@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Team Vinayak</string>
+    <string name="creator"><![CDATA[Made with <3 by Shankar Lohar]]></string>
+    <string name="logout">Logout</string>
+    <string name="settings">Settings</string>
+    <string name="profile_pic">profile pic</string>
+    <string name="membership_active_icon">Membership Active Icon</string>
 </resources>
