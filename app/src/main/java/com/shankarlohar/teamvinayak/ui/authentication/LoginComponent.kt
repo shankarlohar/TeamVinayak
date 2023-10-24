@@ -1,6 +1,9 @@
 package com.shankarlohar.teamvinayak.ui.authentication
 
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -64,7 +68,13 @@ fun BgCard() {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = signupText, color = MaterialTheme.colorScheme.onErrorContainer, modifier = Modifier.padding(bottom = 10.dp))
+            Text(
+                text = signupText,
+                color = MaterialTheme.colorScheme.onErrorContainer,
+                modifier = Modifier
+                    .padding(bottom = 10.dp)
+                    .clickable {},
+            )
         }
     }
 }
@@ -77,7 +87,7 @@ fun MainCard() {
     val passState = remember { mutableStateOf(TextFieldValue("")) }
     Surface(
         color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier
-            .height(500.dp)
+            .height(550.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(60.dp).copy(topStart = ZeroCornerSize, topEnd = ZeroCornerSize)
     ) {
@@ -108,11 +118,15 @@ fun MainCard() {
                 leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "Leading Icon") },
                 modifier = modifier
             )
-            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
             CompositionLocalProvider() {
-                Text(text = "Forgot Credentials Call Support?", textAlign = TextAlign.End, modifier = modifier)
+                Text(
+                    text = "Forgot Credentials Call Support?",
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.clickable{}
+                )
             }
-            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
             Button(
                 onClick = {}, modifier = modifier,
                 colors = ButtonDefaults.buttonColors(
@@ -123,7 +137,6 @@ fun MainCard() {
                 Text(text = "Start working out!")
             }
             Spacer(modifier = Modifier.padding(vertical = 5.dp))
-            Text(text = "We Believe in hard work", color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(bottom = 10.dp))
 
         }
     }
