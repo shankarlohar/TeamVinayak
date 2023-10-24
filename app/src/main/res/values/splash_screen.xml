@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/light</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/vinayak_multi_gym_logo</item>
+    </style>
+</resources>
