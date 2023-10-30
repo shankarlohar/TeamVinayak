@@ -50,13 +50,13 @@ import com.shankarlohar.teamvinayak.R
 @Composable
 fun LoginPage() {
     Box {
-        BgCard()
-        MainCard()
+        LoginBgCard()
+        LoginMainCard()
     }
 }
 
 @Composable
-fun BgCard() {
+fun LoginBgCard() {
     val signupText = buildAnnotatedString {
         append("Haven't joined Team Vinayak yet? ")
         withStyle(SpanStyle(color = MaterialTheme.colorScheme.error)) {
@@ -82,7 +82,7 @@ fun BgCard() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainCard() {
+fun LoginMainCard() {
     val emailState = remember { mutableStateOf(TextFieldValue("shankarlohar")) }
     val passState = remember { mutableStateOf(TextFieldValue("")) }
     Surface(
