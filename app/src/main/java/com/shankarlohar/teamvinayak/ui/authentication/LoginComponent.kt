@@ -48,15 +48,24 @@ import com.shankarlohar.teamvinayak.R
 
 @Preview(showBackground = true)
 @Composable
-fun LoginPage() {
+fun LoginPage(
+    onJoinNowClick: () -> Unit = {},
+    onStartClick: () -> Unit = {}
+) {
     Box {
-        LoginBgCard()
-        LoginMainCard()
+        LoginBgCard(
+            onJoinNowClick = onJoinNowClick
+        )
+        LoginMainCard(
+            onStartClick = onStartClick
+        )
     }
 }
 
 @Composable
-fun LoginBgCard() {
+fun LoginBgCard(
+    onJoinNowClick: () -> Unit = {}
+) {
     val signupText = buildAnnotatedString {
         append("Haven't joined Team Vinayak yet? ")
         withStyle(SpanStyle(color = MaterialTheme.colorScheme.error)) {
@@ -73,7 +82,9 @@ fun LoginBgCard() {
                 color = MaterialTheme.colorScheme.onErrorContainer,
                 modifier = Modifier
                     .padding(bottom = 10.dp)
-                    .clickable {},
+                    .clickable {
+                        onJoinNowClick()
+                    },
             )
         }
     }
@@ -82,7 +93,9 @@ fun LoginBgCard() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginMainCard() {
+fun LoginMainCard(
+    onStartClick: () -> Unit = {}
+) {
     val emailState = remember { mutableStateOf(TextFieldValue("shankarlohar")) }
     val passState = remember { mutableStateOf(TextFieldValue("")) }
     Surface(
@@ -128,7 +141,7 @@ fun LoginMainCard() {
             }
             Spacer(modifier = Modifier.padding(vertical = 8.dp))
             Button(
-                onClick = {}, modifier = modifier,
+                onClick = onStartClick, modifier = modifier,
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
