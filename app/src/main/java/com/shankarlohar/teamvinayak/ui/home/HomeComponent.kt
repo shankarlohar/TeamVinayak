@@ -41,7 +41,9 @@ import com.shankarlohar.teamvinayak.ui.settings.SettingsComponent
 import kotlin.math.roundToInt
 
 @Composable
-fun HomeComponent() {
+fun HomeComponent(
+    onLogoutClick: () -> Unit = {}
+) {
     var screen by remember { mutableStateOf(HomeMenu.HOME.name) }
     var currentState by remember { mutableStateOf(MenuState.COLLAPSED) }
     val updateAnim = updateTransition(currentState, label = "MenuState")
@@ -184,7 +186,7 @@ fun HomeComponent() {
                     screen = "SETTINGS"
                 }
                 HomeMenuAction.LOGOUT -> {
-                    //do logout
+                    onLogoutClick()
                 }
                 else -> {
                     currentState = MenuState.COLLAPSED
