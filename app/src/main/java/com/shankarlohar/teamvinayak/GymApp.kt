@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.shankarlohar.teamvinayak.data.model.OnBoardingModel
 import com.shankarlohar.teamvinayak.ui.authentication.login.LoginPage
 import com.shankarlohar.teamvinayak.ui.authentication.AuthViewModel
 import com.shankarlohar.teamvinayak.ui.authentication.signup.OnBoarding
@@ -28,6 +29,7 @@ enum class Screens{
 @Composable
 fun GymApp(
     authViewModel: AuthViewModel,
+    onBoardingContent: List<OnBoardingModel>,
     navHostController: NavHostController = rememberNavController(),
     context: Context,
 ){
@@ -66,6 +68,7 @@ fun GymApp(
 
             composable(route = Screens.ONBOARDING.name){
                 OnBoarding(
+                    onBoardingContent = onBoardingContent,
                     onJoinClick = {
                         navHostController.navigate(Screens.SIGNUP.name)
                     },

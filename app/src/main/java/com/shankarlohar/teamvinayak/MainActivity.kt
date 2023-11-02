@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.shankarlohar.teamvinayak.ui.authentication.AuthViewModel
+import com.shankarlohar.teamvinayak.ui.authentication.signup.OnBoardingViewModel
 import com.shankarlohar.teamvinayak.ui.theme.TeamVinayakTheme
 
 
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
+    private val onBoardingViewModel: OnBoardingViewModel by viewModels()
 
     @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,10 +34,15 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        val onBoardingContent = onBoardingViewModel.onBoardingData.value
+
+
         setContent {
+
             TeamVinayakTheme {
                 GymApp(
                     authViewModel = authViewModel,
+                    onBoardingContent = onBoardingContent,
                     context = LocalContext.current
                 )
             }
