@@ -46,9 +46,9 @@ import androidx.compose.ui.unit.dp
 import com.shankarlohar.teamvinayak.R
 
 
-@Preview(showBackground = true)
 @Composable
 fun LoginPage(
+    loginViewModel: LoginViewModel,
     onJoinNowClick: () -> Unit = {},
     onStartClick: () -> Unit = {}
 ) {
@@ -57,6 +57,7 @@ fun LoginPage(
             onJoinNowClick = onJoinNowClick
         )
         LoginMainCard(
+            loginViewModel = loginViewModel,
             onStartClick = onStartClick
         )
     }
@@ -94,9 +95,10 @@ fun LoginBgCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginMainCard(
+    loginViewModel: LoginViewModel,
     onStartClick: () -> Unit = {}
 ) {
-    val emailState = remember { mutableStateOf(TextFieldValue("shankarlohar")) }
+    val emailState = remember { mutableStateOf(TextFieldValue(loginViewModel.name.value)) }
     val passState = remember { mutableStateOf(TextFieldValue("")) }
     Surface(
         color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier

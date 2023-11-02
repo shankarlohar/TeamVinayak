@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.shankarlohar.teamvinayak.ui.authentication.LoginPage
+import com.shankarlohar.teamvinayak.ui.authentication.LoginViewModel
 import com.shankarlohar.teamvinayak.ui.authentication.OnBoarding
 import com.shankarlohar.teamvinayak.ui.home.HomeComponent
 import com.shankarlohar.teamvinayak.ui.theme.TeamVinayakTheme
@@ -27,7 +28,8 @@ enum class MenuState {
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +37,15 @@ class MainActivity : ComponentActivity() {
 
         installSplashScreen().apply {
             setKeepOnScreenCondition{
-                viewModel.isLoading.value
+                mainViewModel.isLoading.value
             }
         }
 
         setContent {
             TeamVinayakTheme {
-                GymApp()
+                GymApp(
+                    loginViewModel = loginViewModel
+                )
             }
         }
     }
