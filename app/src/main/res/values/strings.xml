@@ -15,5 +15,12 @@
 
     <string name="onBoardingTitle3">Play the beat</string>
     <string name="onBoardingText3">Most beginner producers learn make \n creating by simple beats</string>
+    <string name="not_a_member_yet">"Not a member yet? 😱 "</string>
+    <string name="join_now">" Join now."</string>
+    <string name="gym_name">Vinayak Multi Gym</string>
+    <string name="membership_number">Membership Number</string>
+    <string name="passcode">Passcode</string>
+    <string name="i_forgot_my_credentials">I forgot my credentials. 🤪</string>
+    <string name="lets_go">Let\'s go!</string>
 
 </resources>

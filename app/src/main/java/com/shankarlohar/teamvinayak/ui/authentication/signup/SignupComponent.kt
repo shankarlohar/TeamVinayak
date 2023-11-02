@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.authentication
+package com.shankarlohar.teamvinayak.ui.authentication.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

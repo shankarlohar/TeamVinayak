@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.authentication
+package com.shankarlohar.teamvinayak.ui.authentication.signup
 
 import com.shankarlohar.teamvinayak.R
 

@@ -9,9 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.shankarlohar.teamvinayak.ui.authentication.LoginPage
-import com.shankarlohar.teamvinayak.ui.authentication.LoginViewModel
-import com.shankarlohar.teamvinayak.ui.authentication.SignupPage
+import com.shankarlohar.teamvinayak.ui.authentication.login.LoginPage
+import com.shankarlohar.teamvinayak.ui.authentication.AuthViewModel
+import com.shankarlohar.teamvinayak.ui.authentication.signup.SignupPage
 import com.shankarlohar.teamvinayak.ui.home.HomeComponent
 
 enum class Screens{
@@ -22,7 +22,7 @@ enum class Screens{
 
 @Composable
 fun GymApp(
-    loginViewModel: LoginViewModel,
+    authViewModel: AuthViewModel,
     navHostController: NavHostController = rememberNavController()
 ){
     // A surface container using the 'background' color from the theme
@@ -36,7 +36,7 @@ fun GymApp(
         ){
             composable(route = Screens.LOGIN.name){
                 LoginPage(
-                    loginViewModel = loginViewModel,
+                    authViewModel = authViewModel,
                     onJoinNowClick = {
                         navHostController.navigate(Screens.SIGNUP.name)
                     },
