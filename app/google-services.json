@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "842872859394",
+    "project_id": "team-vinayak",
+    "storage_bucket": "team-vinayak.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842872859394:android:40bdd9240c1994e81f301b",
+        "android_client_info": {
+          "package_name": "com.shankarlohar.teamvinayak"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_qCQSaJyPoxey4cM0jkGirMdUUpZqNW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
