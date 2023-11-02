@@ -1,20 +1,20 @@
 package com.shankarlohar.teamvinayak.ui.authentication.signup
 
-import com.shankarlohar.teamvinayak.R
+import androidx.lifecycle.ViewModel
+import com.shankarlohar.teamvinayak.data.model.OnBoardingModel
+import com.shankarlohar.teamvinayak.data.repositories.OnBoardingDataRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 
-class OnBoardingItems(
-    val image: Int,
-    val title: Int,
-    val desc: Int
-) {
-    companion object{
-        fun getData(): List<OnBoardingItems>{
-            return listOf(
-                OnBoardingItems(R.drawable.intro1, R.string.onBoardingTitle1, R.string.onBoardingText1),
-                OnBoardingItems(R.drawable.intro2, R.string.onBoardingTitle2, R.string.onBoardingText2),
-                OnBoardingItems(R.drawable.intro3, R.string.onBoardingTitle3, R.string.onBoardingText3)
-            )
-        }
+class OnBoardingViewModel: ViewModel() {
+
+    private val boardingContent = getData()
+    private val _onBoardingData = MutableStateFlow(boardingContent)
+
+    val onBoardingData = _onBoardingData.asStateFlow()
+
+    private fun getData(): List<OnBoardingModel>{
+        return OnBoardingDataRepository.getData()
     }
 }

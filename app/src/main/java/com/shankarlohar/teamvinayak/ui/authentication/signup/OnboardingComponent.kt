@@ -30,16 +30,17 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.data.model.OnBoardingModel
 import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
 @Composable
 fun OnBoarding(
+    onBoardingContent: List<OnBoardingModel>,
     onJoinClick: () -> Unit = {},
     onBackToLoginClick: () -> Unit = {},
     context: Context,
 ) {
-    val items = OnBoardingItems.getData()
     val scope = rememberCoroutineScope()
     val pageState = rememberPagerState()
 
@@ -57,32 +58,32 @@ fun OnBoarding(
                 }
             },
             onSkipClick = {
-                if (pageState.currentPage + 1 < items.size) scope.launch {
-                    pageState.scrollToPage(items.size - 1)
+                if (pageState.currentPage + 1 < onBoardingContent.size) scope.launch {
+                    pageState.scrollToPage(onBoardingContent.size - 1)
                 }
-                if (pageState.currentPage != items.size - 1) {
+                if (pageState.currentPage != onBoardingContent.size - 1) {
                     Toast.makeText(context, R.string.wohh_that_was_fast, Toast.LENGTH_SHORT).show()
                 }
             }
         )
 
         HorizontalPager(
-            count = items.size,
+            count = onBoardingContent.size,
             state = pageState,
             modifier = Modifier
                 .fillMaxHeight(0.9f)
                 .fillMaxWidth()
         ) { page ->
             OnBoardingItem(
-                items = items[page]
+                items = onBoardingContent[page]
             )
         }
 
         BottomSection(
-            size = items.size,
+            size = onBoardingContent.size,
             index = pageState.currentPage,
         ) {
-            if (pageState.currentPage + 1 < items.size) scope.launch {
+            if (pageState.currentPage + 1 < onBoardingContent.size) scope.launch {
                 pageState.scrollToPage(pageState.currentPage + 1)
             }else{
                 onJoinClick()
@@ -208,7 +209,7 @@ fun Indicator(isSelected: Boolean) {
 }
 
 @Composable
-fun OnBoardingItem(items: OnBoardingItems) {
+fun OnBoardingItem(items: OnBoardingModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
