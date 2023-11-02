@@ -22,5 +22,9 @@
     <string name="passcode">Passcode</string>
     <string name="i_forgot_my_credentials">I forgot my credentials. 🤪</string>
     <string name="lets_go">Let\'s go!</string>
+    <string name="wohh_that_was_fast">Wohh! That was fast. 🏃🏻‍</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="fill_form">Fill registration form 📝</string>
 
 </resources>

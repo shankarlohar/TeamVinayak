@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.shankarlohar.teamvinayak.ui.authentication.AuthViewModel
@@ -34,7 +35,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             TeamVinayakTheme {
                 GymApp(
-                    authViewModel = authViewModel
+                    authViewModel = authViewModel,
+                    context = LocalContext.current
                 )
             }
         }
