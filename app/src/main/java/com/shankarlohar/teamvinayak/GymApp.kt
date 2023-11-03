@@ -29,6 +29,7 @@ enum class Screens{
 @Composable
 fun GymApp(
     authViewModel: AuthViewModel,
+    mainViewModel: MainViewModel,
     onBoardingContent: List<OnBoardingModel>,
     navHostController: NavHostController = rememberNavController(),
     context: Context,
@@ -45,6 +46,7 @@ fun GymApp(
             composable(route = Screens.LOGIN.name){
                 LoginPage(
                     authViewModel = authViewModel,
+                    mainViewModel = mainViewModel,
                     onJoinNowClick = {
                         navHostController.navigate(Screens.ONBOARDING.name)
                     },

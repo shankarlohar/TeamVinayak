@@ -1,6 +1,5 @@
 package com.shankarlohar.teamvinayak.ui.authentication.login
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,11 +27,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -41,6 +43,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.shankarlohar.teamvinayak.MainViewModel
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.ui.authentication.AuthViewModel
 
@@ -48,17 +53,24 @@ import com.shankarlohar.teamvinayak.ui.authentication.AuthViewModel
 @Composable
 fun LoginPage(
     authViewModel: AuthViewModel,
+    mainViewModel: MainViewModel,
     onJoinNowClick: () -> Unit = {},
     onStartClick: () -> Unit = {}
 ) {
+    val gymInfo by mainViewModel.gymInfo.collectAsState()
+
     Column() {
-        LoginMainCard(
-            authViewModel = authViewModel,
-            onStartClick = onStartClick
-        )
-        LoginBgCard(
-            onJoinNowClick = onJoinNowClick
-        )
+        gymInfo?.let {
+            LoginMainCard(
+                authViewModel = authViewModel,
+                logoUrl = it.logo,
+                onStartClick = onStartClick
+            )
+            LoginBgCard(
+                monthlyFee = it.monthlyFee,
+                onJoinNowClick = onJoinNowClick
+            )
+        }
     }
 }
 
@@ -67,6 +79,7 @@ fun LoginPage(
 @Composable
 fun LoginMainCard(
     authViewModel: AuthViewModel,
+    logoUrl:String,
     onStartClick: () -> Unit = {}
 ) {
     val emailState = remember {
@@ -78,7 +91,7 @@ fun LoginMainCard(
     Surface(
         color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
-            .fillMaxHeight(0.93f)
+            .fillMaxHeight(0.9f)
             .fillMaxWidth(),
         shape = RoundedCornerShape(60.dp)
             .copy(
@@ -88,21 +101,25 @@ fun LoginMainCard(
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp),
+                .padding(6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             val modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-            Image(
-                painter = painterResource(id = R.drawable.vinayak_multi_gym_logo),
+                .padding(8.dp)
+
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(logoUrl)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = stringResource(R.string.gym_name),
-                Modifier.height(200.dp)
+                modifier = modifier
+                    .height(200.dp)
             )
+
             Spacer(
-                modifier = Modifier
-                    .padding(16.dp)
+                modifier = modifier
             )
             OutlinedTextField(
                 value = emailState.value,
@@ -124,8 +141,7 @@ fun LoginMainCard(
             )
 
             Spacer(
-                modifier = Modifier
-                    .padding(6.dp)
+                modifier = modifier
             )
 
             OutlinedTextField(
@@ -148,23 +164,20 @@ fun LoginMainCard(
             )
 
             Spacer(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
+                modifier = modifier
             )
 
             CompositionLocalProvider() {
                 Text(
                     text = stringResource(R.string.i_forgot_my_credentials),
                     textAlign = TextAlign.End,
-                    modifier = Modifier.clickable{}
+                    modifier = Modifier
+                        .clickable{}
                 )
             }
 
             Spacer(
-                modifier = Modifier
-                    .padding(
-                        vertical = 24.dp
-                    )
+                modifier = modifier
             )
 
             Button(
@@ -175,20 +188,13 @@ fun LoginMainCard(
                 ),
                 contentPadding = PaddingValues(16.dp),
                 shape = CircleShape,
-                modifier = Modifier
-                    .size(100.dp)
+                modifier = modifier
+                    .size(90.dp)
             ) {
                 Text(
                     text = stringResource(R.string.lets_go),
                 )
             }
-            Spacer(
-                modifier = Modifier
-                    .padding(
-                        vertical = 5.dp
-                    )
-            )
-
         }
     }
 }
@@ -196,14 +202,19 @@ fun LoginMainCard(
 
 @Composable
 fun LoginBgCard(
+    monthlyFee: Int,
     onJoinNowClick: () -> Unit = {}
 ) {
+
     val signupText = buildAnnotatedString {
         append(stringResource(R.string.not_a_member_yet))
         withStyle(SpanStyle(color = MaterialTheme.colorScheme.error)) {
-            append(stringResource(R.string.join_now))
+            append(
+                stringResource(R.string.join_now)
+            )
         }
     }
+
     Surface(
         color = MaterialTheme.colorScheme.errorContainer,
         modifier = Modifier
@@ -227,6 +238,10 @@ fun LoginBgCard(
                     .clickable {
                         onJoinNowClick()
                     },
+            )
+            Text(
+                text = "Just @" + monthlyFee + "₹ per month.",
+                modifier = Modifier.padding( bottom = 8.dp)
             )
         }
     }

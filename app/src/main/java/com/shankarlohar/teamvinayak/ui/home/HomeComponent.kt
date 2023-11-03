@@ -306,14 +306,14 @@ fun MenuComponent(modifier: Modifier, menuAction: (HomeMenuAction) -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(id = R.drawable.vinayak_multi_gym_logo),
-                contentDescription = stringResource(R.string.profile_pic),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(shape = CircleShape)
-            )
+//            Image(
+//                painter = painterResource(id = R.drawable.vinayak_multi_gym_logo),
+//                contentDescription = stringResource(R.string.profile_pic),
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .size(80.dp)
+//                    .clip(shape = CircleShape)
+//            )
 
             Text(
                 text = "Shankar Lohar",
