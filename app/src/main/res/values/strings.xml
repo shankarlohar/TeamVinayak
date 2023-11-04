@@ -26,5 +26,6 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="fill_form">Fill registration form 📝</string>
+    <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
 
 </resources>
