@@ -1,7 +1,6 @@
-package com.shankarlohar.teamvinayak.data.model
+package com.shankarlohar.teamvinayak.model
 
 data class OnBoardingModel(
-    val image: Int,
-    val title: Int,
-    val desc: Int
+    val section: String,
+    val content: List<String>
 )
