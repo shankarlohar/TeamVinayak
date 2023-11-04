@@ -1,7 +1,6 @@
 package com.shankarlohar.teamvinayak
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -11,7 +10,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.shankarlohar.teamvinayak.data.repositories.FirestoreRepository
 import com.shankarlohar.teamvinayak.ui.authentication.AuthViewModel
-import com.shankarlohar.teamvinayak.ui.authentication.signup.OnBoardingViewModel
 import com.shankarlohar.teamvinayak.ui.theme.TeamVinayakTheme
 
 
@@ -25,7 +23,6 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var mainViewModel: MainViewModel
     private val authViewModel: AuthViewModel by viewModels()
-    private val onBoardingViewModel: OnBoardingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +38,6 @@ class MainActivity : ComponentActivity() {
 
 
 
-        val onBoardingContent = onBoardingViewModel.onBoardingData.value
-
-
 
         setContent {
 
@@ -54,7 +48,6 @@ class MainActivity : ComponentActivity() {
                     GymApp(
                         authViewModel = authViewModel,
                         mainViewModel = mainViewModel,
-                        onBoardingContent = onBoardingContent,
                         context = LocalContext.current
                     )
                 }
