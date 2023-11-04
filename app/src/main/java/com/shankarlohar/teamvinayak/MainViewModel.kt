@@ -1,10 +1,13 @@
 package com.shankarlohar.teamvinayak
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shankarlohar.teamvinayak.data.model.GymInfoModel
+import com.shankarlohar.teamvinayak.model.GymInfoModel
 import com.shankarlohar.teamvinayak.data.repositories.FirestoreRepository
+import com.shankarlohar.teamvinayak.model.OnBoardingModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,12 +19,14 @@ class MainViewModel(
 
     private val _isLoading = MutableStateFlow(true)
     private val _gymInfo = MutableStateFlow<GymInfoModel?>(null)
+    private val _termsAndConditionsData = MutableStateFlow<List<OnBoardingModel>?>(null)
 
     val isLoading = _isLoading.asStateFlow()
     val gymInfo = _gymInfo.asStateFlow()
+    val termsAndConditionsData = _termsAndConditionsData.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             try {
                 _gymInfo.value = firestoreRepository.getGymInfoDocument()
             } catch (e: Exception) {
@@ -30,6 +35,14 @@ class MainViewModel(
                 _isLoading.value = false // Data loading is complete
             }
         }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                _termsAndConditionsData.value = firestoreRepository.getTnC()
+            } catch (e: Exception) {
+                Log.e("firestore", "Error fetching OnBoarding data: ${e.message}")
+            }
+        }
     }
+
 
 }
