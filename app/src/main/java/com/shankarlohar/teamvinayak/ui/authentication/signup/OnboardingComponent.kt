@@ -8,13 +8,20 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,64 +36,69 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.shankarlohar.teamvinayak.MainViewModel
 import com.shankarlohar.teamvinayak.R
-import com.shankarlohar.teamvinayak.data.model.OnBoardingModel
+import com.shankarlohar.teamvinayak.model.OnBoardingModel
 import kotlinx.coroutines.launch
+
 
 @ExperimentalPagerApi
 @Composable
 fun OnBoarding(
-    onBoardingContent: List<OnBoardingModel>,
+    mainViewModel: MainViewModel,
     onJoinClick: () -> Unit = {},
     onBackToLoginClick: () -> Unit = {},
     context: Context,
 ) {
+    val items by mainViewModel.termsAndConditionsData.collectAsState()
     val scope = rememberCoroutineScope()
     val pageState = rememberPagerState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        TopSection(
-            onBackClick = {
-                if (pageState.currentPage + 1 > 1) scope.launch {
-                    pageState.scrollToPage(pageState.currentPage - 1)
-                }
-                else{
-                    onBackToLoginClick()
-                }
-            },
-            onSkipClick = {
-                if (pageState.currentPage + 1 < onBoardingContent.size) scope.launch {
-                    pageState.scrollToPage(onBoardingContent.size - 1)
-                }
-                if (pageState.currentPage != onBoardingContent.size - 1) {
-                    Toast.makeText(context, R.string.wohh_that_was_fast, Toast.LENGTH_SHORT).show()
-                }
-            }
-        )
-
-        HorizontalPager(
-            count = onBoardingContent.size,
-            state = pageState,
+    items?.let {
+        Column(
             modifier = Modifier
-                .fillMaxHeight(0.9f)
-                .fillMaxWidth()
-        ) { page ->
-            OnBoardingItem(
-                items = onBoardingContent[page]
-            )
-        }
-
-        BottomSection(
-            size = onBoardingContent.size,
-            index = pageState.currentPage,
+                .fillMaxSize()
         ) {
-            if (pageState.currentPage + 1 < onBoardingContent.size) scope.launch {
-                pageState.scrollToPage(pageState.currentPage + 1)
-            }else{
-                onJoinClick()
+            TopSection(
+                onBackClick = {
+                    if (pageState.currentPage + 1 > 1) scope.launch {
+                        pageState.scrollToPage(pageState.currentPage - 1)
+                    }
+                    else{
+                        onBackToLoginClick()
+                    }
+                },
+                onSkipClick = {
+                    if (pageState.currentPage + 1 < items!!.size) scope.launch {
+                        pageState.scrollToPage(items!!.size - 1)
+                    }
+                    if (pageState.currentPage != items!!.size - 1) {
+                        Toast.makeText(context, R.string.wohh_that_was_fast, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            )
+
+            HorizontalPager(
+                count = items!!.size,
+                state = pageState,
+                modifier = Modifier
+                    .fillMaxHeight(0.9f)
+                    .fillMaxWidth()
+            ) { page ->
+                OnBoardingItem(
+                    items = items!![page]
+                )
+            }
+
+            BottomSection(
+                size = items!!.size,
+                index = pageState.currentPage,
+            ) {
+                if (pageState.currentPage + 1 < items!!.size) scope.launch {
+                    pageState.scrollToPage(pageState.currentPage + 1)
+                }else{
+                    onJoinClick()
+                }
             }
         }
     }
@@ -212,21 +224,24 @@ fun Indicator(isSelected: Boolean) {
 fun OnBoardingItem(items: OnBoardingModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         modifier = Modifier.fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(id = items.image),
-            contentDescription = "Image1",
-            modifier = Modifier.padding(start = 50.dp, end = 50.dp)
-        )
 
-        Spacer(modifier = Modifier.height(25.dp))
 
         Text(
-            text = stringResource(id = items.title),
+            text = stringResource(R.string.terms_conditions),
             style = MaterialTheme.typography.headlineMedium,
-            // fontSize = 24.sp,
+            color = MaterialTheme.colorScheme.onBackground,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            letterSpacing = 1.sp,
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = items.section,
+            style = MaterialTheme.typography.headlineMedium,
+            fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -234,14 +249,22 @@ fun OnBoardingItem(items: OnBoardingModel) {
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = stringResource(id = items.desc),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.Light,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(10.dp),
-            letterSpacing = 1.sp,
-        )
+        LazyColumn{
+            items.content.forEach{
+                item {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontWeight = FontWeight.Light,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(10.dp),
+                        letterSpacing = 1.sp,
+                    )
+                }
+            }
+        }
+
+
     }
 }
