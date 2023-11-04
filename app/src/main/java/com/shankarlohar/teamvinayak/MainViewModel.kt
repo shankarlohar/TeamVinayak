@@ -37,7 +37,7 @@ class MainViewModel(
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                _termsAndConditionsData.value = firestoreRepository.getTnC()
+                _termsAndConditionsData.value = firestoreRepository.getTnC().sortedBy { it.section }
             } catch (e: Exception) {
                 Log.e("firestore", "Error fetching OnBoarding data: ${e.message}")
             }
