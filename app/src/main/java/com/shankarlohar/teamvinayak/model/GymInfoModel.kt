@@ -1,6 +1,4 @@
-package com.shankarlohar.teamvinayak.data.model
-
-import kotlinx.coroutines.flow.MutableStateFlow
+package com.shankarlohar.teamvinayak.model
 
 data class GymInfoModel(
     val logo: String = "",
