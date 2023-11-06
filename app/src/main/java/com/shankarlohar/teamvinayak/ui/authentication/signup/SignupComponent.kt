@@ -5,15 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -46,7 +49,6 @@ import com.shankarlohar.teamvinayak.model.GymUserModel
 import com.shankarlohar.teamvinayak.model.PersonalDetails
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview()
 @Composable
 fun SignupPage() {
@@ -64,8 +66,7 @@ fun SignupPage() {
     Surface(
         color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
-            .fillMaxHeight(0.9f)
-            .fillMaxWidth(),
+            .fillMaxSize(),
         shape = RoundedCornerShape(60.dp)
             .copy(
                 topStart = ZeroCornerSize,
@@ -124,9 +125,15 @@ fun PersonalDetailsSection(gymUserModel: GymUserModel, onNext: (PersonalDetails)
     val modifier = Modifier
         .padding(8.dp)
 
+
+    val scrollState = rememberScrollState()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
     ){
 
         Spacer(modifier = modifier)
@@ -137,7 +144,7 @@ fun PersonalDetailsSection(gymUserModel: GymUserModel, onNext: (PersonalDetails)
             onValueChange = { personalDetails = personalDetails.copy(fullName = it) },
             label = { Text("Full Name") },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
+                keyboardType = KeyboardType.Text
             ),
             leadingIcon = {
                 Icon(
@@ -153,7 +160,71 @@ fun PersonalDetailsSection(gymUserModel: GymUserModel, onNext: (PersonalDetails)
             onValueChange = { personalDetails = personalDetails.copy(address = it) },
             label = { Text("Address") }
         )
-        // Add more fields...
+
+        Spacer(modifier = modifier)
+
+        OutlinedTextField(
+            value = personalDetails.mobileNumber.orEmpty(),
+            onValueChange = { personalDetails = personalDetails.copy(mobileNumber = it) },
+            label = { Text("Mobile") }
+        )
+
+        Spacer(modifier = modifier)
+
+        OutlinedTextField(
+            value = personalDetails.dateOfBirth.orEmpty(),
+            onValueChange = { personalDetails = personalDetails.copy(dateOfBirth = it) },
+            label = { Text("Date of birth") }
+        )
+
+        Spacer(modifier = modifier)
+
+        OutlinedTextField(
+            value = personalDetails.weight.toString(),
+            onValueChange = { personalDetails = personalDetails.copy(weight = it.toDouble()) },
+            label = { Text("Weight") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            )
+        )
+
+        Spacer(modifier = modifier)
+
+        OutlinedTextField(
+            value = personalDetails.height.toString(),
+            onValueChange = { personalDetails = personalDetails.copy(height = it.toInt()) },
+            label = { Text("Height") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            )
+        )
+
+        Spacer(modifier = modifier)
+
+        OutlinedTextField(
+            value = personalDetails.gender.orEmpty(),
+            onValueChange = { personalDetails = personalDetails.copy(gender = it) },
+            label = { Text("Gender") }
+        )
+
+        Spacer(modifier = modifier)
+
+        OutlinedTextField(
+            value = personalDetails.disability.orEmpty(),
+            onValueChange = { personalDetails = personalDetails.copy(disability = it) },
+            label = { Text("Disability") }
+        )
+
+        Spacer(modifier = modifier)
+
+        OutlinedTextField(
+            value = personalDetails.fitnessGoal.orEmpty(),
+            onValueChange = { personalDetails = personalDetails.copy(fitnessGoal = it) },
+            label = { Text("Fitness Goal") }
+        )
+
+        Spacer(modifier = modifier)
+
 
         Button(
             onClick = { onNext(personalDetails) },
