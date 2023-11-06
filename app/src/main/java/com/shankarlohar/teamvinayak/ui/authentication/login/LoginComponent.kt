@@ -120,9 +120,11 @@ fun LoginMainCard(
             Spacer(
                 modifier = modifier
             )
+
+
             OutlinedTextField(
                 value = emailState.value,
-                onValueChange = { emailState.value = it },
+                onValueChange = {emailState.value = it},
                 label = {
                     Text(
                         text = stringResource(R.string.user_id)
