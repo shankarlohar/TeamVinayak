@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,8 +55,12 @@ import kotlin.math.absoluteValue
 @Composable
 fun ChoiceComponent(viewModel: MainViewModel) {
     val pagerState = rememberPagerState()
-    val selectedCategory = remember { mutableStateOf(ChoiceScreenDataModel.categories.size - 1) }
+    val selectedCategory = remember { mutableStateOf(0) }
     val rememberScope = rememberCoroutineScope()
+
+    LaunchedEffect(pagerState.currentPage){
+        selectedCategory.value = pagerState.currentPage
+    }
 
     Row(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -153,7 +158,7 @@ fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewMod
         .fillMaxSize()
         .clickable {
             viewModel.screenState.value = MainViewModel.UiState.Details(item)
-            when(page){
+            when (page) {
                 0 -> context.startActivity(SignupActivity.getIntent(context))
                 1 -> context.startActivity(ClientActivity.getIntent(context))
                 2 -> context.startActivity(OwnerActivity.getIntent(context))
@@ -163,11 +168,12 @@ fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewMod
         Box(
             modifier = Modifier
                 .graphicsLayer {
-                    Utils.lerp(
-                        start = 0.90f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
+                    Utils
+                        .lerp(
+                            start = 0.90f,
+                            stop = 1f,
+                            fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                        )
                         .also {
                             scaleX = boxScaleX
                             scaleY = boxScaleY
