@@ -16,7 +16,7 @@
     <string name="onBoardingTitle3">Play the beat</string>
     <string name="onBoardingText3">Most beginner producers learn make \n creating by simple beats</string>
     <string name="not_a_member_yet">"Not a member yet? 😱 "</string>
-    <string name="join_now">" Join now."</string>
+    <string name="join_now">"Join now!"</string>
     <string name="gym_name">Vinayak Multi Gym</string>
     <string name="user_id">Username</string>
     <string name="passcode">Passcode</string>
@@ -35,5 +35,11 @@
     <string name="gender">Gender</string>
     <string name="weight_kg">Weight (KG)</string>
     <string name="height_cm">Height (CM)</string>
+    <string name="members_login">Members Login</string>
+    <string name="admin_only">Admin Only</string>
+    <string name="unisex">Unisex</string>
+    <string name="vinayak_multi_gym">Vinayak Multi Gym</string>
+    <string name="team_vinayak">Team Vinayak</string>
+    <string name="let_s_make_everyone_fit">Let\'s make everyone fit 💪🏻</string>
 
 </resources>

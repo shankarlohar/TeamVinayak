@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +44,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 import com.shankarlohar.teamvinayak.MainViewModel
+import com.shankarlohar.teamvinayak.data.choiceCategories
+import com.shankarlohar.teamvinayak.data.choiceScreens
 import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
 import com.shankarlohar.teamvinayak.util.Utils
 import com.shankarlohar.vmgclient.ClientActivity
@@ -68,7 +71,7 @@ fun ChoiceComponent(viewModel: MainViewModel) {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ChoiceScreenDataModel.categories.forEachIndexed { index, item ->
+            choiceCategories.forEachIndexed { index, item ->
                 Text(
                     text = item,
                     modifier = Modifier
@@ -91,12 +94,12 @@ fun ChoiceComponent(viewModel: MainViewModel) {
             }
         }
         HorizontalPager(
-            count = ChoiceScreenDataModel.listOfShoes.size,
+            count = choiceScreens.size,
             contentPadding = PaddingValues(end = 70.dp, top = 70.dp),
             state = pagerState,
         ) { page ->
             val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
-            ChoiceItem(item = ChoiceScreenDataModel.listOfShoes[page],page = page, pageOffset, viewModel)
+            ChoiceItem(item = choiceScreens[page],page = page, pageOffset, viewModel)
         }
     }
 }
@@ -192,19 +195,19 @@ fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewMod
             ) {
                 Column {
                     Text(
-                        text = item.title,
+                        text = stringResource(item.title),
                         fontSize = 16.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Medium
                     )
                     Text(
-                        text = item.description,
+                        text = stringResource(item.description),
                         color = Color.White,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = item.price,
+                        text = stringResource(item.price),
                         fontSize = 14.sp,
                         color = Color.White.copy(alpha = .9f),
                         fontWeight = FontWeight.Light

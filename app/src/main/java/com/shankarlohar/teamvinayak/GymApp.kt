@@ -13,7 +13,6 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.shankarlohar.teamvinayak.ui.screens.ChoiceScreen
 import com.shankarlohar.teamvinayak.ui.signup.OnBoarding
-import com.shankarlohar.teamvinayak.ui.signup.SignupPage
 
 enum class Screens{
     CHOICES,
@@ -42,9 +41,7 @@ fun GymApp(
                     viewModel = mainViewModel
                 )
             }
-            composable(route = Screens.SIGNUP.name){
-                SignupPage()
-            }
+
             composable(route = Screens.ONBOARDING.name){
                 OnBoarding(
                     mainViewModel = mainViewModel,
