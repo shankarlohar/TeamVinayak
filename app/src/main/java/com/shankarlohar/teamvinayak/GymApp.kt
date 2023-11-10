@@ -11,16 +11,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.shankarlohar.teamvinayak.model.OnBoardingModel
-import com.shankarlohar.teamvinayak.ui.authentication.login.LoginPage
-import com.shankarlohar.teamvinayak.ui.authentication.AuthViewModel
-import com.shankarlohar.teamvinayak.ui.authentication.signup.OnBoarding
-import com.shankarlohar.teamvinayak.ui.authentication.signup.SignupPage
-import com.shankarlohar.teamvinayak.ui.home.HomeComponent
+import com.shankarlohar.teamvinayak.ui.screens.ChoiceScreen
+import com.shankarlohar.teamvinayak.ui.signup.OnBoarding
+import com.shankarlohar.teamvinayak.ui.signup.SignupPage
 
 enum class Screens{
-    HOME,
-    LOGIN,
+    CHOICES,
     SIGNUP,
     ONBOARDING
 }
@@ -28,7 +24,6 @@ enum class Screens{
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun GymApp(
-    authViewModel: AuthViewModel,
     mainViewModel: MainViewModel,
     navHostController: NavHostController = rememberNavController(),
     context: Context,
@@ -40,33 +35,16 @@ fun GymApp(
     ) {
         NavHost(
             navController = navHostController,
-            startDestination = Screens.LOGIN.name,
+            startDestination = Screens.CHOICES.name,
         ){
-            composable(route = Screens.LOGIN.name){
-                LoginPage(
-                    authViewModel = authViewModel,
-                    mainViewModel = mainViewModel,
-                    onJoinNowClick = {
-                        navHostController.navigate(Screens.ONBOARDING.name)
-                    },
-                    onStartClick = {
-                        navHostController.navigate(Screens.HOME.name)
-                    }
+            composable(route = Screens.CHOICES.name){
+                ChoiceScreen(
+                    viewModel = mainViewModel
                 )
             }
-
-            composable(route = Screens.HOME.name){
-                HomeComponent(
-                    onLogoutClick = {
-                        navHostController.navigate(Screens.LOGIN.name)
-                    }
-                )
-            }
-
             composable(route = Screens.SIGNUP.name){
                 SignupPage()
             }
-
             composable(route = Screens.ONBOARDING.name){
                 OnBoarding(
                     mainViewModel = mainViewModel,
@@ -74,7 +52,7 @@ fun GymApp(
                         navHostController.navigate(Screens.SIGNUP.name)
                     },
                     onBackToLoginClick = {
-                        navHostController.navigate(Screens.LOGIN.name)
+                        navHostController.navigate(Screens.SIGNUP.name)
                     },
                     context = context
                 )
