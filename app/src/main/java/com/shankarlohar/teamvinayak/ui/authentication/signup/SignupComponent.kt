@@ -3,6 +3,7 @@ package com.shankarlohar.teamvinayak.ui.authentication.signup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +19,17 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -128,6 +135,9 @@ fun PersonalDetailsSection(gymUserModel: GymUserModel, onNext: (PersonalDetails)
 
     val scrollState = rememberScrollState()
 
+    val genderOptions = listOf("Female", "Male")
+    var genderOptionsExpanded by remember { mutableStateOf(false) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -142,7 +152,7 @@ fun PersonalDetailsSection(gymUserModel: GymUserModel, onNext: (PersonalDetails)
         OutlinedTextField(
             value = personalDetails.fullName.orEmpty(),
             onValueChange = { personalDetails = personalDetails.copy(fullName = it) },
-            label = { Text("Full Name") },
+            label = { Text(stringResource(R.string.full_name)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text
             ),
@@ -158,15 +168,34 @@ fun PersonalDetailsSection(gymUserModel: GymUserModel, onNext: (PersonalDetails)
         OutlinedTextField(
             value = personalDetails.address.orEmpty(),
             onValueChange = { personalDetails = personalDetails.copy(address = it) },
-            label = { Text("Address") }
+            label = { Text(stringResource(R.string.address)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text
+            ),
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.Home,
+                    contentDescription = stringResource(R.string.address)
+                )
+            }
         )
+
 
         Spacer(modifier = modifier)
 
         OutlinedTextField(
-            value = personalDetails.mobileNumber.orEmpty(),
+            value = stringResource(R.string._91) + personalDetails.mobileNumber.orEmpty(),
             onValueChange = { personalDetails = personalDetails.copy(mobileNumber = it) },
-            label = { Text("Mobile") }
+            label = { Text(stringResource(R.string.mobile)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text
+            ),
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.Phone,
+                    contentDescription = stringResource(R.string.mobile)
+                )
+            }
         )
 
         Spacer(modifier = modifier)
@@ -174,38 +203,81 @@ fun PersonalDetailsSection(gymUserModel: GymUserModel, onNext: (PersonalDetails)
         OutlinedTextField(
             value = personalDetails.dateOfBirth.orEmpty(),
             onValueChange = { personalDetails = personalDetails.copy(dateOfBirth = it) },
-            label = { Text("Date of birth") }
-        )
-
-        Spacer(modifier = modifier)
-
-        OutlinedTextField(
-            value = personalDetails.weight.toString(),
-            onValueChange = { personalDetails = personalDetails.copy(weight = it.toDouble()) },
-            label = { Text("Weight") },
+            label = { Text(stringResource(R.string.date_of_birth)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
-            )
+            ),
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.DateRange,
+                    contentDescription = stringResource(R.string.date_of_birth)
+                )
+            }
+
         )
 
         Spacer(modifier = modifier)
 
-        OutlinedTextField(
-            value = personalDetails.height.toString(),
-            onValueChange = { personalDetails = personalDetails.copy(height = it.toInt()) },
-            label = { Text("Height") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
+        Row{
+            OutlinedTextField(
+                value = personalDetails.weight.toString(),
+                onValueChange = {
+                    personalDetails = personalDetails
+                        .copy(weight = it.toDouble())
+                                },
+                label = { Text("Weight (KG)") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                modifier = modifier.weight(1f)
             )
-        )
+
+
+            OutlinedTextField(
+                value = personalDetails.height.toString(),
+                onValueChange = {
+                    personalDetails = personalDetails.copy(height = it.toInt())
+                                },
+                label = { Text("Height (CM)") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                modifier = Modifier.weight(1f)
+            )
+        }
 
         Spacer(modifier = modifier)
 
-        OutlinedTextField(
-            value = personalDetails.gender.orEmpty(),
-            onValueChange = { personalDetails = personalDetails.copy(gender = it) },
-            label = { Text("Gender") }
-        )
+        ExposedDropdownMenuBox(
+            expanded = genderOptionsExpanded,
+            onExpandedChange = { genderOptionsExpanded = it },
+        ) {
+            OutlinedTextField(
+                // The `menuAnchor` modifier must be passed to the text field for correctness.
+                modifier = Modifier.menuAnchor(),
+                readOnly = true,
+                value = personalDetails.gender.orEmpty(),
+                onValueChange = {},
+                label = { Text("Gender") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = genderOptionsExpanded) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            )
+            ExposedDropdownMenu(
+                expanded = genderOptionsExpanded,
+                onDismissRequest = { genderOptionsExpanded = false },
+            ) {
+                genderOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(selectionOption) },
+                        onClick = {
+                            personalDetails.gender = selectionOption
+                            genderOptionsExpanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                }
+            }
+        }
 
         Spacer(modifier = modifier)
 
