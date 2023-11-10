@@ -46,6 +46,7 @@ import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
 import com.shankarlohar.teamvinayak.util.Utils
 import com.shankarlohar.vmgclient.ClientActivity
 import com.shankarlohar.vmgowner.OwnerActivity
+import com.shankarlohar.vmgsignup.SignupActivity
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -90,13 +91,13 @@ fun ChoiceComponent(viewModel: MainViewModel) {
             state = pagerState,
         ) { page ->
             val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
-            ChoiceItem(shoe = ChoiceScreenDataModel.listOfShoes[page], pageOffset, viewModel)
+            ChoiceItem(item = ChoiceScreenDataModel.listOfShoes[page],page = page, pageOffset, viewModel)
         }
     }
 }
 
 @Composable
-fun ChoiceItem(shoe: ChoiceScreenDataModel, pageOffset: Float, viewModel: MainViewModel) {
+fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewModel: MainViewModel) {
     val scale = Utils.lerp(
         start = 0.5f,
         stop = 1f,
@@ -151,8 +152,12 @@ fun ChoiceItem(shoe: ChoiceScreenDataModel, pageOffset: Float, viewModel: MainVi
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable {
-            viewModel.screenState.value = MainViewModel.UiState.Details(shoe)
-            context.startActivity(ClientActivity.getIntent(context))
+            viewModel.screenState.value = MainViewModel.UiState.Details(item)
+            when(page){
+                0 -> context.startActivity(SignupActivity.getIntent(context))
+                1 -> context.startActivity(ClientActivity.getIntent(context))
+                2 -> context.startActivity(OwnerActivity.getIntent(context))
+            }
         }
     ) {
         Box(
@@ -171,7 +176,7 @@ fun ChoiceItem(shoe: ChoiceScreenDataModel, pageOffset: Float, viewModel: MainVi
                 }
                 .fillMaxHeight(.8f)
                 .fillMaxWidth()
-                .background(color = shoe.color.copy(alpha = .8f), RoundedCornerShape(20.dp))
+                .background(color = item.color.copy(alpha = .8f), RoundedCornerShape(20.dp))
                 .padding(end = 16.dp)
         ) {
             Row(
@@ -181,19 +186,19 @@ fun ChoiceItem(shoe: ChoiceScreenDataModel, pageOffset: Float, viewModel: MainVi
             ) {
                 Column {
                     Text(
-                        text = shoe.title,
+                        text = item.title,
                         fontSize = 16.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Medium
                     )
                     Text(
-                        text = shoe.description,
+                        text = item.description,
                         color = Color.White,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = shoe.price,
+                        text = item.price,
                         fontSize = 14.sp,
                         color = Color.White.copy(alpha = .9f),
                         fontWeight = FontWeight.Light
@@ -210,7 +215,7 @@ fun ChoiceItem(shoe: ChoiceScreenDataModel, pageOffset: Float, viewModel: MainVi
         ) {
 
             Image(
-                painter = painterResource(id = shoe.resId),
+                painter = painterResource(id = item.resId),
                 contentDescription = "",
                 modifier = Modifier
                     .align(
