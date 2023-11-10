@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
@@ -48,6 +49,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.ConsentToExercise
 import com.shankarlohar.teamvinayak.model.DoctorDetails
@@ -200,45 +202,100 @@ fun PersonalDetailsSection(gymUserModel: GymUserModel, onNext: (PersonalDetails)
 
         Spacer(modifier = modifier)
 
-        OutlinedTextField(
-            value = personalDetails.dateOfBirth.orEmpty(),
-            onValueChange = { personalDetails = personalDetails.copy(dateOfBirth = it) },
-            label = { Text(stringResource(R.string.date_of_birth)) },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
-            ),
-            leadingIcon = {
-                Icon(
-                    Icons.Filled.DateRange,
-                    contentDescription = stringResource(R.string.date_of_birth)
-                )
-            }
+        Row(modifier = modifier) {
+            OutlinedTextField(
+                value = personalDetails.dateOfBirth.orEmpty(),
+                onValueChange = { personalDetails = personalDetails.copy(dateOfBirth = it) },
+                label = {
+                    Text(
+                        stringResource(R.string.date_of_birth),
+                        style = TextStyle(fontSize = 16.sp)
 
-        )
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.DateRange,
+                        contentDescription = stringResource(R.string.date_of_birth)
+                    )
+                },
+                modifier = Modifier.weight(1f)
+            )
+
+            Spacer(modifier = modifier)
+
+            ExposedDropdownMenuBox(
+                expanded = genderOptionsExpanded,
+                onExpandedChange = { genderOptionsExpanded = it },
+                modifier = Modifier.weight(1f)
+            ) {
+                OutlinedTextField(
+                    // The `menuAnchor` modifier must be passed to the text field for correctness.
+                    modifier = Modifier.menuAnchor(),
+                    readOnly = true,
+                    value = personalDetails.gender.orEmpty(),
+                    onValueChange = {},
+                    label = {
+                        Text(
+                            stringResource(R.string.gender),
+                            style = TextStyle(fontSize = 14.sp)
+                        )
+                            },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.Face,
+                            contentDescription = stringResource(R.string.gender)
+                        )
+                    },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = genderOptionsExpanded) },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                )
+                ExposedDropdownMenu(
+                    expanded = genderOptionsExpanded,
+                    onDismissRequest = { genderOptionsExpanded = false },
+                ) {
+                    genderOptions.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            text = { Text(selectionOption) },
+                            onClick = {
+                                personalDetails.gender = selectionOption
+                                genderOptionsExpanded = false
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                        )
+                    }
+                }
+            }
+        }
 
         Spacer(modifier = modifier)
 
-        Row{
+        Row(modifier = modifier){
+
             OutlinedTextField(
                 value = personalDetails.weight.toString(),
                 onValueChange = {
                     personalDetails = personalDetails
                         .copy(weight = it.toDouble())
                                 },
-                label = { Text("Weight (KG)") },
+                label = { Text(stringResource(R.string.weight_kg)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
                 ),
                 modifier = modifier.weight(1f)
             )
 
+            Spacer(modifier = modifier)
 
             OutlinedTextField(
                 value = personalDetails.height.toString(),
                 onValueChange = {
                     personalDetails = personalDetails.copy(height = it.toInt())
                                 },
-                label = { Text("Height (CM)") },
+                label = { Text(stringResource(R.string.height_cm)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
                 ),
@@ -248,51 +305,18 @@ fun PersonalDetailsSection(gymUserModel: GymUserModel, onNext: (PersonalDetails)
 
         Spacer(modifier = modifier)
 
-        ExposedDropdownMenuBox(
-            expanded = genderOptionsExpanded,
-            onExpandedChange = { genderOptionsExpanded = it },
-        ) {
-            OutlinedTextField(
-                // The `menuAnchor` modifier must be passed to the text field for correctness.
-                modifier = Modifier.menuAnchor(),
-                readOnly = true,
-                value = personalDetails.gender.orEmpty(),
-                onValueChange = {},
-                label = { Text("Gender") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = genderOptionsExpanded) },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            )
-            ExposedDropdownMenu(
-                expanded = genderOptionsExpanded,
-                onDismissRequest = { genderOptionsExpanded = false },
-            ) {
-                genderOptions.forEach { selectionOption ->
-                    DropdownMenuItem(
-                        text = { Text(selectionOption) },
-                        onClick = {
-                            personalDetails.gender = selectionOption
-                            genderOptionsExpanded = false
-                        },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                    )
-                }
-            }
-        }
+        OutlinedTextField(
+            value = personalDetails.fitnessGoal.orEmpty(),
+            onValueChange = { personalDetails = personalDetails.copy(fitnessGoal = it) },
+            label = { Text("Fitness Goal") }
+        )
 
         Spacer(modifier = modifier)
 
         OutlinedTextField(
             value = personalDetails.disability.orEmpty(),
             onValueChange = { personalDetails = personalDetails.copy(disability = it) },
-            label = { Text("Disability") }
-        )
-
-        Spacer(modifier = modifier)
-
-        OutlinedTextField(
-            value = personalDetails.fitnessGoal.orEmpty(),
-            onValueChange = { personalDetails = personalDetails.copy(fitnessGoal = it) },
-            label = { Text("Fitness Goal") }
+            label = { Text("Disability (if any)") }
         )
 
         Spacer(modifier = modifier)
