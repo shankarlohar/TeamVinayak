@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,8 @@ import com.google.accompanist.pager.rememberPagerState
 import com.shankarlohar.teamvinayak.MainViewModel
 import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
 import com.shankarlohar.teamvinayak.util.Utils
+import com.shankarlohar.vmgclient.ClientActivity
+import com.shankarlohar.vmgowner.OwnerActivity
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -144,12 +147,12 @@ fun ChoiceItem(shoe: ChoiceScreenDataModel, pageOffset: Float, viewModel: MainVi
         stop = 1f,
         fraction = 1f - pageOffset.coerceIn(0f, 1f)
     )
-
+    val context = LocalContext.current
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable {
             viewModel.screenState.value = MainViewModel.UiState.Details(shoe)
-
+            context.startActivity(ClientActivity.getIntent(context))
         }
     ) {
         Box(

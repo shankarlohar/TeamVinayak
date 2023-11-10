@@ -1,19 +1,18 @@
-package com.shankarlohar.vmgclient
+package com.shankarlohar.vmgsignup
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.shankarlohar.vmgclient.ui.components.home.HomeComponent
-import com.shankarlohar.vmgclient.ui.screens.login.LoginScreen
-import com.shankarlohar.vmgclient.ui.theme.TeamVinayakTheme
+import androidx.compose.ui.tooling.preview.Preview
+import com.shankarlohar.vmgsignup.ui.theme.TeamVinayakTheme
 
-class ClientActivity : ComponentActivity() {
+class SignupActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -23,15 +22,25 @@ class ClientActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ClientApp()
+                    Greeting("Android")
                 }
             }
         }
     }
+}
 
-    companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, ClientActivity::class.java)
-        }
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    TeamVinayakTheme {
+        Greeting("Android")
     }
 }

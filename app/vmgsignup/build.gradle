@@ -1,13 +1,14 @@
 plugins {
-    id 'com.android.library'
+    id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    namespace 'com.shankarlohar.vmgowner'
+    namespace 'com.shankarlohar.vmgsignup'
     compileSdk 33
 
     defaultConfig {
+        applicationId "com.shankarlohar.vmgsignup"
         minSdk 22
         targetSdk 33
         versionCode 1
