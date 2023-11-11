@@ -17,10 +17,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +49,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -49,6 +63,7 @@ import com.shankarlohar.teamvinayak.data.choiceScreens
 import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
 import com.shankarlohar.teamvinayak.util.Utils
 import com.shankarlohar.vmgclient.ClientActivity
+import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.vmgowner.OwnerActivity
 import com.shankarlohar.vmgsignup.SignupActivity
 import kotlinx.coroutines.launch
@@ -104,6 +119,7 @@ fun ChoiceComponent(viewModel: MainViewModel) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewModel: MainViewModel) {
     val scale = Utils.lerp(
@@ -156,15 +172,17 @@ fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewMod
         stop = 1f,
         fraction = 1f - pageOffset.coerceIn(0f, 1f)
     )
+
+
+
     val context = LocalContext.current
+
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable {
             viewModel.screenState.value = MainViewModel.UiState.Details(item)
             when (page) {
                 0 -> context.startActivity(SignupActivity.getIntent(context))
-                1 -> context.startActivity(ClientActivity.getIntent(context))
-                2 -> context.startActivity(OwnerActivity.getIntent(context))
             }
         }
     ) {
@@ -201,30 +219,242 @@ fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewMod
                         fontWeight = FontWeight.Medium
                     )
                     Text(
-                        text = stringResource(item.description),
+                        text = stringResource(item.heading),
                         color = Color.White,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = stringResource(item.price),
+                        text = stringResource(item.subHeading),
                         fontSize = 14.sp,
                         color = Color.White.copy(alpha = .9f),
                         fontWeight = FontWeight.Light
                     )
+                    when(page){
+                        1 -> {
+                            Column(
+                                modifier = Modifier
+                                    .padding(6.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                val modifier = Modifier
+                                    .padding(8.dp)
+
+                                val emailState = remember{ mutableStateOf("") }
+                                val passState = remember{ mutableStateOf("") }
+
+                                Spacer(
+                                    modifier = modifier
+                                )
+
+
+                                OutlinedTextField(
+                                    value = emailState.value,
+                                    onValueChange = {emailState.value = it},
+                                    label = {
+                                        Text(
+                                            text = stringResource(R.string.user_id)
+                                        )
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Number
+                                    ),
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Filled.Person,
+                                            contentDescription = stringResource(R.string.user_id)
+                                        )
+                                    }
+                                )
+
+                                Spacer(
+                                    modifier = modifier
+                                )
+
+                                OutlinedTextField(
+                                    value = passState.value,
+                                    onValueChange = { passState.value = it },
+                                    label = {
+                                        Text(
+                                            text = stringResource(R.string.passcode)
+                                        )
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Password
+                                    ),
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Filled.Lock,
+                                            contentDescription = stringResource(R.string.passcode)
+                                        )
+                                    },
+                                )
+
+                                Spacer(
+                                    modifier = modifier
+                                )
+
+                                CompositionLocalProvider() {
+                                    Row{
+                                        Text(
+                                            text = "Forgot your credentials?",
+                                            textAlign = TextAlign.End,
+                                            fontSize = 12.sp
+                                        )
+                                        Spacer(modifier = Modifier.padding(2.dp))
+                                        Text(
+                                            text = "Click here",
+                                            textAlign = TextAlign.End,
+                                            fontSize = 12.sp,
+                                            modifier = Modifier
+                                                .clickable{}
+                                        )
+                                    }
+                                }
+
+
+                                Button(
+                                    onClick = {
+                                        context.startActivity(
+                                            ClientActivity
+                                                .getIntent(context,emailState.value,passState.value)
+                                        )
+                                    },
+                                    colors = ButtonDefaults
+                                        .buttonColors(
+                                            contentColor = MaterialTheme.colorScheme.onPrimary
+                                        ),
+                                    contentPadding = PaddingValues(16.dp),
+                                    shape = CircleShape,
+                                    modifier = modifier
+                                        .size(90.dp)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.let_s_go),
+                                    )
+                                }
+                            }
+                        }
+                        2 -> {
+                            Column(
+                                modifier = Modifier
+                                    .padding(6.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                val modifier = Modifier
+                                    .padding(8.dp)
+
+                                val name = remember{ mutableStateOf("") }
+                                val password = remember{ mutableStateOf("") }
+
+                                Spacer(
+                                    modifier = modifier
+                                )
+
+
+                                OutlinedTextField(
+                                    value = name.value,
+                                    onValueChange = {name.value = it},
+                                    label = {
+                                        Text(
+                                            text = stringResource(R.string.name)
+                                        )
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Number
+                                    ),
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Filled.Person,
+                                            contentDescription = stringResource(R.string.name)
+                                        )
+                                    }
+                                )
+
+                                Spacer(
+                                    modifier = modifier
+                                )
+
+                                OutlinedTextField(
+                                    value = password.value,
+                                    onValueChange = { password.value = it },
+                                    label = {
+                                        Text(
+                                            text = stringResource(R.string.password)
+                                        )
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Password
+                                    ),
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Filled.Lock,
+                                            contentDescription = stringResource(R.string.passcode)
+                                        )
+                                    },
+                                )
+
+                                Spacer(
+                                    modifier = modifier
+                                )
+
+                                CompositionLocalProvider() {
+                                    Row{
+                                        Text(
+                                            text = stringResource(R.string.forgot_your_credentials),
+                                            textAlign = TextAlign.End,
+                                            fontSize = 12.sp
+                                        )
+                                        Spacer(modifier = Modifier.padding(2.dp))
+                                        Text(
+                                            text = stringResource(R.string.click_here),
+                                            textAlign = TextAlign.End,
+                                            fontSize = 12.sp,
+                                            modifier = Modifier
+                                                .clickable{}
+                                        )
+                                    }
+                                }
+
+
+                                Button(
+                                    onClick = {
+                                        context.startActivity(
+                                            OwnerActivity
+                                                .getIntent(context,name.value,password.value)
+                                        )
+                                    },
+                                    colors = ButtonDefaults
+                                        .buttonColors(
+                                            contentColor = MaterialTheme.colorScheme.onPrimary
+                                        ),
+                                    contentPadding = PaddingValues(16.dp),
+                                    shape = CircleShape,
+                                    modifier = modifier
+                                        .size(90.dp)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.get_in),
+                                    )
+                                }
+                            }
+                        }
+                    }
+
                 }
-
                 Spacer(modifier = Modifier.weight(1f))
-
             }
         }
+
         Box(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
 
             Image(
-                painter = painterResource(id = item.resId),
+                painter = painterResource(id = item.bottomImage),
                 contentDescription = "",
                 modifier = Modifier
                     .align(

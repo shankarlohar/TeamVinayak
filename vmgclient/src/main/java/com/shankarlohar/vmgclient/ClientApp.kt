@@ -9,12 +9,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.shankarlohar.vmgclient.ui.screens.home.HomeScreen
-import com.shankarlohar.vmgclient.ui.screens.login.LoginScreen
+import com.shankarlohar.vmgclient.ui.components.home.HomeComponent
 import com.shankarlohar.vmgclient.ui.utils.Screen
 
 @Composable
 fun ClientApp(
+    email: String,
+    pass: String,
     navHostController: NavHostController = rememberNavController(),
 ){
     Surface(
@@ -23,17 +24,13 @@ fun ClientApp(
     ) {
         NavHost(
             navController = navHostController,
-            startDestination = Screen.LOGIN.name,
+            startDestination = Screen.HOME.name,
         ){
 
-            composable(route = Screen.LOGIN.name){
-                LoginScreen(
-                    onLoginClick = { navHostController.navigate(Screen.HOME.name) }
-                )
-            }
-
             composable(route = Screen.HOME.name){
-                HomeScreen(
+                HomeComponent(
+                    email = email,
+                    pass = pass,
                 onLogoutClick = { navHostController.navigate(Screen.LOGIN.name) }
                 )
             }

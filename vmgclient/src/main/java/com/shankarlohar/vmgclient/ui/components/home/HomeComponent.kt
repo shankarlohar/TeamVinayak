@@ -60,6 +60,8 @@ import kotlin.math.roundToInt
 
 @Composable
 fun HomeComponent(
+    email: String,
+    pass: String,
     onLogoutClick: () -> Unit = {}
 ) {
     var screen by remember { mutableStateOf(HomeMenu.HOME.name) }
@@ -292,7 +294,10 @@ fun HomeComponent(
             )
             when (screen) {
                 HomeMenu.HOME.name -> {
-                    DashboardComponent()
+                    DashboardComponent(
+                        email = email,
+                        pass = pass
+                    )
                 }
                 HomeMenu.PROFILE.name -> {
                     ProfileComponent()
@@ -445,9 +450,3 @@ fun MenuComponent(modifier: Modifier, menuAction: (HomeMenuAction) -> Unit) {
 
 }
 
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun PreviewHomeComponent() {
-    HomeComponent()
-}

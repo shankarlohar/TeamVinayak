@@ -16,7 +16,10 @@ import androidx.compose.ui.res.stringResource
 import com.shankarlohar.vmgclient.R
 
 @Composable
-fun DashboardComponent() {
+fun DashboardComponent(
+    email: String,
+    pass: String
+) {
     val context = LocalContext.current
 
     Column(
@@ -29,5 +32,6 @@ fun DashboardComponent() {
             Icons.Filled.Home,
             contentDescription = stringResource(R.string.home)
         )
+        Text(email+pass)
     }
 }

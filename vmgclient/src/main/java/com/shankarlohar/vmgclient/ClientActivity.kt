@@ -9,13 +9,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.shankarlohar.vmgclient.ui.components.home.HomeComponent
-import com.shankarlohar.vmgclient.ui.screens.login.LoginScreen
 import com.shankarlohar.vmgclient.ui.theme.TeamVinayakTheme
 
 class ClientActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val email = intent.getStringExtra("email")
+        val pass = intent.getStringExtra("pass")
+
         setContent {
             TeamVinayakTheme {
                 // A surface container using the 'background' color from the theme
@@ -23,15 +25,20 @@ class ClientActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ClientApp()
+                    ClientApp(
+                        email = email.toString(),
+                        pass = pass.toString()
+                    )
                 }
             }
         }
     }
 
     companion object {
-        fun getIntent(context: Context): Intent {
+        fun getIntent(context: Context, email: String, pass: String): Intent {
             return Intent(context, ClientActivity::class.java)
+                .putExtra("email",email)
+                .putExtra("pass",pass)
         }
     }
 }

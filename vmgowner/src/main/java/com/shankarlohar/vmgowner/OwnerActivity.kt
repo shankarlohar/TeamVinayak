@@ -20,6 +20,11 @@ import com.shankarlohar.vmgowner.ui.theme.TeamVinayakTheme
 class OwnerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val name = intent.getStringExtra("name")
+        val password = intent.getStringExtra("password")
+
+
         setContent {
             TeamVinayakTheme {
                 // A surface container using the 'background' color from the theme
@@ -27,14 +32,16 @@ class OwnerActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("This is Owner Side")
+                    Greeting("This is Owner Side $name $password")
                 }
             }
         }
     }
     companion object {
-        fun getIntent(context: Context): Intent {
+        fun getIntent(context: Context,name: String, password: String): Intent {
             return Intent(context, OwnerActivity::class.java)
+                .putExtra("name",name)
+                .putExtra("password",password)
         }
     }
 }

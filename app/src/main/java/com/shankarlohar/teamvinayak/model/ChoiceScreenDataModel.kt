@@ -3,9 +3,9 @@ package com.shankarlohar.teamvinayak.model
 import androidx.compose.ui.graphics.Color
 
 data class ChoiceScreenDataModel(
-    val resId: Int,
+    val bottomImage: Int,
     val title: Int,
-    val description: Int,
-    val price: Int,
+    val heading: Int,
+    val subHeading: Int,
     val color: Color,
 )

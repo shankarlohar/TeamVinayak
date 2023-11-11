@@ -7,28 +7,28 @@ import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
 val choiceScreens = mutableListOf<ChoiceScreenDataModel>().apply {
         add(
             ChoiceScreenDataModel(
-                resId = R.drawable.join_now,
+                bottomImage = R.drawable.join_now,
                 title = R.string.join_now,
-                description = R.string.vinayak_multi_gym,
-                price = R.string.unisex,
+                heading = R.string.vinayak_multi_gym,
+                subHeading = R.string.unisex,
                 color = Color(0xFFeb4658)
             )
         )
         add(
             ChoiceScreenDataModel(
-                resId = R.drawable.member_login,
+                bottomImage = R.drawable.member_login,
                 title = R.string.members_login,
-                description = R.string.team_vinayak,
-                price = R.string.unisex,
+                heading = R.string.team_vinayak,
+                subHeading = R.string.who_will_top_this_weeks_leaderboard,
                 color = Color(0xFF6887cb)
             )
         )
         add(
             ChoiceScreenDataModel(
-                resId = R.drawable.admin_login,
+                bottomImage = R.drawable.admin_login,
                 title = R.string.admin_only,
-                description = R.string.let_s_make_everyone_fit,
-                price = R.string.unisex,
+                heading = R.string.let_s_make_everyone_fit,
+                subHeading = R.string.what_s_special_today,
                 color = Color(0xFFfe7153)
             )
         )

@@ -39,7 +39,16 @@
     <string name="admin_only">Admin Only</string>
     <string name="unisex">Unisex</string>
     <string name="vinayak_multi_gym">Vinayak Multi Gym</string>
-    <string name="team_vinayak">Team Vinayak</string>
+    <string name="team_vinayak">Team Vinayak 🏋🏻‍</string>
     <string name="let_s_make_everyone_fit">Let\'s make everyone fit 💪🏻</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="get_in">Get in!</string>
+    <string name="click_here">Click here</string>
+    <string name="forgot_your_credentials">Forgot your credentials?</string>
+    <string name="let_s_go">Let\'s go!</string>
+    <string name="who_will_top_this_weeks_leaderboard">Who will top this weeks leaderboard?</string>
+    <string name="what_s_special_today">What\'s special today?</string>
+
 
 </resources>
