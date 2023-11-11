@@ -1,5 +1,7 @@
 package com.shankarlohar.teamvinayak
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.shankarlohar.teamvinayak.ui.components.ChoiceComponent
 import com.shankarlohar.teamvinayak.ui.theme.TeamVinayakTheme
+import com.shankarlohar.vmgsignup.SignupActivity
 
 class ChoiceActivity : ComponentActivity() {
 
@@ -42,6 +45,12 @@ class ChoiceActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, ChoiceActivity::class.java)
         }
     }
 }

@@ -8,15 +8,25 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.shankarlohar.vmgsignup.ui.component.FormComponent
+import com.shankarlohar.vmgsignup.ui.component.OnBoardingComponent
 import com.shankarlohar.vmgsignup.ui.theme.TeamVinayakTheme
 
 class SignupActivity : ComponentActivity() {
+
+    private lateinit var signupViewModel: SignupViewModel
+    @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        signupViewModel = SignupViewModel()
+
+
         setContent {
             TeamVinayakTheme {
                 // A surface container using the 'background' color from the theme
@@ -24,7 +34,27 @@ class SignupActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+
+                    NavHost(
+                        navController = navController,
+                        startDestination = Steps.ONBOARD.name
+                    ){
+                        composable(Steps.ONBOARD.name){
+                            OnBoardingComponent(
+                                viewModel = signupViewModel,
+                                navController = navController,
+                                onBackPressed = { onBackPressed() }
+                            ) { finish() }
+                        }
+                        composable(Steps.FORM.name){
+                            FormComponent()
+                        }
+                    }
+
+
+
+
                 }
             }
         }
@@ -36,18 +66,7 @@ class SignupActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TeamVinayakTheme {
-        Greeting("Android")
-    }
+enum class Steps{
+    ONBOARD,
+    FORM
 }

@@ -182,7 +182,9 @@ fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewMod
         .clickable {
             viewModel.screenState.value = ChoiceScreenViewModel.UiState.Details(item)
             when (page) {
-                0 -> context.startActivity(SignupActivity.getIntent(context))
+                0 -> {
+                    context.startActivity(SignupActivity.getIntent(context))
+                }
             }
         }
     ) {
