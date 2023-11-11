@@ -57,7 +57,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
-import com.shankarlohar.teamvinayak.MainViewModel
+import com.shankarlohar.teamvinayak.ChoiceScreenViewModel
 import com.shankarlohar.teamvinayak.data.choiceCategories
 import com.shankarlohar.teamvinayak.data.choiceScreens
 import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
@@ -71,7 +71,7 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ChoiceComponent(viewModel: MainViewModel) {
+fun ChoiceComponent(viewModel: ChoiceScreenViewModel) {
     val pagerState = rememberPagerState()
     val selectedCategory = remember { mutableStateOf(0) }
     val rememberScope = rememberCoroutineScope()
@@ -121,7 +121,7 @@ fun ChoiceComponent(viewModel: MainViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewModel: MainViewModel) {
+fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewModel: ChoiceScreenViewModel) {
     val scale = Utils.lerp(
         start = 0.5f,
         stop = 1f,
@@ -180,7 +180,7 @@ fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewMod
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable {
-            viewModel.screenState.value = MainViewModel.UiState.Details(item)
+            viewModel.screenState.value = ChoiceScreenViewModel.UiState.Details(item)
             when (page) {
                 0 -> context.startActivity(SignupActivity.getIntent(context))
             }
@@ -231,6 +231,21 @@ fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewMod
                         fontWeight = FontWeight.Light
                     )
                     when(page){
+                        0 -> {
+                            Column(
+                                modifier = Modifier
+                                    .padding(6.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.vinayak_multi_gym_no_background),
+                                    contentDescription = stringResource(R.string.gym_name),
+                                    modifier = Modifier.size(200.dp)
+                                )
+                                Text(stringResource(R.string.tap_to_fill_registration_form))
+                            }
+                        }
                         1 -> {
                             Column(
                                 modifier = Modifier
