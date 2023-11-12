@@ -13,7 +13,7 @@ class FirestoreDatabase {
     private val tncList = db.collection("register").document("terms-and-conditions")
     private val signupFormFields = db.collection("register").document("form")
 
-    private val newUser = db.collection("User") // Replace with your collection name
+    private val newUser = db.collection("user") // Replace with your collection name
 
 
 
@@ -66,24 +66,34 @@ class FirestoreDatabase {
     suspend fun uploadNewUser(formModelList: List<FormModel>): Boolean {
         val results = mutableListOf<Boolean>()
 
+        val userSections = mutableMapOf<String, Map<String, String>>()
+
         for (formModel in formModelList) {
+            val sectionData = userSections.getOrPut(formModel.field) { emptyMap() }
+            val newData = formModel.data.associate { it.first to it.second }
+            userSections[formModel.field] = sectionData + newData
+        }
+
             try {
-                val task = newUser.add(formModel).await()
-                if (task != null) {
-                    Log.e("myuserdata", "uploaded to firebase")
-                    results.add(true)
-                }else{
-                    Log.e("myuserdata", "null task firebase")
-                }
+
+                // Create a reference to a new document within the "users" collection with a random unique ID
+                val newUserDoc = newUser.document()
+
+                // Set the map in the new document
+                newUserDoc.set(userSections).await()
+
+                Log.e("myuserdata", "uploaded to Firestore")
+                results.add(true)
             } catch (e: Exception) {
-                Log.e("myuserdata", "could not upload to firebase", e)
+                Log.e("myuserdata", "could not upload to Firestore", e)
                 results.add(false)
             }
-        }
 
         // Check if all tasks were successful
         return results.all { it }
     }
+
+
 
 
 }
