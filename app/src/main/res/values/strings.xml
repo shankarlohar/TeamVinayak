@@ -55,6 +55,7 @@
     <string name="this_is_important">This is important</string>
     <string name="submit">Submit</string>
     <string name="go_back_to_choice">Go Back to Login.</string>
+    <string name="empty" />
 
 
 </resources>

@@ -200,7 +200,7 @@ fun ChoiceItem(
             viewModel.screenState.value = ChoiceScreenViewModel.UiState.Details(item)
             when (page) {
                 0 -> {
-                    navController.navigate(Steps.CHOICE.name)
+                    navController.navigate(Steps.ONBOARD.name)
                 }
             }
         }

@@ -1,6 +1,8 @@
 package com.shankarlohar.teamvinayak.data
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.shankarlohar.teamvinayak.model.FormModel
 import com.shankarlohar.teamvinayak.model.OnBoardingModel
 import com.shankarlohar.teamvinayak.model.SignupFormModel
 import kotlinx.coroutines.tasks.await
@@ -10,6 +12,8 @@ class FirestoreDatabase {
 
     private val tncList = db.collection("register").document("terms-and-conditions")
     private val signupFormFields = db.collection("register").document("form")
+
+    private val newUser = db.collection("User") // Replace with your collection name
 
 
 
@@ -57,6 +61,28 @@ class FirestoreDatabase {
         }
 
         return emptyList()
+    }
+
+    suspend fun uploadNewUser(formModelList: List<FormModel>): Boolean {
+        val results = mutableListOf<Boolean>()
+
+        for (formModel in formModelList) {
+            try {
+                val task = newUser.add(formModel).await()
+                if (task != null) {
+                    Log.e("myuserdata", "uploaded to firebase")
+                    results.add(true)
+                }else{
+                    Log.e("myuserdata", "null task firebase")
+                }
+            } catch (e: Exception) {
+                Log.e("myuserdata", "could not upload to firebase", e)
+                results.add(false)
+            }
+        }
+
+        // Check if all tasks were successful
+        return results.all { it }
     }
 
 
