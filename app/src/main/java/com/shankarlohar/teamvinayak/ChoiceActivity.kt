@@ -14,16 +14,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.shankarlohar.teamvinayak.ui.components.ChoiceComponent
-import com.shankarlohar.teamvinayak.ui.components.FailedToLoad
-import com.shankarlohar.teamvinayak.ui.components.FormComponent
-import com.shankarlohar.teamvinayak.ui.components.LoadingData
-import com.shankarlohar.teamvinayak.ui.components.OnBoardingComponent
+import com.shankarlohar.teamvinayak.ui.clientside.home.HomeComponent
+import com.shankarlohar.teamvinayak.ui.newuserside.ChoiceComponent
+import com.shankarlohar.teamvinayak.ui.newuserside.FailedToLoad
+import com.shankarlohar.teamvinayak.ui.newuserside.FormComponent
+import com.shankarlohar.teamvinayak.ui.newuserside.LoadingData
+import com.shankarlohar.teamvinayak.ui.newuserside.OnBoardingComponent
+import com.shankarlohar.teamvinayak.ui.ownerside.OwnerHomeComponent
 import com.shankarlohar.teamvinayak.ui.theme.TeamVinayakTheme
 import com.shankarlohar.teamvinayak.util.Status
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.ChoiceScreenViewModel
 import com.shankarlohar.teamvinayak.viewmodel.SignupViewModel
+
 
 class ChoiceActivity : ComponentActivity() {
 
@@ -100,6 +103,16 @@ class ChoiceActivity : ComponentActivity() {
                                     viewModel = choiceScreenViewModel,
                                     navController = navController
                                 )
+                            }
+                            composable(Steps.CLIENT.name){
+                                HomeComponent(
+                                    email = "email",
+                                    pass = "pass",
+                                    onLogoutClick = { navController.navigate(Steps.CHOICE.name) }
+                                )
+                            }
+                            composable(Steps.OWNER.name){
+                                OwnerHomeComponent()
                             }
                         }
 

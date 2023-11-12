@@ -32,7 +32,9 @@ object Utils {
 enum class Steps{
     ONBOARD,
     FORM,
-    CHOICE
+    CHOICE,
+    CLIENT,
+    OWNER
 }
 
 enum class Status{
