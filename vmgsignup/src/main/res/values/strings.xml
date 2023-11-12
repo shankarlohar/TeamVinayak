@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">vmgsignup</string>
-    <string name="skip">skip</string>
-    <string name="accept_agreement">Yes, I agree to the Terms and Conditions.  📝</string>
-    <string name="next">Next</string>
-    <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
-    <string name="you_should_have_read">You should have read that… But anyways 🤷🏻‍</string>
-
-</resources>

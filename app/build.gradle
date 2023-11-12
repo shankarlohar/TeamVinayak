@@ -82,5 +82,4 @@ dependencies {
 
     implementation project(':vmgclient')
     implementation project(':vmgowner')
-    implementation project(':vmgsignup')
 }

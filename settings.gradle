@@ -16,4 +16,3 @@ rootProject.name = "Team Vinayak"
 include ':app'
 include ':vmgowner'
 include ':vmgclient'
-include ':vmgsignup'

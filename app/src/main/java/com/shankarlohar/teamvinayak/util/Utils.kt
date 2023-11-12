@@ -28,3 +28,15 @@ object Utils {
     }
     val EaseOutQuart = CubicBezierEasing(0.25f, 1f, 0.5f, 1f)
 }
+
+enum class Steps{
+    ONBOARD,
+    FORM,
+    CHOICE
+}
+
+enum class Status{
+    Completed,
+    Loading,
+    Failed
+}

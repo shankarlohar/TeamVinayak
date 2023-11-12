@@ -53,25 +53,30 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
-import com.shankarlohar.teamvinayak.ChoiceScreenViewModel
+import com.shankarlohar.teamvinayak.viewmodel.ChoiceScreenViewModel
 import com.shankarlohar.teamvinayak.data.choiceCategories
 import com.shankarlohar.teamvinayak.data.choiceScreens
 import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
 import com.shankarlohar.teamvinayak.util.Utils
 import com.shankarlohar.vmgclient.ClientActivity
 import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.vmgowner.OwnerActivity
-import com.shankarlohar.vmgsignup.SignupActivity
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ChoiceComponent(viewModel: ChoiceScreenViewModel) {
+fun ChoiceComponent(
+    viewModel: ChoiceScreenViewModel,
+    navController: NavController
+) {
     val pagerState = rememberPagerState()
     val selectedCategory = remember { mutableStateOf(0) }
     val rememberScope = rememberCoroutineScope()
@@ -114,14 +119,26 @@ fun ChoiceComponent(viewModel: ChoiceScreenViewModel) {
             state = pagerState,
         ) { page ->
             val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
-            ChoiceItem(item = choiceScreens[page],page = page, pageOffset, viewModel)
+            ChoiceItem(
+                item = choiceScreens[page],
+                page = page,
+                pageOffset = pageOffset,
+                viewModel = viewModel,
+                navController = navController
+            )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewModel: ChoiceScreenViewModel) {
+fun ChoiceItem(
+    item: ChoiceScreenDataModel,
+    page: Int, pageOffset: Float,
+    viewModel: ChoiceScreenViewModel,
+    navController: NavController,
+
+    ) {
     val scale = Utils.lerp(
         start = 0.5f,
         stop = 1f,
@@ -183,7 +200,7 @@ fun ChoiceItem(item: ChoiceScreenDataModel,page: Int, pageOffset: Float, viewMod
             viewModel.screenState.value = ChoiceScreenViewModel.UiState.Details(item)
             when (page) {
                 0 -> {
-                    context.startActivity(SignupActivity.getIntent(context))
+                    navController.navigate(Steps.CHOICE.name)
                 }
             }
         }

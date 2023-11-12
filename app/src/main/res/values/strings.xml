@@ -49,5 +49,12 @@
     <string name="what_s_special_today">What\'s special today?</string>
     <string name="tap_to_fill_registration_form">Tap to fill registration form 📝</string>
 
+    <string name="accept_agreement">Yes, I agree to the Terms and Conditions.  📝</string>
+    <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="you_should_have_read">You should have read that… But anyways 🤷🏻‍</string>
+    <string name="this_is_important">This is important</string>
+    <string name="submit">Submit</string>
+    <string name="go_back_to_choice">Go Back to Login.</string>
+
 
 </resources>

@@ -1,4 +1,4 @@
-package com.shankarlohar.vmgsignup.model
+package com.shankarlohar.teamvinayak.model
 
 data class OnBoardingModel(
     val section: String,

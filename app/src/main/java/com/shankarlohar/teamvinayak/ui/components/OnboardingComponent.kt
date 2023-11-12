@@ -1,4 +1,4 @@
-package com.shankarlohar.vmgsignup.ui.component
+package com.shankarlohar.teamvinayak.ui.components
 
 import android.widget.Toast
 import androidx.compose.animation.core.Spring
@@ -49,10 +49,10 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.shankarlohar.vmgsignup.R
-import com.shankarlohar.vmgsignup.SignupViewModel
-import com.shankarlohar.vmgsignup.Steps
-import com.shankarlohar.vmgsignup.model.OnBoardingModel
+import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.model.OnBoardingModel
+import com.shankarlohar.teamvinayak.util.Steps
+import com.shankarlohar.teamvinayak.viewmodel.SignupViewModel
 import kotlinx.coroutines.launch
 
 
@@ -60,61 +60,56 @@ import kotlinx.coroutines.launch
 @Composable
 fun OnBoardingComponent(
     viewModel: SignupViewModel,
-    onBackPressed: () -> Unit,
     navController: NavHostController,
-    finish: () -> Unit,
 ) {
     val items by viewModel.termsAndConditionsData.collectAsState()
     val scope = rememberCoroutineScope()
     val pageState = rememberPagerState()
     val context = LocalContext.current
 
-    items?.let {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            TopSection(
-                onBackClick = {
-                    if (pageState.currentPage + 1 > 1) scope.launch {
-                        pageState.scrollToPage(pageState.currentPage - 1)
-                    }
-                    else{
-                        finish()
-                        onBackPressed()
-                    }
-                },
-                onSkipClick = {
-                    if (pageState.currentPage + 1 < items!!.size) scope.launch {
-                        pageState.scrollToPage(items!!.size - 1)
-                    }
-                    if (pageState.currentPage != items!!.size - 1) {
-                        Toast.makeText(context, R.string.you_should_have_read, Toast.LENGTH_SHORT).show()
-                    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        TopSection(
+            onBackClick = {
+                if (pageState.currentPage + 1 > 1) scope.launch {
+                    pageState.scrollToPage(pageState.currentPage - 1)
                 }
-            )
-
-            HorizontalPager(
-                count = items!!.size,
-                state = pageState,
-                modifier = Modifier
-                    .fillMaxHeight(0.9f)
-                    .fillMaxWidth()
-            ) { page ->
-                OnBoardingItem(
-                    items = items!![page]
-                )
+                else{
+                    navController.navigate(Steps.CHOICE.name)
+                }
+            },
+            onSkipClick = {
+                if (pageState.currentPage + 1 < items.size) scope.launch {
+                    pageState.scrollToPage(items.size - 1)
+                }
+                if (pageState.currentPage != items.size - 1) {
+                    Toast.makeText(context, R.string.you_should_have_read, Toast.LENGTH_SHORT).show()
+                }
             }
+        )
 
-            BottomSection(
-                size = items!!.size,
-                index = pageState.currentPage,
-            ) {
-                if (pageState.currentPage + 1 < items!!.size) scope.launch {
-                    pageState.scrollToPage(pageState.currentPage + 1)
-                }else{
-                    navController.navigate(Steps.FORM.name)
-                }
+        HorizontalPager(
+            count = items.size,
+            state = pageState,
+            modifier = Modifier
+                .fillMaxHeight(0.9f)
+                .fillMaxWidth()
+        ) { page ->
+            OnBoardingItem(
+                items = items[page]
+            )
+        }
+
+        BottomSection(
+            size = items.size,
+            index = pageState.currentPage,
+        ) {
+            if (pageState.currentPage + 1 < items.size) scope.launch {
+                pageState.scrollToPage(pageState.currentPage + 1)
+            }else{
+                navController.navigate(Steps.FORM.name)
             }
         }
     }
@@ -124,7 +119,8 @@ fun OnBoardingComponent(
 @Composable
 fun TopSection(
     onBackClick: () -> Unit = {},
-    onSkipClick: () -> Unit = {}) {
+    onSkipClick: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()

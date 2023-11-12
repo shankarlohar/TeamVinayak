@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak
+package com.shankarlohar.teamvinayak.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -16,7 +16,6 @@ class ChoiceScreenViewModel() : ViewModel() {
     val isLoading = _isLoading.asStateFlow()
     init {
         viewModelScope.launch(Dispatchers.Main) {
-
                 _isLoading.value = false // when data loading is complete
         }
     }

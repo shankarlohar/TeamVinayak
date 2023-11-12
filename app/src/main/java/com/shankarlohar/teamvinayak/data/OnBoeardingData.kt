@@ -1,6 +1,6 @@
-package com.shankarlohar.vmgsignup.data
+package com.shankarlohar.teamvinayak.data
 
-import com.shankarlohar.vmgsignup.model.OnBoardingModel
+import com.shankarlohar.teamvinayak.model.OnBoardingModel
 
 val onBoardingData = mutableListOf<OnBoardingModel>().apply {
     add(
