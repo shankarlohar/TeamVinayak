@@ -68,6 +68,7 @@ class SignupViewModel: ViewModel() {
     }
 
     fun uploadNewRegistration(){
+        addQuestion("Membership Status", "Approved","false")
         _dataStatus.value = Status.Loading
         var status = false
         viewModelScope.launch(Dispatchers.IO)
