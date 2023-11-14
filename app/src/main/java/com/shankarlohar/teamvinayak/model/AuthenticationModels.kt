@@ -5,7 +5,7 @@ data class SignupFormModel(
     val data: List<String>
 )
 
-data class FormModel(
+data class ToSubmitFormModel(
     val field: String,
     val data: List<Pair<String,String>>
 )

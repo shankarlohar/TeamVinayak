@@ -50,16 +50,16 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.shankarlohar.teamvinayak.R
-import com.shankarlohar.teamvinayak.model.OnBoardingModel
+import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.util.Steps
-import com.shankarlohar.teamvinayak.viewmodel.SignupViewModel
+import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 
 
 @ExperimentalPagerApi
 @Composable
-fun OnBoardingComponent(
-    viewModel: SignupViewModel,
+fun TermsAndConditionsComponent(
+    viewModel: AuthViewModel,
     navController: NavHostController,
 ) {
     val items by viewModel.termsAndConditionsData.collectAsState()
@@ -97,8 +97,8 @@ fun OnBoardingComponent(
                 .fillMaxHeight(0.9f)
                 .fillMaxWidth()
         ) { page ->
-            OnBoardingItem(
-                items = items[page]
+            TncItem(
+                tnc = items[page]
             )
         }
 
@@ -235,7 +235,7 @@ fun Indicator(isSelected: Boolean) {
 }
 
 @Composable
-fun OnBoardingItem(items: OnBoardingModel) {
+fun TncItem(tnc: TermsAndConditionsModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
@@ -253,7 +253,7 @@ fun OnBoardingItem(items: OnBoardingModel) {
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = items.section,
+            text = tnc.section.substring(3),
             style = MaterialTheme.typography.headlineMedium,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onBackground,
@@ -264,7 +264,7 @@ fun OnBoardingItem(items: OnBoardingModel) {
         Spacer(modifier = Modifier.height(8.dp))
 
         LazyColumn{
-            items.content.forEach{
+            tnc.content.forEach{
                 item {
                     Text(
                         text = it,

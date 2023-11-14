@@ -3,13 +3,13 @@ package com.shankarlohar.teamvinayak.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
+import com.shankarlohar.teamvinayak.model.ChooseUserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ChoiceScreenViewModel() : ViewModel() {
+class ChooseUserViewModel() : ViewModel() {
 
 
     private val _isLoading = MutableStateFlow(true)
@@ -24,7 +24,7 @@ class ChoiceScreenViewModel() : ViewModel() {
 
 
     sealed class UiState {
-        class Details(val choiceScreenDataModel: ChoiceScreenDataModel) : UiState()
+        class Details(val chooseUserModel: ChooseUserModel) : UiState()
         object Home : UiState()
     }
 

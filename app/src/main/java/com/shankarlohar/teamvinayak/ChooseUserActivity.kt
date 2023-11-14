@@ -15,23 +15,23 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.shankarlohar.teamvinayak.ui.clientside.home.HomeComponent
-import com.shankarlohar.teamvinayak.ui.newuserside.ChoiceComponent
+import com.shankarlohar.teamvinayak.ui.newuserside.ChooseUserComponent
 import com.shankarlohar.teamvinayak.ui.newuserside.FailedToLoad
-import com.shankarlohar.teamvinayak.ui.newuserside.FormComponent
+import com.shankarlohar.teamvinayak.ui.newuserside.NewUserFormComponent
 import com.shankarlohar.teamvinayak.ui.newuserside.LoadingData
-import com.shankarlohar.teamvinayak.ui.newuserside.OnBoardingComponent
+import com.shankarlohar.teamvinayak.ui.newuserside.TermsAndConditionsComponent
 import com.shankarlohar.teamvinayak.ui.ownerside.OwnerHomeComponent
 import com.shankarlohar.teamvinayak.ui.theme.TeamVinayakTheme
 import com.shankarlohar.teamvinayak.util.Status
 import com.shankarlohar.teamvinayak.util.Steps
-import com.shankarlohar.teamvinayak.viewmodel.ChoiceScreenViewModel
-import com.shankarlohar.teamvinayak.viewmodel.SignupViewModel
+import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
+import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 
 
-class ChoiceActivity : ComponentActivity() {
+class ChooseUserActivity : ComponentActivity() {
 
-    private lateinit var choiceScreenViewModel: ChoiceScreenViewModel
-    private lateinit var signupViewModel: SignupViewModel
+    private lateinit var chooseUserViewModel: ChooseUserViewModel
+    private lateinit var authViewModel: AuthViewModel
 
     @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,18 +39,18 @@ class ChoiceActivity : ComponentActivity() {
 
         installSplashScreen().apply {
             setKeepOnScreenCondition{
-                choiceScreenViewModel.isLoading.value
+                chooseUserViewModel.isLoading.value
             }
         }
-        choiceScreenViewModel = ChoiceScreenViewModel()
-        signupViewModel = SignupViewModel()
+        chooseUserViewModel = ChooseUserViewModel()
+        authViewModel = AuthViewModel()
 
         setContent {
 
             TeamVinayakTheme {
-                val isLoading by choiceScreenViewModel.isLoading.collectAsState()
+                val isLoading by chooseUserViewModel.isLoading.collectAsState()
 
-                val signupDataStatus by signupViewModel.dataStatus.collectAsState()
+                val signupDataStatus by authViewModel.dataStatus.collectAsState()
 
 
                 if (!isLoading) {
@@ -67,8 +67,8 @@ class ChoiceActivity : ComponentActivity() {
                             composable(Steps.ONBOARD.name){
                                 when (signupDataStatus) {
                                     Status.Completed -> {
-                                        OnBoardingComponent(
-                                            viewModel = signupViewModel,
+                                        TermsAndConditionsComponent(
+                                            viewModel = authViewModel,
                                             navController = navController,
                                         )
                                     }
@@ -84,8 +84,8 @@ class ChoiceActivity : ComponentActivity() {
                             composable(Steps.FORM.name){
                                 when (signupDataStatus) {
                                     Status.Completed -> {
-                                        FormComponent(
-                                            viewModel = signupViewModel,
+                                        NewUserFormComponent(
+                                            viewModel = authViewModel,
                                             navController = navController,
                                         )
                                     }
@@ -99,15 +99,13 @@ class ChoiceActivity : ComponentActivity() {
                                 }
                             }
                             composable(Steps.CHOICE.name){
-                                ChoiceComponent(
-                                    viewModel = choiceScreenViewModel,
+                                ChooseUserComponent(
+                                    viewModel = chooseUserViewModel,
                                     navController = navController
                                 )
                             }
                             composable(Steps.CLIENT.name){
                                 HomeComponent(
-                                    email = "email",
-                                    pass = "pass",
                                     onLogoutClick = { navController.navigate(Steps.CHOICE.name) }
                                 )
                             }

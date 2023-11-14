@@ -58,10 +58,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
-import com.shankarlohar.teamvinayak.viewmodel.ChoiceScreenViewModel
+import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 import com.shankarlohar.teamvinayak.data.choiceCategories
 import com.shankarlohar.teamvinayak.data.choiceScreens
-import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
+import com.shankarlohar.teamvinayak.model.ChooseUserModel
 import com.shankarlohar.teamvinayak.util.Utils
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.util.Steps
@@ -70,8 +70,8 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ChoiceComponent(
-    viewModel: ChoiceScreenViewModel,
+fun ChooseUserComponent(
+    viewModel: ChooseUserViewModel,
     navController: NavController
 ) {
     val pagerState = rememberPagerState()
@@ -130,9 +130,9 @@ fun ChoiceComponent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChoiceItem(
-    item: ChoiceScreenDataModel,
+    item: ChooseUserModel,
     page: Int, pageOffset: Float,
-    viewModel: ChoiceScreenViewModel,
+    viewModel: ChooseUserViewModel,
     navController: NavController,
 
     ) {
@@ -194,7 +194,7 @@ fun ChoiceItem(
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable {
-            viewModel.screenState.value = ChoiceScreenViewModel.UiState.Details(item)
+            viewModel.screenState.value = ChooseUserViewModel.UiState.Details(item)
             when (page) {
                 0 -> {
                     navController.navigate(Steps.ONBOARD.name)

@@ -2,11 +2,11 @@ package com.shankarlohar.teamvinayak.data
 
 import androidx.compose.ui.graphics.Color
 import com.shankarlohar.teamvinayak.R
-import com.shankarlohar.teamvinayak.model.ChoiceScreenDataModel
+import com.shankarlohar.teamvinayak.model.ChooseUserModel
 
-val choiceScreens = mutableListOf<ChoiceScreenDataModel>().apply {
+val choiceScreens = mutableListOf<ChooseUserModel>().apply {
         add(
-            ChoiceScreenDataModel(
+            ChooseUserModel(
                 bottomImage = R.drawable.join_now,
                 title = R.string.join_now,
                 heading = R.string.vinayak_multi_gym,
@@ -15,7 +15,7 @@ val choiceScreens = mutableListOf<ChoiceScreenDataModel>().apply {
             )
         )
         add(
-            ChoiceScreenDataModel(
+            ChooseUserModel(
                 bottomImage = R.drawable.member_login,
                 title = R.string.members_login,
                 heading = R.string.team_vinayak,
@@ -24,7 +24,7 @@ val choiceScreens = mutableListOf<ChoiceScreenDataModel>().apply {
             )
         )
         add(
-            ChoiceScreenDataModel(
+            ChooseUserModel(
                 bottomImage = R.drawable.admin_login,
                 title = R.string.admin_only,
                 heading = R.string.let_s_make_everyone_fit,
@@ -34,4 +34,4 @@ val choiceScreens = mutableListOf<ChoiceScreenDataModel>().apply {
         )
     }
 
-    val choiceCategories = listOf("New", "Members", "Admin")
+    val choiceCategories = listOf("New User", "Members", "Admin")

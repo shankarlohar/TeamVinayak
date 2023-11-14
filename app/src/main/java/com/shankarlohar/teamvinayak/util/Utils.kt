@@ -2,6 +2,9 @@ package com.shankarlohar.teamvinayak.util
 
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.Easing
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object Utils {
     fun lerp(start: Float, stop: Float, fraction: Float): Float =
@@ -27,6 +30,10 @@ object Utils {
         }
     }
     val EaseOutQuart = CubicBezierEasing(0.25f, 1f, 0.5f, 1f)
+
+    fun getCurrentDate():String{
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+    }
 }
 
 enum class Steps{

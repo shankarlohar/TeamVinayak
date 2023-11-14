@@ -2,8 +2,8 @@ package com.shankarlohar.teamvinayak.data
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.shankarlohar.teamvinayak.model.FormModel
-import com.shankarlohar.teamvinayak.model.OnBoardingModel
+import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
+import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.model.SignupFormModel
 import kotlinx.coroutines.tasks.await
 
@@ -17,19 +17,19 @@ class FirestoreDatabase {
 
 
 
-    suspend fun getTnC(): List<OnBoardingModel>{
+    suspend fun getTnC(): List<TermsAndConditionsModel>{
         val snapshot = tncList.get().await()
 
         if (snapshot.exists()) {
             val data = snapshot.data
-            val tncList = mutableListOf<OnBoardingModel>()
+            val tncList = mutableListOf<TermsAndConditionsModel>()
 
             if (data != null) {
                 for (key in data.keys) {
                     if (data[key] is List<*>) {
                         val content = (data[key] as List<String>)
-                        val onBoardingModel = OnBoardingModel(key, content)
-                        tncList.add(onBoardingModel)
+                        val termsAndConditionsModel = TermsAndConditionsModel(key, content)
+                        tncList.add(termsAndConditionsModel)
                     }
                 }
             }
@@ -40,7 +40,7 @@ class FirestoreDatabase {
         return emptyList()
     }
 
-    suspend fun getSignupForm(): List<SignupFormModel>{
+    suspend fun getNewUserForm(): List<SignupFormModel>{
         val snapshot = signupFormFields.get().await()
 
         if (snapshot.exists()) {
@@ -63,33 +63,34 @@ class FirestoreDatabase {
         return emptyList()
     }
 
-    suspend fun uploadNewUser(formModelList: List<FormModel>): Boolean {
+    suspend fun createNewUser(toSubmitFormModelList: List<ToSubmitFormModel>): Boolean {
         val results = mutableListOf<Boolean>()
-
         val userSections = mutableMapOf<String, Map<String, String>>()
 
-        for (formModel in formModelList) {
+        val auth = Authentication()
+
+        for (formModel in toSubmitFormModelList) {
             val sectionData = userSections.getOrPut(formModel.field) { emptyMap() }
             val newData = formModel.data.associate { it.first to it.second }
             userSections[formModel.field] = sectionData + newData
         }
 
             try {
+                userSections["1. Personal Details"]?.get("Create a password")?.let {password ->
+                    userSections["1. Personal Details"]?.get("Email")?.let { email ->
+                        auth.registerUser(email, password).onSuccess { uid ->
 
-                // Create a reference to a new document within the "users" collection with a random unique ID
-                val newUserDoc = newUser.document()
+                            val newUserDoc = newUser.document(uid)
+                            newUserDoc.set(userSections).await()
 
-                // Set the map in the new document
-                newUserDoc.set(userSections).await()
-
-                Log.e("myuserdata", "uploaded to Firestore")
+                        }
+                    }
+                }
                 results.add(true)
             } catch (e: Exception) {
-                Log.e("myuserdata", "could not upload to Firestore", e)
                 results.add(false)
             }
 
-        // Check if all tasks were successful
         return results.all { it }
     }
 

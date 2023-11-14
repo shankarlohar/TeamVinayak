@@ -45,7 +45,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,8 +59,6 @@ import kotlin.math.roundToInt
 
 @Composable
 fun HomeComponent(
-    email: String,
-    pass: String,
     onLogoutClick: () -> Unit = {}
 ) {
     var screen by remember { mutableStateOf(HomeMenu.HOME.name) }
@@ -294,10 +291,7 @@ fun HomeComponent(
             )
             when (screen) {
                 HomeMenu.HOME.name -> {
-                    DashboardComponent(
-                        email = email,
-                        pass = pass
-                    )
+                    DashboardComponent()
                 }
                 HomeMenu.PROFILE.name -> {
                     ProfileComponent()

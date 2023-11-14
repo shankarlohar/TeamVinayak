@@ -2,7 +2,7 @@ package com.shankarlohar.teamvinayak.model
 
 import androidx.compose.ui.graphics.Color
 
-data class ChoiceScreenDataModel(
+data class ChooseUserModel(
     val bottomImage: Int,
     val title: Int,
     val heading: Int,
