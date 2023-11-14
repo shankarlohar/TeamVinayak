@@ -1,5 +1,6 @@
 package com.shankarlohar.teamvinayak.ui.newuserside
 
+import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -35,9 +36,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -65,6 +68,7 @@ import com.shankarlohar.teamvinayak.model.ChooseUserModel
 import com.shankarlohar.teamvinayak.util.Utils
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.util.Steps
+import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -72,15 +76,19 @@ import kotlin.math.absoluteValue
 @Composable
 fun ChooseUserComponent(
     viewModel: ChooseUserViewModel,
-    navController: NavController
+    navController: NavController,
+    authViewModel: AuthViewModel
 ) {
     val pagerState = rememberPagerState()
     val selectedCategory = remember { mutableStateOf(0) }
     val rememberScope = rememberCoroutineScope()
 
+
+
     LaunchedEffect(pagerState.currentPage){
         selectedCategory.value = pagerState.currentPage
     }
+
 
     Row(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -121,7 +129,8 @@ fun ChooseUserComponent(
                 page = page,
                 pageOffset = pageOffset,
                 viewModel = viewModel,
-                navController = navController
+                navController = navController,
+                authViewModel = authViewModel
             )
         }
     }
@@ -134,6 +143,7 @@ fun ChoiceItem(
     page: Int, pageOffset: Float,
     viewModel: ChooseUserViewModel,
     navController: NavController,
+    authViewModel: AuthViewModel,
 
     ) {
     val scale = Utils.lerp(
@@ -187,9 +197,8 @@ fun ChoiceItem(
         fraction = 1f - pageOffset.coerceIn(0f, 1f)
     )
 
-
-
     val context = LocalContext.current
+
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -347,7 +356,14 @@ fun ChoiceItem(
 
                                 Button(
                                     onClick = {
-                                        navController.navigate(Steps.CLIENT.name)
+                                        authViewModel.loginMember(emailState.value,passState.value)
+                                            { success, errorMessage ->
+                                                if (success) {
+                                                    navController.navigate(Steps.CLIENT.name)
+                                                } else {
+                                                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                                                }
+                                        }
                                     },
                                     colors = ButtonDefaults
                                         .buttonColors(

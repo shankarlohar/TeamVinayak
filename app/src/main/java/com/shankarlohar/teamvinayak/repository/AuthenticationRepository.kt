@@ -1,5 +1,8 @@
 package com.shankarlohar.teamvinayak.repository
 
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.shankarlohar.teamvinayak.data.Authentication
 import com.shankarlohar.teamvinayak.data.FirestoreDatabase
 import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
 import com.shankarlohar.teamvinayak.model.SignupFormModel
@@ -10,6 +13,7 @@ import kotlinx.coroutines.withContext
 class AuthenticationRepository {
 
     private val firestoreDatabase = FirestoreDatabase()
+    private val authentication = Authentication()
 
     suspend fun getTncData(): List<TermsAndConditionsModel> {
         return withContext(Dispatchers.IO) {
@@ -27,5 +31,15 @@ class AuthenticationRepository {
         return withContext(Dispatchers.IO) {
             return@withContext firestoreDatabase.createNewUser(toSubmitFormModelList)
         }
+    }
+
+    suspend fun loginMember(email: String, password: String,onResult: (Boolean, String?) -> Unit) {
+        return withContext(Dispatchers.Main){
+            return@withContext authentication.loginMember(email,password,onResult)
+        }
+    }
+
+    fun logoutMember(onResult: (Boolean) -> Unit) {
+        authentication.logoutMember(onResult)
     }
 }

@@ -1,5 +1,6 @@
 package com.shankarlohar.teamvinayak.ui.clientside.home
 
+import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
@@ -43,11 +44,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.ui.clientside.cart.CartComponent
 import com.shankarlohar.teamvinayak.ui.clientside.dashboard.DashboardComponent
@@ -55,15 +58,22 @@ import com.shankarlohar.teamvinayak.ui.clientside.favorite.FavoriteComponent
 import com.shankarlohar.teamvinayak.ui.clientside.notifications.NotificationsComponent
 import com.shankarlohar.teamvinayak.ui.clientside.profile.ProfileComponent
 import com.shankarlohar.teamvinayak.ui.clientside.settings.SettingsComponent
+import com.shankarlohar.teamvinayak.util.Steps
+import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import kotlin.math.roundToInt
+
+
 
 @Composable
 fun HomeComponent(
-    onLogoutClick: () -> Unit = {}
+    viewModel: AuthViewModel,
+    navController: NavHostController
 ) {
+
     var screen by remember { mutableStateOf(HomeMenu.HOME.name) }
     var currentState by remember { mutableStateOf(MenuState.COLLAPSED) }
     val updateAnim = updateTransition(currentState, label = "MenuState")
+    val context = LocalContext.current
     val scale = updateAnim.animateFloat(
         transitionSpec = {
             when {
@@ -203,7 +213,13 @@ fun HomeComponent(
                     screen = "SETTINGS"
                 }
                 HomeMenuAction.LOGOUT -> {
-                    onLogoutClick()
+                    viewModel.logoutMember{ success ->
+                        if (success) {
+                            navController.navigate(Steps.CHOICE.name)
+                        } else {
+                            Toast.makeText(context, "Logout failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
                 else -> {
                     currentState = MenuState.COLLAPSED

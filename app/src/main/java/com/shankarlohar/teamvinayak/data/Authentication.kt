@@ -1,6 +1,9 @@
 package com.shankarlohar.teamvinayak.data
 
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.shankarlohar.teamvinayak.model.LoginResult
 import kotlinx.coroutines.tasks.await
 
 class Authentication {
@@ -17,4 +20,26 @@ class Authentication {
             Result.failure(e)
         }
     }
+
+    fun loginMember(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+       auth.signInWithEmailAndPassword(email, password)
+           .addOnCompleteListener { task ->
+               if (task.isSuccessful) {
+                   onResult(true, null) // Sign-in successful
+               } else {
+                   onResult(false, task.exception?.message ?: "Login failed")
+               }
+           }
+    }
+
+    fun logoutMember(onResult: (Boolean) -> Unit) {
+            try {
+                auth.signOut()
+                onResult(true)
+            } catch (e: Exception) {
+                onResult(false)
+            }
+        }
+
+
 }

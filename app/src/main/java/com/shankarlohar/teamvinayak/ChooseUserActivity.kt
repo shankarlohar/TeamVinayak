@@ -45,6 +45,7 @@ class ChooseUserActivity : ComponentActivity() {
         chooseUserViewModel = ChooseUserViewModel()
         authViewModel = AuthViewModel()
 
+
         setContent {
 
             TeamVinayakTheme {
@@ -52,13 +53,13 @@ class ChooseUserActivity : ComponentActivity() {
 
                 val signupDataStatus by authViewModel.dataStatus.collectAsState()
 
-
                 if (!isLoading) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
                         val navController = rememberNavController()
+
 
                         NavHost(
                             navController = navController,
@@ -101,12 +102,14 @@ class ChooseUserActivity : ComponentActivity() {
                             composable(Steps.CHOICE.name){
                                 ChooseUserComponent(
                                     viewModel = chooseUserViewModel,
+                                    authViewModel = authViewModel,
                                     navController = navController
                                 )
                             }
                             composable(Steps.CLIENT.name){
                                 HomeComponent(
-                                    onLogoutClick = { navController.navigate(Steps.CHOICE.name) }
+                                    viewModel = authViewModel,
+                                    navController = navController
                                 )
                             }
                             composable(Steps.OWNER.name){

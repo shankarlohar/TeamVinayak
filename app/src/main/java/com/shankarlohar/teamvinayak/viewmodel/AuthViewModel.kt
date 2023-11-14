@@ -1,7 +1,10 @@
 package com.shankarlohar.teamvinayak.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shankarlohar.teamvinayak.model.LoginResult
 import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.model.SignupFormModel
@@ -34,6 +37,20 @@ class AuthViewModel: ViewModel() {
 
 
     private val _formMap = mutableMapOf<String, MutableList<Pair<String, String>>>()
+
+
+    fun loginMember(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+        viewModelScope.launch(Dispatchers.Main){
+            return@launch authenticationRepository.loginMember(email,password, onResult)
+
+            }
+    }
+
+    fun logoutMember(onResult: (Boolean) -> Unit){
+        viewModelScope.launch(Dispatchers.Main){
+            return@launch authenticationRepository.logoutMember(onResult)
+        }
+    }
 
 
     init {
