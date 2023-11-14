@@ -1,9 +1,6 @@
 package com.shankarlohar.teamvinayak.data
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.shankarlohar.teamvinayak.model.LoginResult
 import kotlinx.coroutines.tasks.await
 
 class Authentication {

@@ -1,10 +1,9 @@
 package com.shankarlohar.teamvinayak.data
 
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
-import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.model.SignupFormModel
+import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
+import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
 import kotlinx.coroutines.tasks.await
 
 class FirestoreDatabase {
