@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import com.shankarlohar.teamvinayak.R
 
 @Composable
-fun FavoriteComponent() {
+fun MessageComponent() {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

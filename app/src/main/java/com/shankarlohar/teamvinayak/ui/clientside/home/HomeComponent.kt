@@ -1,6 +1,5 @@
 package com.shankarlohar.teamvinayak.ui.clientside.home
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDp
@@ -9,6 +8,7 @@ import androidx.compose.animation.core.animateOffset
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
@@ -56,9 +57,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.User
-import com.shankarlohar.teamvinayak.ui.clientside.cart.CartComponent
-import com.shankarlohar.teamvinayak.ui.clientside.dashboard.DashboardComponent
-import com.shankarlohar.teamvinayak.ui.clientside.favorite.FavoriteComponent
+import com.shankarlohar.teamvinayak.ui.clientside.payment.PaymentComponent
+import com.shankarlohar.teamvinayak.ui.clientside.dashboard.AttendanceComponent
+import com.shankarlohar.teamvinayak.ui.clientside.favorite.MessageComponent
 import com.shankarlohar.teamvinayak.ui.clientside.notifications.NotificationsComponent
 import com.shankarlohar.teamvinayak.ui.clientside.profile.ProfileComponent
 import com.shankarlohar.teamvinayak.ui.clientside.settings.SettingsComponent
@@ -76,7 +77,7 @@ fun HomeComponent(
     userViewModel: UserViewModel
 ) {
 
-    var screen by remember { mutableStateOf(HomeMenu.HOME.name) }
+    var screen by remember { mutableStateOf(HomeMenu.ATTENDANCE.name) }
     var currentState by remember { mutableStateOf(MenuState.COLLAPSED) }
     val updateAnim = updateTransition(currentState, label = "MenuState")
     val context = LocalContext.current
@@ -327,17 +328,17 @@ fun HomeComponent(
                     .background(MaterialTheme.colorScheme.onPrimaryContainer)
             )
             when (screen) {
-                HomeMenu.HOME.name -> {
-                    DashboardComponent()
+                HomeMenu.ATTENDANCE.name -> {
+                    AttendanceComponent()
                 }
                 HomeMenu.PROFILE.name -> {
                     ProfileComponent()
                 }
-                HomeMenu.CART.name -> {
-                    CartComponent()
+                HomeMenu.PAYMENT.name -> {
+                    PaymentComponent()
                 }
-                HomeMenu.FAVORITE.name -> {
-                    FavoriteComponent()
+                HomeMenu.MESSAGE.name -> {
+                    MessageComponent()
                 }
                 HomeMenu.NOTIFICATION.name -> {
                     NotificationsComponent()
@@ -399,10 +400,9 @@ fun MenuComponent(user: User?,modifier: Modifier, menuAction: (HomeMenuAction) -
                             menuAction(HomeMenuAction.MenuSelected(it))
                         }
                 ) {
-                    Icon(
-                        it.icon,
+                    Image(
+                        painterResource(it.icon),
                         contentDescription = it.title,
-                        tint = MaterialTheme.colorScheme.onSecondary,
                         modifier = Modifier.size(24.dp)
                     )
 

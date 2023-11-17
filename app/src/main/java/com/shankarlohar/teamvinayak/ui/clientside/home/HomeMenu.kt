@@ -1,33 +1,27 @@
 package com.shankarlohar.teamvinayak.ui.clientside.home
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.shankarlohar.teamvinayak.R
 
-enum class HomeMenu(val title: String, val icon: ImageVector) {
-    HOME(
-        "Home",
-            Icons.Filled.Home
+enum class HomeMenu(val title: String, val icon: Int) {
+    ATTENDANCE(
+        "Attendance",
+            R.drawable.attendance
     ),
     NOTIFICATION(
         "Notification",
-        Icons.Filled.Notifications
+        R.drawable.notification
     ),
-    FAVORITE(
-        "Favorite",
-        Icons.Filled.Favorite
+    MESSAGE(
+        "Message",
+        R.drawable.message
     ),
-    CART(
-        "Cart",
-        Icons.Filled.ShoppingCart
+    PAYMENT(
+        "Payments",
+        R.drawable.rupee
     ),
     PROFILE(
         "Profile",
-        Icons.Filled.Person
+        R.drawable.profile
     )
 }
 

@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import com.shankarlohar.teamvinayak.R
 
 @Composable
-fun DashboardComponent(
+fun AttendanceComponent(
 ) {
     val context = LocalContext.current
 

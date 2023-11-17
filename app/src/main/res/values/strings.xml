@@ -63,6 +63,7 @@
     <string name="person">Person</string>
     <string name="menu">Menu</string>
     <string name="membership_active">Membership Active</string>
+    <string name="payment">Payments</string>
 
 
 </resources>
