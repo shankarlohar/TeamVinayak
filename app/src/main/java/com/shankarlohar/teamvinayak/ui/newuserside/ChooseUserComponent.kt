@@ -465,7 +465,15 @@ fun ChoiceItem(
 
                                 Button(
                                     onClick = {
-                                        navController.navigate(Steps.OWNER.name)
+                                        authViewModel.loginAdmin(name.value,password.value)
+                                        { success, errorMessage ->
+                                            if (success) {
+                                                authViewModel.getAdmin()
+                                                navController.navigate(Steps.OWNER.name)
+                                            } else {
+                                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
                                     },
                                     colors = ButtonDefaults
                                         .buttonColors(

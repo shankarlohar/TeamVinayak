@@ -16,6 +16,9 @@ class FirestoreDatabase {
 
     private val users = db.collection("user") // Replace with your collection name
 
+    private val admin = db.collection("admin")
+
+    private lateinit var adminId:String
 
 
     suspend fun getTnC(): List<TermsAndConditionsModel>{
@@ -124,5 +127,20 @@ class FirestoreDatabase {
         return User() // Return a default instance if there's an error or the document doesn't exist
     }
 
+    suspend fun loginAdmin(name: String, password: String, onResult: (Boolean, String?) -> Unit) {
+        val adminSnapshot = admin.document(name).get().await()
+        if (adminSnapshot.exists()) {
+                if (adminSnapshot.data?.get("password") == password){
+                    adminId = name
+                    onResult(true, null) // Sign-in successful
+                }
+            } else {
+                onResult(false, "Login failed")
+            }
+    }
+
+    fun getAdmin():String{
+        return adminId
+    }
 
 }

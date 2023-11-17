@@ -117,7 +117,10 @@ class ChooseUserActivity : ComponentActivity() {
                                 )
                             }
                             composable(Steps.OWNER.name){
-                                OwnerHomeComponent()
+                                OwnerHomeComponent(
+                                    authViewModel = authViewModel,
+                                    navController = navController,
+                                )
                             }
                         }
 

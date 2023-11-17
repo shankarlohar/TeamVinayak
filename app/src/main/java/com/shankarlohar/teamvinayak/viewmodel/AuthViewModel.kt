@@ -22,6 +22,9 @@ class AuthViewModel: ViewModel() {
     private val _userForm = MutableStateFlow(Status.Loading)
     val userForm = _userForm.asStateFlow()
 
+    private val _admin = MutableStateFlow("")
+    val admin = _admin.asStateFlow()
+
 
 
     private val authenticationRepository = AuthenticationRepository()
@@ -42,8 +45,18 @@ class AuthViewModel: ViewModel() {
     fun loginMember(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
         viewModelScope.launch(Dispatchers.Main){
             return@launch authenticationRepository.loginMember(email,password, onResult)
-
             }
+    }
+    fun loginAdmin(name: String, password: String, onResult: (Boolean, String?) -> Unit) {
+        viewModelScope.launch(Dispatchers.Main){
+            return@launch authenticationRepository.loginAdmin(name,password, onResult)
+        }
+    }
+
+    fun getAdmin(){
+        viewModelScope.launch(Dispatchers.Main) {
+            _admin.value = authenticationRepository.getAdmin()
+        }
     }
 
     fun logoutMember(onResult: (Boolean) -> Unit){
@@ -120,4 +133,6 @@ class AuthViewModel: ViewModel() {
         }
         return validity to response
     }
+
+
 }

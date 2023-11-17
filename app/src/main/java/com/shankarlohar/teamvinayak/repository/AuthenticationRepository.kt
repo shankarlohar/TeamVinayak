@@ -44,4 +44,16 @@ class AuthenticationRepository {
     fun getUid(): String {
         return authentication.getUid()
     }
+
+    suspend fun loginAdmin(name: String, password: String, onResult: (Boolean, String?) -> Unit) {
+        return withContext(Dispatchers.Main){
+            return@withContext firestoreDatabase.loginAdmin(name,password,onResult)
+        }
+    }
+
+    suspend fun getAdmin():String{
+        return withContext(Dispatchers.Main){
+            return@withContext firestoreDatabase.getAdmin()
+        }
+    }
 }
