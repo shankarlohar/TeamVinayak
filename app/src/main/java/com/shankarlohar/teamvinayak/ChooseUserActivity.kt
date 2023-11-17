@@ -26,12 +26,14 @@ import com.shankarlohar.teamvinayak.util.Status
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
+import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 
 
 class ChooseUserActivity : ComponentActivity() {
 
     private lateinit var chooseUserViewModel: ChooseUserViewModel
     private lateinit var authViewModel: AuthViewModel
+    private lateinit var userViewModel: UserViewModel
 
     @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +46,7 @@ class ChooseUserActivity : ComponentActivity() {
         }
         chooseUserViewModel = ChooseUserViewModel()
         authViewModel = AuthViewModel()
+        userViewModel = UserViewModel()
 
 
         setContent {
@@ -108,8 +111,9 @@ class ChooseUserActivity : ComponentActivity() {
                             }
                             composable(Steps.CLIENT.name){
                                 HomeComponent(
-                                    viewModel = authViewModel,
-                                    navController = navController
+                                    authViewModel = authViewModel,
+                                    navController = navController,
+                                    userViewModel = userViewModel
                                 )
                             }
                             composable(Steps.OWNER.name){

@@ -38,5 +38,9 @@ class Authentication {
             }
         }
 
+    fun getUid(): String {
+        return auth.uid.toString()
+    }
+
 
 }

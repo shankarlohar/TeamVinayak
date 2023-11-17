@@ -1,7 +1,5 @@
 package com.shankarlohar.teamvinayak.repository
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.shankarlohar.teamvinayak.data.Authentication
 import com.shankarlohar.teamvinayak.data.FirestoreDatabase
 import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
@@ -41,5 +39,9 @@ class AuthenticationRepository {
 
     fun logoutMember(onResult: (Boolean) -> Unit) {
         authentication.logoutMember(onResult)
+    }
+
+    fun getUid(): String {
+        return authentication.getUid()
     }
 }

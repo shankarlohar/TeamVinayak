@@ -1,5 +1,6 @@
 package com.shankarlohar.teamvinayak.ui.clientside.home
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDp
@@ -34,7 +35,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.model.User
 import com.shankarlohar.teamvinayak.ui.clientside.cart.CartComponent
 import com.shankarlohar.teamvinayak.ui.clientside.dashboard.DashboardComponent
 import com.shankarlohar.teamvinayak.ui.clientside.favorite.FavoriteComponent
@@ -60,20 +64,30 @@ import com.shankarlohar.teamvinayak.ui.clientside.profile.ProfileComponent
 import com.shankarlohar.teamvinayak.ui.clientside.settings.SettingsComponent
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
+import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 import kotlin.math.roundToInt
 
 
 
 @Composable
 fun HomeComponent(
-    viewModel: AuthViewModel,
-    navController: NavHostController
+    authViewModel: AuthViewModel,
+    navController: NavHostController,
+    userViewModel: UserViewModel
 ) {
 
     var screen by remember { mutableStateOf(HomeMenu.HOME.name) }
     var currentState by remember { mutableStateOf(MenuState.COLLAPSED) }
     val updateAnim = updateTransition(currentState, label = "MenuState")
     val context = LocalContext.current
+
+    LaunchedEffect(authViewModel.getUid()) {
+        userViewModel.fetchPersonalDetails(authViewModel.getUid())
+    }
+
+    val userDetails by userViewModel.personalDetails.observeAsState()
+
+
     val scale = updateAnim.animateFloat(
         transitionSpec = {
             when {
@@ -196,6 +210,7 @@ fun HomeComponent(
 
         //side menu
         MenuComponent(
+            user = userDetails,
             Modifier
                 .offset {
                     IntOffset(
@@ -213,7 +228,7 @@ fun HomeComponent(
                     screen = "SETTINGS"
                 }
                 HomeMenuAction.LOGOUT -> {
-                    viewModel.logoutMember{ success ->
+                    authViewModel.logoutMember{ success ->
                         if (success) {
                             navController.navigate(Steps.CHOICE.name)
                         } else {
@@ -239,7 +254,10 @@ fun HomeComponent(
                         transitionOffset.value.y.toInt()
                     )
                 }
-                .background(MaterialTheme.colorScheme.onPrimary.copy(alpha = .90f), shape = RoundedCornerShape(20.dp))
+                .background(
+                    MaterialTheme.colorScheme.onPrimary.copy(alpha = .90f),
+                    shape = RoundedCornerShape(20.dp)
+                )
                 .padding(8.dp)
                 .alpha(alphaMenu.value)
         )
@@ -254,7 +272,10 @@ fun HomeComponent(
                         transitionOffset.value.y.toInt()
                     )
                 }
-                .background(MaterialTheme.colorScheme.onPrimary.copy(.5f), shape = RoundedCornerShape(20.dp))
+                .background(
+                    MaterialTheme.colorScheme.onPrimary.copy(.5f),
+                    shape = RoundedCornerShape(20.dp)
+                )
                 .padding(8.dp)
                 .alpha(alphaMenu.value)
         )
@@ -331,7 +352,7 @@ fun HomeComponent(
 }
 
 @Composable
-fun MenuComponent(modifier: Modifier, menuAction: (HomeMenuAction) -> Unit) {
+fun MenuComponent(user: User?,modifier: Modifier, menuAction: (HomeMenuAction) -> Unit) {
 
     Column(modifier = modifier.padding(18.dp), verticalArrangement = Arrangement.Center) {
 
@@ -340,24 +361,28 @@ fun MenuComponent(modifier: Modifier, menuAction: (HomeMenuAction) -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
 
 
-            Text(
-                text = "Shankar Lohar",
-                fontStyle = MaterialTheme.typography.titleMedium.fontStyle,
-                color = MaterialTheme.colorScheme.onSecondary,
-                fontSize = 24.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
+            user?.let {details ->
 
-            Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = details.name,
+                    fontStyle = MaterialTheme.typography.titleMedium.fontStyle,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
 
-            Icon(
-                Icons.Filled.CheckCircle,
-                contentDescription = stringResource(R.string.membership_active),
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(24.dp)
-            )
+                Spacer(modifier = Modifier.width(8.dp))
 
-            Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    Icons.Filled.CheckCircle,
+                    contentDescription = stringResource(R.string.membership_active),
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))

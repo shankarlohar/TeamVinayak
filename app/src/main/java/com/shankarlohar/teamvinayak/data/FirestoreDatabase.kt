@@ -1,9 +1,11 @@
 package com.shankarlohar.teamvinayak.data
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shankarlohar.teamvinayak.model.SignupFormModel
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
+import com.shankarlohar.teamvinayak.model.User
 import kotlinx.coroutines.tasks.await
 
 class FirestoreDatabase {
@@ -12,7 +14,7 @@ class FirestoreDatabase {
     private val tncList = db.collection("register").document("terms-and-conditions")
     private val signupFormFields = db.collection("register").document("form")
 
-    private val newUser = db.collection("user") // Replace with your collection name
+    private val users = db.collection("user") // Replace with your collection name
 
 
 
@@ -79,7 +81,7 @@ class FirestoreDatabase {
                     userSections["1. Personal Details"]?.get("Email")?.let { email ->
                         auth.registerUser(email, password).onSuccess { uid ->
 
-                            val newUserDoc = newUser.document(uid)
+                            val newUserDoc = users.document(uid)
                             newUserDoc.set(userSections).await()
 
                         }
@@ -93,7 +95,34 @@ class FirestoreDatabase {
         return results.all { it }
     }
 
+    suspend fun getUserPersonalDetails(uid: String): User {
+        Log.d("useridentification", "UID: $uid")
 
+        try {
+            val documentSnapshot = users.document(uid).get().await()
+
+            if (documentSnapshot.exists()) {
+
+                val personalDetailsMap = documentSnapshot.data?.get("1. Personal Details") as? Map<String, String> ?: emptyMap()
+
+                return User(
+                    dob = personalDetailsMap["Date of Birth"] ?: "",
+                    email = personalDetailsMap["Email"] ?: "",
+                    gender = personalDetailsMap["Gender"] ?: "",
+                    height = personalDetailsMap["Height"] ?: "",
+                    mobile = personalDetailsMap["Mobile Number"] ?: "",
+                    weight = personalDetailsMap["Weight"] ?: "",
+                    name = personalDetailsMap["Full Name"] ?: ""
+                )
+            } else {
+                Log.d("useridentification", "Document does not exist for UID: $uid")
+            }
+        } catch (e: Exception) {
+            Log.e("useridentification", "Error fetching user details: ${e.message}", e)
+        }
+
+        return User() // Return a default instance if there's an error or the document doesn't exist
+    }
 
 
 }
