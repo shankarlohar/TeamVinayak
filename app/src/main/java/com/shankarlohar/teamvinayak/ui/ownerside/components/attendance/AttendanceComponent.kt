@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.clientside.dashboard
+package com.shankarlohar.teamvinayak.ui.ownerside.components.attendance
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,10 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
 import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 
 @Composable
 fun AttendanceComponent(
+    authViewModel: AuthViewModel,
+    navController: NavHostController
 ) {
     val context = LocalContext.current
 

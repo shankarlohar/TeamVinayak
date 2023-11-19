@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.clientside.home
+package com.shankarlohar.teamvinayak.ui.clientside.hiddenpannel
 
 import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -57,12 +57,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.User
-import com.shankarlohar.teamvinayak.ui.clientside.payment.PaymentComponent
-import com.shankarlohar.teamvinayak.ui.clientside.dashboard.AttendanceComponent
-import com.shankarlohar.teamvinayak.ui.clientside.favorite.MessageComponent
-import com.shankarlohar.teamvinayak.ui.clientside.notifications.NotificationsComponent
-import com.shankarlohar.teamvinayak.ui.clientside.profile.ProfileComponent
-import com.shankarlohar.teamvinayak.ui.clientside.settings.SettingsComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.attendance.AttendanceComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.bottomnav.BottomToolbar
+import com.shankarlohar.teamvinayak.ui.clientside.component.payment.PaymentComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.message.MessageComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.notifications.NotificationsComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.profile.ProfileComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.settings.SettingsComponent
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
@@ -71,13 +72,14 @@ import kotlin.math.roundToInt
 
 
 @Composable
-fun HomeComponent(
+fun PanelComponent(
     authViewModel: AuthViewModel,
     navController: NavHostController,
     userViewModel: UserViewModel
 ) {
 
-    var screen by remember { mutableStateOf(HomeMenu.ATTENDANCE.name) }
+
+    var screen by remember { mutableStateOf(PanelMenu.ATTENDANCE.name) }
     var currentState by remember { mutableStateOf(MenuState.COLLAPSED) }
     val updateAnim = updateTransition(currentState, label = "MenuState")
     val context = LocalContext.current
@@ -222,13 +224,13 @@ fun HomeComponent(
                 .alpha(alphaMenu.value),
         ) {
             when (it) {
-                is HomeMenuAction.MenuSelected -> {
+                is PanelMenuAction.MenuSelected -> {
                     screen = it.menu.name
                 }
-                HomeMenuAction.SETTINGS -> {
+                PanelMenuAction.SETTINGS -> {
                     screen = "SETTINGS"
                 }
-                HomeMenuAction.LOGOUT -> {
+                PanelMenuAction.LOGOUT -> {
                     authViewModel.logoutMember{ success ->
                         if (success) {
                             navController.navigate(Steps.CHOICE.name)
@@ -328,19 +330,19 @@ fun HomeComponent(
                     .background(MaterialTheme.colorScheme.onPrimaryContainer)
             )
             when (screen) {
-                HomeMenu.ATTENDANCE.name -> {
+                PanelMenu.ATTENDANCE.name -> {
                     AttendanceComponent()
                 }
-                HomeMenu.PROFILE.name -> {
+                PanelMenu.PROFILE.name -> {
                     ProfileComponent()
                 }
-                HomeMenu.PAYMENT.name -> {
+                PanelMenu.PAYMENT.name -> {
                     PaymentComponent()
                 }
-                HomeMenu.MESSAGE.name -> {
+                PanelMenu.MESSAGE.name -> {
                     MessageComponent()
                 }
-                HomeMenu.NOTIFICATION.name -> {
+                PanelMenu.NOTIFICATION.name -> {
                     NotificationsComponent()
                 }
                 "SETTINGS" -> {
@@ -353,7 +355,7 @@ fun HomeComponent(
 }
 
 @Composable
-fun MenuComponent(user: User?,modifier: Modifier, menuAction: (HomeMenuAction) -> Unit) {
+fun MenuComponent(user: User?,modifier: Modifier, menuAction: (PanelMenuAction) -> Unit) {
 
     Column(modifier = modifier.padding(18.dp), verticalArrangement = Arrangement.Center) {
 
@@ -390,14 +392,14 @@ fun MenuComponent(user: User?,modifier: Modifier, menuAction: (HomeMenuAction) -
 
         LazyColumn {
 
-            items(HomeMenu.values()) {
+            items(PanelMenu.values()) {
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp, top = 26.dp, bottom = 16.dp)
                         .clickable {
-                            menuAction(HomeMenuAction.MenuSelected(it))
+                            menuAction(PanelMenuAction.MenuSelected(it))
                         }
                 ) {
                     Image(
@@ -428,7 +430,7 @@ fun MenuComponent(user: User?,modifier: Modifier, menuAction: (HomeMenuAction) -
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
                 .clickable {
-                    menuAction(HomeMenuAction.SETTINGS)
+                    menuAction(PanelMenuAction.SETTINGS)
                 }
         ) {
             Icon(
@@ -453,7 +455,7 @@ fun MenuComponent(user: User?,modifier: Modifier, menuAction: (HomeMenuAction) -
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
                 .clickable {
-                    menuAction(HomeMenuAction.LOGOUT)
+                    menuAction(PanelMenuAction.LOGOUT)
                 }
         ) {
             Icon(

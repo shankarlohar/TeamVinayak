@@ -16,12 +16,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.shankarlohar.teamvinayak.ui.ownerside.components.AttendanceComponent
-import com.shankarlohar.teamvinayak.ui.ownerside.components.BottomToolbar
+import com.shankarlohar.teamvinayak.ui.ownerside.components.profile.ProfileComponent
+import com.shankarlohar.teamvinayak.ui.ownerside.components.bottomnav.BottomToolbar
+import com.shankarlohar.teamvinayak.ui.ownerside.components.attendance.AttendanceComponent
+import com.shankarlohar.teamvinayak.ui.ownerside.components.bottomnav.BottomNav
+import com.shankarlohar.teamvinayak.ui.ownerside.components.message.MessageComponent
+import com.shankarlohar.teamvinayak.ui.ownerside.components.notifications.NotificationsComponent
+import com.shankarlohar.teamvinayak.ui.ownerside.components.payment.PaymentComponent
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 
 @Composable
-fun OwnerHomeComponent(authViewModel: AuthViewModel, navController: NavHostController) {
+fun OwnerActivity(authViewModel: AuthViewModel, navController: NavHostController) {
 
     val screen = remember { mutableStateOf(BottomNav.Attendance) }
 
@@ -40,6 +45,10 @@ fun OwnerHomeComponent(authViewModel: AuthViewModel, navController: NavHostContr
             ) {
                 when (screen.value) {
                     BottomNav.Attendance -> AttendanceComponent(authViewModel,navController)
+                    BottomNav.Message -> MessageComponent()
+                    BottomNav.Notification -> NotificationsComponent()
+                    BottomNav.Payment -> PaymentComponent()
+                    BottomNav.Profile -> ProfileComponent()
                     else -> {
                         Text(
                             text = "Coming Soon",

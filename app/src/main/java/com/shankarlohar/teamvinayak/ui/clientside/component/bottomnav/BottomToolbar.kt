@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.ownerside.components
+package com.shankarlohar.teamvinayak.ui.clientside.component.bottomnav
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.shankarlohar.teamvinayak.ui.ownerside.BottomNav
 
 
 @Composable

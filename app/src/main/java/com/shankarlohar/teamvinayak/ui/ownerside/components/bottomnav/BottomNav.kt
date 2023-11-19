@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.ownerside
+package com.shankarlohar.teamvinayak.ui.ownerside.components.bottomnav
 
 import com.shankarlohar.teamvinayak.R
 

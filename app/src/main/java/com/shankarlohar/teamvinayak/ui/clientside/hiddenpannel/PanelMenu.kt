@@ -1,8 +1,8 @@
-package com.shankarlohar.teamvinayak.ui.clientside.home
+package com.shankarlohar.teamvinayak.ui.clientside.hiddenpannel
 
 import com.shankarlohar.teamvinayak.R
 
-enum class HomeMenu(val title: String, val icon: Int) {
+enum class PanelMenu(val title: String, val icon: Int) {
     ATTENDANCE(
         "Attendance",
             R.drawable.attendance
@@ -25,11 +25,11 @@ enum class HomeMenu(val title: String, val icon: Int) {
     )
 }
 
-sealed class HomeMenuAction {
-    object CLOSE : HomeMenuAction()
-    object LOGOUT : HomeMenuAction()
-    object SETTINGS : HomeMenuAction()
-    data class MenuSelected(val menu: HomeMenu) : HomeMenuAction()
+sealed class PanelMenuAction {
+    object CLOSE : PanelMenuAction()
+    object LOGOUT : PanelMenuAction()
+    object SETTINGS : PanelMenuAction()
+    data class MenuSelected(val menu: PanelMenu) : PanelMenuAction()
 }
 
 enum class MenuState {

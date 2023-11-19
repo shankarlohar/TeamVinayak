@@ -1,28 +1,33 @@
-package com.shankarlohar.teamvinayak.ui.clientside.notifications
+package com.shankarlohar.teamvinayak.ui.clientside.component.leaderboard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.shankarlohar.teamvinayak.R
 
 @Composable
-fun NotificationsComponent() {
+fun LeaderboardComponent(
+) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        //add some content here
-        Icon(
-            Icons.Filled.Notifications,
-            contentDescription = stringResource(R.string.notifications)
+        Image(
+            painterResource(id = R.drawable.leaderboard),
+            contentDescription = stringResource(R.string.leaderboard)
         )
     }
 }
