@@ -14,13 +14,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.shankarlohar.teamvinayak.ui.clientside.hiddenpannel.PanelComponent
+import com.shankarlohar.teamvinayak.ui.clientside.Client
 import com.shankarlohar.teamvinayak.ui.newuserside.ChooseUserComponent
 import com.shankarlohar.teamvinayak.ui.newuserside.FailedToLoad
 import com.shankarlohar.teamvinayak.ui.newuserside.NewUserFormComponent
 import com.shankarlohar.teamvinayak.ui.newuserside.LoadingData
 import com.shankarlohar.teamvinayak.ui.newuserside.TermsAndConditionsComponent
-import com.shankarlohar.teamvinayak.ui.ownerside.OwnerActivity
+import com.shankarlohar.teamvinayak.ui.ownerside.hiddenpanel.OwnerPanelComponent
 import com.shankarlohar.teamvinayak.ui.theme.TeamVinayakTheme
 import com.shankarlohar.teamvinayak.util.Status
 import com.shankarlohar.teamvinayak.util.Steps
@@ -110,16 +110,17 @@ class ChooseUserActivity : ComponentActivity() {
                                 )
                             }
                             composable(Steps.CLIENT.name){
-                                PanelComponent(
+                                Client(
                                     authViewModel = authViewModel,
                                     navController = navController,
                                     userViewModel = userViewModel
                                 )
                             }
                             composable(Steps.OWNER.name){
-                                OwnerActivity(
+                                OwnerPanelComponent(
                                     authViewModel = authViewModel,
                                     navController = navController,
+                                    userViewModel = userViewModel
                                 )
                             }
                         }

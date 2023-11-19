@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.clientside.hiddenpannel
+package com.shankarlohar.teamvinayak.ui.clientside.hiddenpanel
 
 import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -30,12 +30,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -58,28 +59,32 @@ import androidx.navigation.NavHostController
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.User
 import com.shankarlohar.teamvinayak.ui.clientside.component.attendance.AttendanceComponent
-import com.shankarlohar.teamvinayak.ui.clientside.component.bottomnav.BottomToolbar
-import com.shankarlohar.teamvinayak.ui.clientside.component.payment.PaymentComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.message.MessageComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.notifications.NotificationsComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.payment.PaymentComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.profile.ProfileComponent
-import com.shankarlohar.teamvinayak.ui.clientside.component.settings.SettingsComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.settings.MoreComponent
+import com.shankarlohar.teamvinayak.ui.navigation.ClientMenuAction
+import com.shankarlohar.teamvinayak.ui.navigation.ClientPanelNavigation
+import com.shankarlohar.teamvinayak.ui.navigation.MenuState
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 import kotlin.math.roundToInt
 
 
-
 @Composable
-fun PanelComponent(
+fun ClientPanelComponent(
     authViewModel: AuthViewModel,
     navController: NavHostController,
     userViewModel: UserViewModel
 ) {
 
+    val isForMen = remember { mutableStateOf(true) }
 
-    var screen by remember { mutableStateOf(PanelMenu.ATTENDANCE.name) }
+
+    var panelNavScreen by remember { mutableStateOf(ClientPanelNavigation.Attendance) }
+
     var currentState by remember { mutableStateOf(MenuState.COLLAPSED) }
     val updateAnim = updateTransition(currentState, label = "MenuState")
     val context = LocalContext.current
@@ -213,6 +218,7 @@ fun PanelComponent(
 
         //side menu
         MenuComponent(
+            isForMen = isForMen,
             user = userDetails,
             Modifier
                 .offset {
@@ -224,13 +230,10 @@ fun PanelComponent(
                 .alpha(alphaMenu.value),
         ) {
             when (it) {
-                is PanelMenuAction.MenuSelected -> {
-                    screen = it.menu.name
+                is ClientMenuAction.MenuSelected -> {
+                    panelNavScreen = it.menu
                 }
-                PanelMenuAction.SETTINGS -> {
-                    screen = "SETTINGS"
-                }
-                PanelMenuAction.LOGOUT -> {
+                ClientMenuAction.LOGOUT -> {
                     authViewModel.logoutMember{ success ->
                         if (success) {
                             navController.navigate(Steps.CHOICE.name)
@@ -316,7 +319,7 @@ fun PanelComponent(
                 Spacer(modifier = Modifier.width(16.dp))
 
                 Text(
-                    text = screen,
+                    text = panelNavScreen.title,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -329,33 +332,38 @@ fun PanelComponent(
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.onPrimaryContainer)
             )
-            when (screen) {
-                PanelMenu.ATTENDANCE.name -> {
+            when (panelNavScreen) {
+                ClientPanelNavigation.Attendance -> {
                     AttendanceComponent()
                 }
-                PanelMenu.PROFILE.name -> {
+                ClientPanelNavigation.Profile -> {
                     ProfileComponent()
                 }
-                PanelMenu.PAYMENT.name -> {
+                ClientPanelNavigation.Payment -> {
                     PaymentComponent()
                 }
-                PanelMenu.MESSAGE.name -> {
+                ClientPanelNavigation.Message -> {
                     MessageComponent()
                 }
-                PanelMenu.NOTIFICATION.name -> {
+                ClientPanelNavigation.Notification -> {
                     NotificationsComponent()
                 }
-                "SETTINGS" -> {
-                    SettingsComponent()
+                ClientPanelNavigation.More -> {
+                    MoreComponent()
                 }
             }
+
+
         }
 
     }
 }
 
 @Composable
-fun MenuComponent(user: User?,modifier: Modifier, menuAction: (PanelMenuAction) -> Unit) {
+fun MenuComponent(
+    isForMen: MutableState<Boolean>,
+    user: User?,
+    modifier: Modifier, menuAction: (ClientMenuAction) -> Unit) {
 
     Column(modifier = modifier.padding(18.dp), verticalArrangement = Arrangement.Center) {
 
@@ -392,14 +400,14 @@ fun MenuComponent(user: User?,modifier: Modifier, menuAction: (PanelMenuAction) 
 
         LazyColumn {
 
-            items(PanelMenu.values()) {
+            items(ClientPanelNavigation.values()) {
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp, top = 26.dp, bottom = 16.dp)
                         .clickable {
-                            menuAction(PanelMenuAction.MenuSelected(it))
+                            menuAction(ClientMenuAction.MenuSelected(it))
                         }
                 ) {
                     Image(
@@ -424,28 +432,18 @@ fun MenuComponent(user: User?,modifier: Modifier, menuAction: (PanelMenuAction) 
 
         Spacer(modifier = Modifier.weight(1f))
 
-        //settings
+        //ui switch
         Row(
-            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
-                .clickable {
-                    menuAction(PanelMenuAction.SETTINGS)
-                }
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                Icons.Filled.Settings,
-                contentDescription = stringResource(R.string.settings)
-            )
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Text(
-                text = stringResource(R.string.settings),
-                color = MaterialTheme.colorScheme.onSecondary,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(start = 16.dp),
-                fontWeight = FontWeight.Medium
+            Switch(
+                checked = isForMen.value,
+                onCheckedChange = { isChecked ->
+                    isForMen.value = isChecked
+                }
             )
         }
 
@@ -455,7 +453,7 @@ fun MenuComponent(user: User?,modifier: Modifier, menuAction: (PanelMenuAction) 
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
                 .clickable {
-                    menuAction(PanelMenuAction.LOGOUT)
+                    menuAction(ClientMenuAction.LOGOUT)
                 }
         ) {
             Icon(

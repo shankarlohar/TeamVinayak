@@ -69,6 +69,8 @@
     <string name="leaderboard">Leaderboard</string>
     <string name="diet">Diet</string>
     <string name="complain">Complain</string>
+    <string name="maintanance">Maintanance</string>
+    <string name="control">Control</string>
 
 
 </resources>

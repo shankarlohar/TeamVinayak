@@ -16,18 +16,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.shankarlohar.teamvinayak.ui.navigation.ClientBottomNavigation
 
 
 @Composable
-fun BottomToolbar(screen: MutableState<BottomNav>) {
+fun ClientBottomToolbar(screen: MutableState<ClientBottomNavigation>) {
     Row(
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        BottomNav.values().forEach { nav ->
+        ClientBottomNavigation.values().forEach { nav ->
             Image(
                 painter = painterResource(id = nav.icon),
                 contentDescription = "search",

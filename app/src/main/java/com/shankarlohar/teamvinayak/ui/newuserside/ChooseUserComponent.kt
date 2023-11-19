@@ -298,7 +298,7 @@ fun ChoiceItem(
                                         )
                                     },
                                     keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Number
+                                        keyboardType = KeyboardType.Text
                                     ),
                                     leadingIcon = {
                                         Icon(
@@ -407,7 +407,7 @@ fun ChoiceItem(
                                         )
                                     },
                                     keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Number
+                                        keyboardType = KeyboardType.Text
                                     ),
                                     leadingIcon = {
                                         Icon(
