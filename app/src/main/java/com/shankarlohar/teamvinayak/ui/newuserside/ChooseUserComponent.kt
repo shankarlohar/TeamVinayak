@@ -1,6 +1,5 @@
 package com.shankarlohar.teamvinayak.ui.newuserside
 
-import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -18,29 +17,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -52,8 +38,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -66,8 +50,9 @@ import com.shankarlohar.teamvinayak.data.choiceCategories
 import com.shankarlohar.teamvinayak.data.choiceScreens
 import com.shankarlohar.teamvinayak.model.ChooseUserModel
 import com.shankarlohar.teamvinayak.util.Utils
-import com.shankarlohar.teamvinayak.R
-import com.shankarlohar.teamvinayak.util.Steps
+import com.shankarlohar.teamvinayak.ui.newuserside.component.AdminLoginCard
+import com.shankarlohar.teamvinayak.ui.newuserside.component.JoinNowCard
+import com.shankarlohar.teamvinayak.ui.newuserside.component.MemberLoginCard
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
@@ -204,11 +189,6 @@ fun ChoiceItem(
         .fillMaxSize()
         .clickable {
             viewModel.screenState.value = ChooseUserViewModel.UiState.Details(item)
-            when (page) {
-                0 -> {
-                    navController.navigate(Steps.ONBOARD.name)
-                }
-            }
         }
     ) {
         Box(
@@ -256,240 +236,9 @@ fun ChoiceItem(
                         fontWeight = FontWeight.Light
                     )
                     when(page){
-                        0 -> {
-                            Column(
-                                modifier = Modifier
-                                    .padding(6.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Image(
-                                    painter = painterResource(R.drawable.vinayak_multi_gym_no_background),
-                                    contentDescription = stringResource(R.string.gym_name),
-                                    modifier = Modifier.size(200.dp)
-                                )
-                                Text(stringResource(R.string.tap_to_fill_registration_form))
-                            }
-                        }
-                        1 -> {
-                            Column(
-                                modifier = Modifier
-                                    .padding(6.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                val modifier = Modifier
-                                    .padding(8.dp)
-
-                                val emailState = remember{ mutableStateOf("") }
-                                val passState = remember{ mutableStateOf("") }
-
-                                Spacer(
-                                    modifier = modifier
-                                )
-
-
-                                OutlinedTextField(
-                                    value = emailState.value,
-                                    onValueChange = {emailState.value = it},
-                                    label = {
-                                        Text(
-                                            text = stringResource(R.string.user_id)
-                                        )
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Text
-                                    ),
-                                    leadingIcon = {
-                                        Icon(
-                                            Icons.Filled.Person,
-                                            contentDescription = stringResource(R.string.user_id)
-                                        )
-                                    }
-                                )
-
-                                Spacer(
-                                    modifier = modifier
-                                )
-
-                                OutlinedTextField(
-                                    value = passState.value,
-                                    onValueChange = { passState.value = it },
-                                    label = {
-                                        Text(
-                                            text = stringResource(R.string.passcode)
-                                        )
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Password
-                                    ),
-                                    leadingIcon = {
-                                        Icon(
-                                            Icons.Filled.Lock,
-                                            contentDescription = stringResource(R.string.passcode)
-                                        )
-                                    },
-                                )
-
-                                Spacer(
-                                    modifier = modifier
-                                )
-
-                                CompositionLocalProvider() {
-                                    Row{
-                                        Text(
-                                            text = "Forgot your credentials?",
-                                            textAlign = TextAlign.End,
-                                            fontSize = 12.sp
-                                        )
-                                        Spacer(modifier = Modifier.padding(2.dp))
-                                        Text(
-                                            text = "Click here",
-                                            textAlign = TextAlign.End,
-                                            fontSize = 12.sp,
-                                            modifier = Modifier
-                                                .clickable{}
-                                        )
-                                    }
-                                }
-
-
-                                Button(
-                                    onClick = {
-                                        authViewModel.loginMember(emailState.value,passState.value)
-                                            { success, errorMessage ->
-                                                if (success) {
-                                                    navController.navigate(Steps.CLIENT.name)
-                                                } else {
-                                                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                                                }
-                                        }
-                                    },
-                                    colors = ButtonDefaults
-                                        .buttonColors(
-                                            contentColor = MaterialTheme.colorScheme.onPrimary
-                                        ),
-                                    contentPadding = PaddingValues(16.dp),
-                                    shape = CircleShape,
-                                    modifier = modifier
-                                        .size(90.dp)
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.let_s_go),
-                                    )
-                                }
-                            }
-                        }
-                        2 -> {
-                            Column(
-                                modifier = Modifier
-                                    .padding(6.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                val modifier = Modifier
-                                    .padding(8.dp)
-
-                                val name = remember{ mutableStateOf("") }
-                                val password = remember{ mutableStateOf("") }
-
-                                Spacer(
-                                    modifier = modifier
-                                )
-
-
-                                OutlinedTextField(
-                                    value = name.value,
-                                    onValueChange = {name.value = it},
-                                    label = {
-                                        Text(
-                                            text = stringResource(R.string.name)
-                                        )
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Text
-                                    ),
-                                    leadingIcon = {
-                                        Icon(
-                                            Icons.Filled.Person,
-                                            contentDescription = stringResource(R.string.name)
-                                        )
-                                    }
-                                )
-
-                                Spacer(
-                                    modifier = modifier
-                                )
-
-                                OutlinedTextField(
-                                    value = password.value,
-                                    onValueChange = { password.value = it },
-                                    label = {
-                                        Text(
-                                            text = stringResource(R.string.password)
-                                        )
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Password
-                                    ),
-                                    leadingIcon = {
-                                        Icon(
-                                            Icons.Filled.Lock,
-                                            contentDescription = stringResource(R.string.passcode)
-                                        )
-                                    },
-                                )
-
-                                Spacer(
-                                    modifier = modifier
-                                )
-
-                                CompositionLocalProvider() {
-                                    Row{
-                                        Text(
-                                            text = stringResource(R.string.forgot_your_credentials),
-                                            textAlign = TextAlign.End,
-                                            fontSize = 12.sp
-                                        )
-                                        Spacer(modifier = Modifier.padding(2.dp))
-                                        Text(
-                                            text = stringResource(R.string.click_here),
-                                            textAlign = TextAlign.End,
-                                            fontSize = 12.sp,
-                                            modifier = Modifier
-                                                .clickable{}
-                                        )
-                                    }
-                                }
-
-
-                                Button(
-                                    onClick = {
-                                        authViewModel.loginAdmin(name.value,password.value)
-                                        { success, errorMessage ->
-                                            if (success) {
-                                                authViewModel.getAdmin()
-                                                navController.navigate(Steps.OWNER.name)
-                                            } else {
-                                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                                            }
-                                        }
-                                    },
-                                    colors = ButtonDefaults
-                                        .buttonColors(
-                                            contentColor = MaterialTheme.colorScheme.onPrimary
-                                        ),
-                                    contentPadding = PaddingValues(16.dp),
-                                    shape = CircleShape,
-                                    modifier = modifier
-                                        .size(90.dp)
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.get_in),
-                                    )
-                                }
-                            }
-                        }
+                        0 -> JoinNowCard(navController = navController)
+                        1 -> MemberLoginCard(navController = navController,authViewModel = authViewModel)
+                        2 -> AdminLoginCard(navController = navController, authViewModel = authViewModel)
                     }
 
                 }
