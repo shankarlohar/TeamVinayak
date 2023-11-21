@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.data
+package com.shankarlohar.teamvinayak.data.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await

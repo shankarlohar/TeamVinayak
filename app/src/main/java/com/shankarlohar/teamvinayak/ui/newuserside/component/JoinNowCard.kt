@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -17,12 +19,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.util.Steps
 
 @Composable
 fun JoinNowCard(
-    navController: NavController
+    navController: NavController,
+    gymInfo: GymInfo
 ){
+    val openDialog = remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .padding(6.dp),
@@ -36,7 +42,7 @@ fun JoinNowCard(
         )
         Row() {
             Button(onClick = {
-
+                openDialog.value = true
             }) {
                 Text("About")
             }
@@ -60,4 +66,5 @@ fun JoinNowCard(
             Text("View Registration Status")
         }
     }
+    About(gymInfo = gymInfo, openDialog)
 }

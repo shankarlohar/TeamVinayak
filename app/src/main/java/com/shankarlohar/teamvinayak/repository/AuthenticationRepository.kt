@@ -1,7 +1,7 @@
 package com.shankarlohar.teamvinayak.repository
 
-import com.shankarlohar.teamvinayak.data.Authentication
-import com.shankarlohar.teamvinayak.data.FirestoreDatabase
+import com.shankarlohar.teamvinayak.data.firebase.Authentication
+import com.shankarlohar.teamvinayak.data.firebase.FirestoreDatabase
 import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
 import com.shankarlohar.teamvinayak.model.SignupFormModel
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel

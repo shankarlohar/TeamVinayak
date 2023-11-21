@@ -1,7 +1,10 @@
-package com.shankarlohar.teamvinayak.data
+package com.shankarlohar.teamvinayak.data.firebase
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
+import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.model.SignupFormModel
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
@@ -18,7 +21,30 @@ class FirestoreDatabase {
 
     private val admin = db.collection("admin")
 
+    private val gym = db.collection("vmg")
+
     private lateinit var adminId:String
+
+    suspend fun getGymInfo(): GymInfo {
+        val gymDocRef = gym.document("info")
+        var gymInfoLiveData = GymInfo()
+
+        val gymRef = gymDocRef.get().await()
+                if (gymRef.data != null) {
+                    val gymData = gymRef.toObject(GymInfo::class.java)
+                    if (gymData != null) {
+                        gymInfoLiveData = gymData
+                    } else {
+                        // Handle the case where mapping to GymData failed
+                        Log.d("gyminfo","isempty")
+                    }
+                } else {
+                    // Handle the case where the document does not exist
+                    Log.d("gyminfo","does not exist")
+                }
+
+        return gymInfoLiveData
+    }
 
 
     suspend fun getTnC(): List<TermsAndConditionsModel>{

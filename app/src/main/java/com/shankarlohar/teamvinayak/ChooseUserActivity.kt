@@ -54,6 +54,8 @@ class ChooseUserActivity : ComponentActivity() {
             TeamVinayakTheme {
                 val isLoading by chooseUserViewModel.isLoading.collectAsState()
 
+                val gymInfo by chooseUserViewModel.gymInfo.collectAsState()
+
                 val signupDataStatus by authViewModel.dataStatus.collectAsState()
 
                 if (!isLoading) {
@@ -104,6 +106,7 @@ class ChooseUserActivity : ComponentActivity() {
                             }
                             composable(Steps.CHOICE.name){
                                 ChooseUserComponent(
+                                    gymInfo = gymInfo,
                                     viewModel = chooseUserViewModel,
                                     authViewModel = authViewModel,
                                     navController = navController

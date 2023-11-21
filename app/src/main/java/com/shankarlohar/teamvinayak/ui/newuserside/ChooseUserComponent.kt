@@ -49,6 +49,7 @@ import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 import com.shankarlohar.teamvinayak.data.choiceCategories
 import com.shankarlohar.teamvinayak.data.choiceScreens
 import com.shankarlohar.teamvinayak.model.ChooseUserModel
+import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.util.Utils
 import com.shankarlohar.teamvinayak.ui.newuserside.component.AdminLoginCard
 import com.shankarlohar.teamvinayak.ui.newuserside.component.JoinNowCard
@@ -62,7 +63,8 @@ import kotlin.math.absoluteValue
 fun ChooseUserComponent(
     viewModel: ChooseUserViewModel,
     navController: NavController,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    gymInfo: GymInfo
 ) {
     val pagerState = rememberPagerState()
     val selectedCategory = remember { mutableStateOf(0) }
@@ -115,7 +117,8 @@ fun ChooseUserComponent(
                 pageOffset = pageOffset,
                 viewModel = viewModel,
                 navController = navController,
-                authViewModel = authViewModel
+                authViewModel = authViewModel,
+                gymInfo = gymInfo
             )
         }
     }
@@ -129,6 +132,7 @@ fun ChoiceItem(
     viewModel: ChooseUserViewModel,
     navController: NavController,
     authViewModel: AuthViewModel,
+    gymInfo: GymInfo,
 
     ) {
     val scale = Utils.lerp(
@@ -236,7 +240,7 @@ fun ChoiceItem(
                         fontWeight = FontWeight.Light
                     )
                     when(page){
-                        0 -> JoinNowCard(navController = navController)
+                        0 -> JoinNowCard(navController = navController,gymInfo = gymInfo)
                         1 -> MemberLoginCard(navController = navController,authViewModel = authViewModel)
                         2 -> AdminLoginCard(navController = navController, authViewModel = authViewModel)
                     }
