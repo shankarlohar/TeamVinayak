@@ -240,7 +240,7 @@ fun ChoiceItem(
                         fontWeight = FontWeight.Light
                     )
                     when(page){
-                        0 -> JoinNowCard(navController = navController,gymInfo = gymInfo)
+                        0 -> JoinNowCard(navController = navController,gymInfo = gymInfo, viewModel = viewModel)
                         1 -> MemberLoginCard(navController = navController,authViewModel = authViewModel)
                         2 -> AdminLoginCard(navController = navController, authViewModel = authViewModel)
                     }

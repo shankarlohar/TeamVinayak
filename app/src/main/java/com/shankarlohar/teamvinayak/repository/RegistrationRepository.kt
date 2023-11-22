@@ -15,4 +15,8 @@ class RegistrationRepository {
             return@withContext firestoreDatabase.getGymInfo()
         }
     }
+
+    suspend fun saveEnquiryQuestion(name: String, phone: String, query: String, whatsapp: Boolean, onDone: (Boolean) -> Unit) {
+        firestoreDatabase.saveEnquiryQuestion(name,phone,query,whatsapp,onDone)
+    }
 }

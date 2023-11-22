@@ -21,13 +21,17 @@ import androidx.navigation.NavController
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.util.Steps
+import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 
 @Composable
 fun JoinNowCard(
+    viewModel: ChooseUserViewModel,
     navController: NavController,
     gymInfo: GymInfo
 ){
-    val openDialog = remember { mutableStateOf(false) }
+    val openAboutDialog = remember { mutableStateOf(false) }
+    val openEnquiryDialog = remember { mutableStateOf(false) }
+    val openRegistrationStatusDialog = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -42,13 +46,13 @@ fun JoinNowCard(
         )
         Row() {
             Button(onClick = {
-                openDialog.value = true
+                openAboutDialog.value = true
             }) {
                 Text("About")
             }
             Spacer(Modifier.padding(4.dp))
             Button(onClick = {
-
+                openEnquiryDialog.value = true
             }) {
                 Text("Enquiry")
             }
@@ -66,5 +70,6 @@ fun JoinNowCard(
             Text("View Registration Status")
         }
     }
-    About(gymInfo = gymInfo, openDialog)
+    About(gymInfo = gymInfo, openAboutDialog)
+    Enquiry(viewModel = viewModel, openDialog = openEnquiryDialog)
 }

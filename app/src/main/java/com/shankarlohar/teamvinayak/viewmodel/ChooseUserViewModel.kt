@@ -44,4 +44,12 @@ class ChooseUserViewModel() : ViewModel() {
         object Home : UiState()
     }
 
+
+
+    fun saveEnquiryQuestion(name: String, phone: String, query: String, whatsapp: Boolean, onDone: (Boolean) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO){
+            registrationRepository.saveEnquiryQuestion(name,phone,query,whatsapp,onDone)
+        }
+    }
+
 }

@@ -23,6 +23,8 @@ class FirestoreDatabase {
 
     private val gym = db.collection("vmg")
 
+    private val enquiries = db.collection("enquiry")
+
     private lateinit var adminId:String
 
     suspend fun getGymInfo(): GymInfo {
@@ -167,6 +169,31 @@ class FirestoreDatabase {
 
     fun getAdmin():String{
         return adminId
+    }
+
+    suspend fun saveEnquiryQuestion(name: String, phone: String, query: String, whatsapp: Boolean, onDone: (Boolean) -> Unit) {
+        val doc = enquiries.document(phone)
+
+        // Create a data map with the information to be stored
+        val data = hashMapOf(
+            "name" to name,
+            "phone" to phone,
+            "query" to query,
+            "method" to if(whatsapp) "Connect via What's App" else "Connect via call"
+        )
+
+        // Update the document in the 'enquiries' collection with the specified phone number
+        doc
+            .set(data)
+            .addOnSuccessListener {
+                // Document successfully written
+                onDone(true)
+            }
+            .addOnFailureListener { e ->
+                // Log the error message
+                Log.w("Enquiry Data", "Error writing document", e)
+                onDone(false)
+            }
     }
 
 }
