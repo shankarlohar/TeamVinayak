@@ -1,8 +1,6 @@
 package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub
 
 import android.net.Uri
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,7 +37,6 @@ import com.shankarlohar.teamvinayak.model.PersonalDetails
 import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.ui.common.CircularImageViewer
 import com.shankarlohar.teamvinayak.viewmodel.NewUserViewModel
-import java.lang.Exception
 import java.util.Date
 
 @ExperimentalPagerApi
@@ -168,12 +165,6 @@ fun ProfilePictureComponent(
 fun PersonalDetailsComponent(personalDetails: PersonalDetails, onPersonalDetailsChange: (PersonalDetails) -> Unit) {
     var selectedDate by remember { mutableStateOf(Date()) }
 
-    /*
-    val dateOfBirth: String = "",
-    val gender: String = "",
-     */
-
-    Column() {
         Column() {
             OutlinedTextField(
                 value = personalDetails.fullName,
@@ -247,10 +238,22 @@ fun PersonalDetailsComponent(personalDetails: PersonalDetails, onPersonalDetails
                 label = { Text("Current Weight") }
             )
 
+            OutlinedTextField(
+                value = personalDetails.dateOfBirth,
+                onValueChange = { dob ->
+                    onPersonalDetailsChange(personalDetails.copy(dateOfBirth = dob))
+                },
+                label = { Text("Date of Birth") }
+            )
+
+            OutlinedTextField(
+                value = personalDetails.gender,
+                onValueChange = { gender ->
+                    onPersonalDetailsChange(personalDetails.copy(gender = gender))
+                },
+                label = { Text("Gender") }
+            )
         }
-    }
-
-
 }
 
 @Composable
