@@ -2,12 +2,12 @@ package com.shankarlohar.teamvinayak.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
-import com.shankarlohar.teamvinayak.model.SignupFormModel
+import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.repository.AuthenticationRepository
+import com.shankarlohar.teamvinayak.repository.RegistrationRepository
 import com.shankarlohar.teamvinayak.util.Status
-import com.shankarlohar.teamvinayak.util.Utils
+import com.shankarlohar.teamvinayak.util.UiStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,10 +16,11 @@ import kotlinx.coroutines.launch
 
 class AuthViewModel: ViewModel() {
 
-    private val _dataStatus = MutableStateFlow(Status.Loading)
+
+    private val _dataStatus = MutableStateFlow(UiStatus.Loading)
     val dataStatus = _dataStatus.asStateFlow()
 
-    private val _userForm = MutableStateFlow(Status.Loading)
+    private val _userForm = MutableStateFlow(UiStatus.Loading)
     val userForm = _userForm.asStateFlow()
 
     private val _admin = MutableStateFlow("")
@@ -32,11 +33,11 @@ class AuthViewModel: ViewModel() {
     private val _tncData = MutableStateFlow<List<TermsAndConditionsModel>>(emptyList())
     val termsAndConditionsData: StateFlow<List<TermsAndConditionsModel>> = _tncData
 
-    private val _signupFormData = MutableStateFlow<List<SignupFormModel>>(emptyList())
-    val signupFormData: StateFlow<List<SignupFormModel>> = _signupFormData
 
 
     private val _formMap = mutableMapOf<String, MutableList<Pair<String, String>>>()
+
+   private val registrationRepository = RegistrationRepository()
 
     fun getUid(): String {
         return authenticationRepository.getUid()
@@ -69,12 +70,11 @@ class AuthViewModel: ViewModel() {
     init {
         viewModelScope.launch(Dispatchers.Main) {
             try {
-                fetchNewUserForm()
                 fetchTnc()
             }catch (e: Exception){
-                _dataStatus.value = Status.Failed
+                _dataStatus.value = UiStatus.Failed
             }finally {
-                _dataStatus.value = Status.Completed // when data loading is complete
+                _dataStatus.value = UiStatus.Completed // when data loading is complete
             }
         }
     }
@@ -86,38 +86,23 @@ class AuthViewModel: ViewModel() {
         }
     }
 
-    private fun fetchNewUserForm() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val data = authenticationRepository.getNewUserForm()
-            _signupFormData.value = data
-        }
-    }
 
-    fun addQuestion(heading: String, question: String, answer: String) {
-        viewModelScope.launch(Dispatchers.Default){
-            val questionList = _formMap.getOrPut(heading) { mutableListOf() }
-            questionList.add(question to answer)
-        }
-    }
 
-    fun createNewMember(){
-        addQuestion("6. Membership Details", "Approved","false")
-        addQuestion("6. Membership Details", "Form Fill Date and Time",Utils.getCurrentDate())
-        _userForm.value = Status.Loading
+    suspend fun createNewMember(userData: UserData){
+        _userForm.value = UiStatus.Loading
         var status = false
         viewModelScope.launch(Dispatchers.IO)
             {
             try {
-                val toSubmitFormModelList = _formMap.map { (field, data) ->
-                    ToSubmitFormModel(field, data)
-                }
 
-                status = authenticationRepository.createNewMember(toSubmitFormModelList)
+
+                status = authenticationRepository.createNewMember(userData)
 
             } catch (e: Exception) {
-                _userForm.value = Status.Failed
+                _userForm.value = UiStatus.Failed
             } finally {
-                if (status) _userForm.value = Status.Completed // when data loading is complete
+                registrationRepository.updateGymInfo()
+                if (status) _userForm.value = UiStatus.Completed // when data loading is complete
             }
         }
 

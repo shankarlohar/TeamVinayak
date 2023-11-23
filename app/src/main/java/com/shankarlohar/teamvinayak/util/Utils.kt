@@ -35,6 +35,19 @@ object Utils {
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
     }
 }
+enum class Role{
+    ADMIN,
+    MEMBER
+}
+enum class Details{
+    APPROVED,
+    UNDER_REVIEW
+}
+enum class Status{
+    ACTIVE,
+    PENDING,
+    BLOCKED
+}
 
 enum class Steps{
     ONBOARD,
@@ -44,8 +57,13 @@ enum class Steps{
     OWNER
 }
 
-enum class Status{
+enum class UiStatus{
     Completed,
     Loading,
     Failed
+}
+
+sealed class LoginResult {
+    object Success : LoginResult()
+    data class Error(val error: String) : LoginResult()
 }

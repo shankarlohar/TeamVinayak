@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,16 +97,22 @@ fun Enquiry(viewModel: ChooseUserViewModel, openDialog: MutableState<Boolean>){
                     }
                 },
                 confirmButton = {
-                    // Display a single confirm button with the text "OK"
                     Button(
                         onClick = {
-                            // Dismiss the dialog when the user clicks the confirm button
                             if (name.value.isEmpty() || phone.value.isEmpty() || query.value.isEmpty()){
                                 Toast.makeText(context,"All the three fields are required",Toast.LENGTH_LONG).show()
                             }else{
-                                viewModel.saveEnquiryQuestion(name.value,phone.value,query.value,whatsapp.value){
+                                viewModel.saveEnquiryQuestion(
+                                    Enquiry(
+                                        name.value,
+                                        phone.value,
+                                        query.value,
+                                        if(whatsapp.value) "Connect via What's App" else "Connect via call"
+                                    )
+                                ){
                                     if (it){
                                         openDialog.value = false
+                                        Toast.makeText(context,"Wait for a callback. We will call you soon!",Toast.LENGTH_LONG).show()
                                     }else{
                                         Toast.makeText(context,"Something went wrong",Toast.LENGTH_LONG).show()
                                     }

@@ -124,7 +124,6 @@ fun ChooseUserComponent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChoiceItem(
     item: ChooseUserModel,

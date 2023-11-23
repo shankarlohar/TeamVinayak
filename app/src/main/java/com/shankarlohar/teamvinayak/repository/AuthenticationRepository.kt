@@ -2,9 +2,8 @@ package com.shankarlohar.teamvinayak.repository
 
 import com.shankarlohar.teamvinayak.data.firebase.Authentication
 import com.shankarlohar.teamvinayak.data.firebase.FirestoreDatabase
-import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
-import com.shankarlohar.teamvinayak.model.SignupFormModel
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
+import com.shankarlohar.teamvinayak.model.UserData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -19,15 +18,10 @@ class AuthenticationRepository {
         }
     }
 
-    suspend fun getNewUserForm(): List<SignupFormModel> {
-        return withContext(Dispatchers.IO) {
-            return@withContext firestoreDatabase.getNewUserForm().sortedBy { it.field }
-        }
-    }
 
-    suspend fun createNewMember(toSubmitFormModelList: List<ToSubmitFormModel>): Boolean {
+    suspend fun createNewMember(userData: UserData): Boolean {
         return withContext(Dispatchers.IO) {
-            return@withContext firestoreDatabase.createNewUser(toSubmitFormModelList)
+            return@withContext firestoreDatabase.createNewUser(userData)
         }
     }
 

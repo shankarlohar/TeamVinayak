@@ -2,10 +2,10 @@ package com.shankarlohar.teamvinayak.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shankarlohar.teamvinayak.model.ChooseUserModel
+import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.repository.RegistrationRepository
 import kotlinx.coroutines.Dispatchers
@@ -46,9 +46,9 @@ class ChooseUserViewModel() : ViewModel() {
 
 
 
-    fun saveEnquiryQuestion(name: String, phone: String, query: String, whatsapp: Boolean, onDone: (Boolean) -> Unit) {
+    fun saveEnquiryQuestion(enquiry: Enquiry, onDone: (Boolean) -> Unit) {
         viewModelScope.launch(Dispatchers.IO){
-            registrationRepository.saveEnquiryQuestion(name,phone,query,whatsapp,onDone)
+            registrationRepository.saveEnquiryQuestion(enquiry,onDone)
         }
     }
 

@@ -42,6 +42,4 @@ class Authentication {
         return auth.uid.toString()
     }
 
-
-
 }

@@ -1,14 +1,13 @@
 package com.shankarlohar.teamvinayak.data.firebase
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.model.GymInfo
-import com.shankarlohar.teamvinayak.model.SignupFormModel
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
-import com.shankarlohar.teamvinayak.model.ToSubmitFormModel
 import com.shankarlohar.teamvinayak.model.User
+import com.shankarlohar.teamvinayak.model.UserData
 import kotlinx.coroutines.tasks.await
 
 class FirestoreDatabase {
@@ -25,25 +24,31 @@ class FirestoreDatabase {
 
     private val enquiries = db.collection("enquiry")
 
+    private val accounts = db.collection("accounts")
+
     private lateinit var adminId:String
+
+    suspend fun updateGymInfo() {
+        gym.document("info").update("totalMembers",FieldValue.increment(1)).await()
+    }
 
     suspend fun getGymInfo(): GymInfo {
         val gymDocRef = gym.document("info")
         var gymInfoLiveData = GymInfo()
 
         val gymRef = gymDocRef.get().await()
-                if (gymRef.data != null) {
-                    val gymData = gymRef.toObject(GymInfo::class.java)
-                    if (gymData != null) {
-                        gymInfoLiveData = gymData
-                    } else {
-                        // Handle the case where mapping to GymData failed
-                        Log.d("gyminfo","isempty")
-                    }
-                } else {
-                    // Handle the case where the document does not exist
-                    Log.d("gyminfo","does not exist")
-                }
+        if (gymRef.data != null) {
+            val gymData = gymRef.toObject(GymInfo::class.java)
+            if (gymData != null) {
+                gymInfoLiveData = gymData
+            } else {
+                // Handle the case where mapping to GymData failed
+                Log.d("gyminfo","isempty")
+            }
+        } else {
+            // Handle the case where the document does not exist
+            Log.d("gyminfo","does not exist")
+        }
 
         return gymInfoLiveData
     }
@@ -72,49 +77,39 @@ class FirestoreDatabase {
         return emptyList()
     }
 
-    suspend fun getNewUserForm(): List<SignupFormModel>{
-        val snapshot = signupFormFields.get().await()
 
-        if (snapshot.exists()) {
-            val data = snapshot.data
-            val signupForm = mutableListOf<SignupFormModel>()
 
-            if (data != null) {
-                for (key in data.keys) {
-                    if (data[key] is List<*>) {
-                        val content = (data[key] as List<String>)
-                        val signupFormData = SignupFormModel(key, content)
-                        signupForm.add(signupFormData)
-                    }
-                }
-            }
-
-            return signupForm
-        }
-
-        return emptyList()
-    }
-
-    suspend fun createNewUser(toSubmitFormModelList: List<ToSubmitFormModel>): Boolean {
+    suspend fun createNewUser(userData: UserData): Boolean {
         val results = mutableListOf<Boolean>()
         val userSections = mutableMapOf<String, Map<String, String>>()
 
         val auth = Authentication()
-
-        for (formModel in toSubmitFormModelList) {
-            val sectionData = userSections.getOrPut(formModel.field) { emptyMap() }
-            val newData = formModel.data.associate { it.first to it.second }
-            userSections[formModel.field] = sectionData + newData
-        }
+//
+//        for (formModel in toSubmitFormModelList) {
+//            val sectionData = userSections.getOrPut(formModel.field) { emptyMap() }
+//            val newData = formModel.data.associate { it.first to it.second }
+//            userSections[formModel.field] = sectionData + newData
+//        }
 
             try {
                 userSections["1. Personal Details"]?.get("Create a password")?.let {password ->
                     userSections["1. Personal Details"]?.get("Email")?.let { email ->
                         auth.registerUser(email, password).onSuccess { uid ->
+                            userSections["1. Personal Details"]?.get("Create a username")?.let{username ->
+                                userSections["1. Personal Details"]?.get("Mobile Number")?.let {phone ->
 
-                            val newUserDoc = users.document(uid)
-                            newUserDoc.set(userSections).await()
+                                    val userAccountData = hashMapOf(
+                                        "uid" to uid,
+                                        "username" to username
+                                    )
+                                    val accountEntry = accounts.document(phone)
+                                    accountEntry.set(userAccountData).await()
 
+
+                                    val newUserDoc = users.document(phone)
+                                    newUserDoc.set(userSections).await()
+                                }
+                            }
                         }
                     }
                 }
@@ -171,29 +166,17 @@ class FirestoreDatabase {
         return adminId
     }
 
-    suspend fun saveEnquiryQuestion(name: String, phone: String, query: String, whatsapp: Boolean, onDone: (Boolean) -> Unit) {
-        val doc = enquiries.document(phone)
-
-        // Create a data map with the information to be stored
-        val data = hashMapOf(
-            "name" to name,
-            "phone" to phone,
-            "query" to query,
-            "method" to if(whatsapp) "Connect via What's App" else "Connect via call"
-        )
-
-        // Update the document in the 'enquiries' collection with the specified phone number
-        doc
-            .set(data)
-            .addOnSuccessListener {
-                // Document successfully written
-                onDone(true)
-            }
-            .addOnFailureListener { e ->
-                // Log the error message
-                Log.w("Enquiry Data", "Error writing document", e)
-                onDone(false)
-            }
+    suspend fun saveEnquiryQuestion(enquiry: Enquiry, onDone: (Boolean) -> Unit) {
+        val doc = enquiries.document(enquiry.phone)
+        try {
+            doc.set(enquiry).await()
+        }catch (e:Exception){
+            onDone(false)
+        }finally {
+            onDone(true)
+        }
     }
+
+
 
 }

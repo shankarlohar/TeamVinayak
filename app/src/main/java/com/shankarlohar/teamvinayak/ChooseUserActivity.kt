@@ -24,6 +24,7 @@ import com.shankarlohar.teamvinayak.ui.ownerside.hiddenpanel.OwnerPanelComponent
 import com.shankarlohar.teamvinayak.ui.theme.TeamVinayakTheme
 import com.shankarlohar.teamvinayak.util.Status
 import com.shankarlohar.teamvinayak.util.Steps
+import com.shankarlohar.teamvinayak.util.UiStatus
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
@@ -72,13 +73,13 @@ class ChooseUserActivity : ComponentActivity() {
                         ){
                             composable(Steps.ONBOARD.name){
                                 when (signupDataStatus) {
-                                    Status.Completed -> {
+                                    UiStatus.Completed -> {
                                         TermsAndConditionsComponent(
                                             viewModel = authViewModel,
                                             navController = navController,
                                         )
                                     }
-                                    Status.Failed -> {
+                                    UiStatus.Failed -> {
                                         FailedToLoad()
                                     }
                                     else -> {
@@ -89,13 +90,13 @@ class ChooseUserActivity : ComponentActivity() {
                             }
                             composable(Steps.FORM.name){
                                 when (signupDataStatus) {
-                                    Status.Completed -> {
+                                    UiStatus.Completed -> {
                                         NewUserFormComponent(
-                                            viewModel = authViewModel,
-                                            navController = navController,
+//                                            viewModel = authViewModel,
+//                                            navController = navController,
                                         )
                                     }
-                                    Status.Failed -> {
+                                    UiStatus.Failed -> {
                                         FailedToLoad()
                                     }
                                     else -> {
