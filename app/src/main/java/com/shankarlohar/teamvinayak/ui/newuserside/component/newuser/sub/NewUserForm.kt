@@ -119,8 +119,20 @@ fun NewUserForm(
                     personalDetails = updatedDetails
                 }
             )
-            2 -> EmergencyContactComponent(emergencyContact = emergencyContact)
-            3 -> DisabilityComponent(disability = disability)
+            2 -> EmergencyContactComponent(
+                emergencyContact = emergencyContact,
+                onEmergencyContactChange = {updatedDetails ->
+                    emergencyContact = updatedDetails
+
+                }
+            )
+            3 -> DisabilityComponent(
+                disability = disability,
+                onDisabilityChange = {updatedDetails ->
+                    disability = updatedDetails
+
+                }
+            )
             4 -> PARQComponent(parq = parq)
             5 -> ReferralComponent(referral = referral)
         }
@@ -256,21 +268,77 @@ fun PersonalDetailsComponent(personalDetails: PersonalDetails, onPersonalDetails
         }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmergencyContactComponent(emergencyContact: EmergencyContact) {
-
+fun EmergencyContactComponent(emergencyContact: EmergencyContact,onEmergencyContactChange: (EmergencyContact) -> Unit) {
+        Column {
+            OutlinedTextField(
+                value = emergencyContact.contactName,
+                onValueChange = { name ->
+                    onEmergencyContactChange(emergencyContact.copy(contactName = name))
+                },
+                label = { Text("Emergency Contact Name") }
+            )
+            OutlinedTextField(
+                value = emergencyContact.contactNumber,
+                onValueChange = { phone ->
+                    onEmergencyContactChange(emergencyContact.copy(contactNumber = phone))
+                },
+                label = { Text("Emergency Contact Number") }
+            )
+        }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisabilityComponent(disability: Disability) {
-
+fun DisabilityComponent(disability: Disability, onDisabilityChange: (Disability) -> Unit) {
+    Column {
+        OutlinedTextField(
+            value = disability.hasDisability.toString(),
+            onValueChange = { has ->
+                onDisabilityChange(disability.copy(hasDisability = has.toBoolean()))
+            },
+            label = { Text("Tell us about your disability") }
+        )
+        OutlinedTextField(
+            value = disability.about,
+            onValueChange = { about ->
+                onDisabilityChange(disability.copy(about = about))
+            },
+            label = { Text("Tell us about your disability") }
+        )
+        OutlinedTextField(
+            value = disability.doctorName,
+            onValueChange = { name ->
+                onDisabilityChange(disability.copy(doctorName = name))
+            },
+            label = { Text("Doctor Name") }
+        )
+        OutlinedTextField(
+            value = disability.doctorContact,
+            onValueChange = { phone ->
+                onDisabilityChange(disability.copy(doctorContact = phone))
+            },
+            label = { Text("Doctor Contact") }
+        )
+    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PARQComponent(parq: PARQ) {
-
+fun PARQComponent(parq: PARQ, onParqChange: (PARQ) -> Unit) {
+    Column {
+        OutlinedTextField(
+            value = "No",
+            onValueChange = { answer1 ->
+                onParqChange(parq.copy(question1 = answer1))
+            },
+            label = { Text(parq.question1) }
+        )
+    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReferralComponent(referral: String) {
 
