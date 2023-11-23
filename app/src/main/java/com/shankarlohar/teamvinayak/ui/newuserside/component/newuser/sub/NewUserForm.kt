@@ -133,8 +133,18 @@ fun NewUserForm(
 
                 }
             )
-            4 -> PARQComponent(parq = parq)
-            5 -> ReferralComponent(referral = referral)
+            4 -> PARQComponent(
+                parq = parq,
+                onParqChange = { updatedDetails ->
+                    parq = updatedDetails
+                }
+            )
+            5 -> ReferralComponent(
+                referral = referral,
+                onReferralChange = { updatedDetails ->
+                    referral = updatedDetails
+                }
+            )
         }
         Spacer(modifier = Modifier.padding(4.dp))
         Button(
@@ -340,8 +350,16 @@ fun PARQComponent(parq: PARQ, onParqChange: (PARQ) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReferralComponent(referral: String) {
-
+fun ReferralComponent(referral: String,onReferralChange: (String) -> Unit) {
+    Column {
+        OutlinedTextField(
+            value = referral,
+            onValueChange = { newValue ->
+                onReferralChange(newValue)
+            },
+            label = { Text("Referred by") }
+        )
+    }
 }
 
 
