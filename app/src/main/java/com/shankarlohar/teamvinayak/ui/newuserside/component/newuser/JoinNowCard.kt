@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.newuserside.component
+package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.GymInfo
+import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.About
+import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.Enquiry
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 

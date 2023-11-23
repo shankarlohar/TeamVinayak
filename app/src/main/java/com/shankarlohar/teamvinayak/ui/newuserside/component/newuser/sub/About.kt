@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.newuserside.component
+package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

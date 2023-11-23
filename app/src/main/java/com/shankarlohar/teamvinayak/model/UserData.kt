@@ -5,6 +5,7 @@ import com.shankarlohar.teamvinayak.util.Role
 import com.shankarlohar.teamvinayak.util.Status
 
 data class UserData(
+    val uid: String = "",
     val role: Role = Role.MEMBER, // Admin, Member
     val personalDetails: PersonalDetails = PersonalDetails(),
     val emergencyContact: EmergencyContact = EmergencyContact(),
@@ -21,21 +22,22 @@ data class EmergencyContact(
 )
 
 data class PersonalDetails(
+    val picture: String = "",
     val fullName: String = "",
     val fullAddress: String = "",
     val mobile: String = "+91 ",
     val dateOfBirth: String = "",
     val gender: String = "",
-    val aadhaarNumber:String = "",
+    val aadhaarNumber: String = "",
     val currentWeight: Int = 0,
     val currentHeight: Int = 0,
     val email: String = "",
     val password: String = "",
-    val username: String = ""
+    val username: String = "",
 )
 
 data class Disability(
-    val hasDisability: Boolean = true, // kept true to show the field, false disables the quetions
+    val hasDisability: Boolean = true, // kept true to show the field, false disables the questions
     val about: String = "",
     val doctorName: String = "",
     val doctorContact: String = ""

@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.data
+package com.shankarlohar.teamvinayak.data.local
 
 import androidx.compose.ui.graphics.Color
 import com.shankarlohar.teamvinayak.R

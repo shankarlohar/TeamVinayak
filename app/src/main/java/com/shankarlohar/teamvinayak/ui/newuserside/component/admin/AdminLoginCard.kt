@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.newuserside.component
+package com.shankarlohar.teamvinayak.ui.newuserside.component.admin
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -40,9 +40,9 @@ import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MemberLoginCard(
+fun AdminLoginCard(
     navController: NavController,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
 ){
     val context = LocalContext.current
     Column(
@@ -54,8 +54,8 @@ fun MemberLoginCard(
         val modifier = Modifier
             .padding(8.dp)
 
-        val emailState = remember{ mutableStateOf("") }
-        val passState = remember{ mutableStateOf("") }
+        val name = remember{ mutableStateOf("") }
+        val password = remember{ mutableStateOf("") }
 
         Spacer(
             modifier = modifier
@@ -63,11 +63,11 @@ fun MemberLoginCard(
 
 
         OutlinedTextField(
-            value = emailState.value,
-            onValueChange = {emailState.value = it},
+            value = name.value,
+            onValueChange = {name.value = it},
             label = {
                 Text(
-                    text = stringResource(R.string.user_id)
+                    text = stringResource(R.string.name)
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -76,7 +76,7 @@ fun MemberLoginCard(
             leadingIcon = {
                 Icon(
                     Icons.Filled.Person,
-                    contentDescription = stringResource(R.string.user_id)
+                    contentDescription = stringResource(R.string.name)
                 )
             }
         )
@@ -86,11 +86,11 @@ fun MemberLoginCard(
         )
 
         OutlinedTextField(
-            value = passState.value,
-            onValueChange = { passState.value = it },
+            value = password.value,
+            onValueChange = { password.value = it },
             label = {
                 Text(
-                    text = stringResource(R.string.passcode)
+                    text = stringResource(R.string.password)
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -111,13 +111,13 @@ fun MemberLoginCard(
         CompositionLocalProvider() {
             Row{
                 Text(
-                    text = "Forgot your credentials?",
+                    text = stringResource(R.string.forgot_your_credentials),
                     textAlign = TextAlign.End,
                     fontSize = 12.sp
                 )
                 Spacer(modifier = Modifier.padding(2.dp))
                 Text(
-                    text = "Click here",
+                    text = stringResource(R.string.click_here),
                     textAlign = TextAlign.End,
                     fontSize = 12.sp,
                     modifier = Modifier
@@ -129,10 +129,11 @@ fun MemberLoginCard(
 
         Button(
             onClick = {
-                authViewModel.loginMember(emailState.value,passState.value)
+                authViewModel.loginAdmin(name.value,password.value)
                 { success, errorMessage ->
                     if (success) {
-                        navController.navigate(Steps.CLIENT.name)
+                        authViewModel.getAdmin()
+                        navController.navigate(Steps.OWNER.name)
                     } else {
                         Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                     }
@@ -148,7 +149,7 @@ fun MemberLoginCard(
                 .size(90.dp)
         ) {
             Text(
-                text = stringResource(R.string.let_s_go),
+                text = stringResource(R.string.get_in),
             )
         }
     }

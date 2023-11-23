@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,14 +45,14 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
-import com.shankarlohar.teamvinayak.data.choiceCategories
-import com.shankarlohar.teamvinayak.data.choiceScreens
+import com.shankarlohar.teamvinayak.data.local.choiceCategories
+import com.shankarlohar.teamvinayak.data.local.choiceScreens
 import com.shankarlohar.teamvinayak.model.ChooseUserModel
 import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.util.Utils
-import com.shankarlohar.teamvinayak.ui.newuserside.component.AdminLoginCard
-import com.shankarlohar.teamvinayak.ui.newuserside.component.JoinNowCard
-import com.shankarlohar.teamvinayak.ui.newuserside.component.MemberLoginCard
+import com.shankarlohar.teamvinayak.ui.newuserside.component.admin.AdminLoginCard
+import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.JoinNowCard
+import com.shankarlohar.teamvinayak.ui.newuserside.component.member.MemberLoginCard
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue

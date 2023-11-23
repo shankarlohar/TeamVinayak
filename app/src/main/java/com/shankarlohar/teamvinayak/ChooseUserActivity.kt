@@ -16,17 +16,17 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.shankarlohar.teamvinayak.ui.clientside.Client
 import com.shankarlohar.teamvinayak.ui.newuserside.ChooseUserComponent
-import com.shankarlohar.teamvinayak.ui.newuserside.FailedToLoad
-import com.shankarlohar.teamvinayak.ui.newuserside.NewUserFormComponent
-import com.shankarlohar.teamvinayak.ui.newuserside.LoadingData
-import com.shankarlohar.teamvinayak.ui.newuserside.TermsAndConditionsComponent
+import com.shankarlohar.teamvinayak.ui.common.FailedToLoad
+import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.NewUserForm
+import com.shankarlohar.teamvinayak.ui.common.LoadingData
+import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.TermsAndConditionsComponent
 import com.shankarlohar.teamvinayak.ui.ownerside.hiddenpanel.OwnerPanelComponent
 import com.shankarlohar.teamvinayak.ui.theme.TeamVinayakTheme
-import com.shankarlohar.teamvinayak.util.Status
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.util.UiStatus
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
+import com.shankarlohar.teamvinayak.viewmodel.NewUserViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 
 
@@ -35,6 +35,7 @@ class ChooseUserActivity : ComponentActivity() {
     private lateinit var chooseUserViewModel: ChooseUserViewModel
     private lateinit var authViewModel: AuthViewModel
     private lateinit var userViewModel: UserViewModel
+    private lateinit var newUserViewModel: NewUserViewModel
 
     @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +49,7 @@ class ChooseUserActivity : ComponentActivity() {
         chooseUserViewModel = ChooseUserViewModel()
         authViewModel = AuthViewModel()
         userViewModel = UserViewModel()
+        newUserViewModel = NewUserViewModel()
 
 
         setContent {
@@ -91,9 +93,9 @@ class ChooseUserActivity : ComponentActivity() {
                             composable(Steps.FORM.name){
                                 when (signupDataStatus) {
                                     UiStatus.Completed -> {
-                                        NewUserFormComponent(
-//                                            viewModel = authViewModel,
-//                                            navController = navController,
+                                        NewUserForm(
+                                            viewModel = newUserViewModel,
+                                            navController = navController,
                                         )
                                     }
                                     UiStatus.Failed -> {

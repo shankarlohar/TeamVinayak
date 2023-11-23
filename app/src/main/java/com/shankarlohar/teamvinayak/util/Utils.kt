@@ -34,6 +34,9 @@ object Utils {
     fun getCurrentDate():String{
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
     }
+
+    val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+
 }
 enum class Role{
     ADMIN,

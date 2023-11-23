@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.data
+package com.shankarlohar.teamvinayak.data.local
 
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 

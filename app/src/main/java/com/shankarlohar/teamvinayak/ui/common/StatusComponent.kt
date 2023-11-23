@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.newuserside
+package com.shankarlohar.teamvinayak.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

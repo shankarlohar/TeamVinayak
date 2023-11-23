@@ -1,4 +1,4 @@
-package com.shankarlohar.teamvinayak.ui.newuserside
+package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub
 
 import android.widget.Toast
 import androidx.compose.animation.core.Spring
