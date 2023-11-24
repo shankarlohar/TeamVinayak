@@ -41,29 +41,30 @@ fun CircularImageViewer(
     }
 
     Box(
-        modifier = Modifier
-            .size(120.dp)
-            .background(MaterialTheme.colorScheme.primary, CircleShape)
-            .clickable {
-                launcher.launch("image/*")
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        if (selectedImageUri != null) {
-            Image(
-                painter = rememberImagePainter(selectedImageUri),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(120.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
+            modifier = Modifier
+                .size(300.dp)
+                .background(MaterialTheme.colorScheme.primary, CircleShape)
+                .clickable {
+                    launcher.launch("profilePictures/*")
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            if (selectedImageUri != null) {
+                Image(
+                    painter = rememberImagePainter(selectedImageUri),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(300.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
-    }
+
 }

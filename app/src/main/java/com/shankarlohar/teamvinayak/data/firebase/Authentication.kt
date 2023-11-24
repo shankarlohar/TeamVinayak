@@ -37,9 +37,4 @@ class Authentication {
                 onResult(false)
             }
         }
-
-    fun getUid(): String {
-        return auth.uid.toString()
-    }
-
 }

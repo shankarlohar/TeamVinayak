@@ -6,6 +6,7 @@ import com.shankarlohar.teamvinayak.data.firebase.FirestoreDatabase
 import com.shankarlohar.teamvinayak.data.firebase.Storage
 import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.model.GymInfo
+import com.shankarlohar.teamvinayak.model.UserData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -35,6 +36,13 @@ class RegistrationRepository {
             return@withContext storage.uploadImage(uri,result){
                 Log.d("Picture Upload Fail",it.toString())
             }
+        }
+    }
+
+    suspend fun createAccount(newUser: UserData):Boolean {
+        return withContext(Dispatchers.IO){
+            Log.d("formSubmit","firestoreDatabase call")
+            return@withContext firestoreDatabase.createNewUser(newUser)
         }
     }
 }

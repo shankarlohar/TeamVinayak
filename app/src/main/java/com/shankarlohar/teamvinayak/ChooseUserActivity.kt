@@ -71,7 +71,7 @@ class ChooseUserActivity : ComponentActivity() {
 
                         NavHost(
                             navController = navController,
-                            startDestination = Steps.FORM.name
+                            startDestination = Steps.CHOICE.name
                         ){
                             composable(Steps.ONBOARD.name){
                                 when (signupDataStatus) {

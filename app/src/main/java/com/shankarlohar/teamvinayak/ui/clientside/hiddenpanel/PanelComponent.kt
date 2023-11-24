@@ -57,7 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.shankarlohar.teamvinayak.R
-import com.shankarlohar.teamvinayak.model.User
+import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.ui.clientside.component.attendance.AttendanceComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.message.MessageComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.notifications.NotificationsComponent
@@ -89,11 +89,9 @@ fun ClientPanelComponent(
     val updateAnim = updateTransition(currentState, label = "MenuState")
     val context = LocalContext.current
 
-    LaunchedEffect(authViewModel.getUid()) {
-        userViewModel.fetchPersonalDetails(authViewModel.getUid())
-    }
 
-    val userDetails by userViewModel.personalDetails.observeAsState()
+
+    val userDetails = UserData()
 
 
     val scale = updateAnim.animateFloat(
@@ -362,7 +360,7 @@ fun ClientPanelComponent(
 @Composable
 fun MenuComponent(
     isForMen: MutableState<Boolean>,
-    user: User?,
+    user: UserData?,
     modifier: Modifier, menuAction: (ClientMenuAction) -> Unit) {
 
     Column(modifier = modifier.padding(18.dp), verticalArrangement = Arrangement.Center) {
@@ -375,7 +373,7 @@ fun MenuComponent(
             user?.let {details ->
 
                 Text(
-                    text = details.name,
+                    text = details.personalDetails.fullName,
                     fontStyle = MaterialTheme.typography.titleMedium.fontStyle,
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 24.sp,

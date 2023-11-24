@@ -1,5 +1,6 @@
 package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -25,9 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Enquiry(viewModel: ChooseUserViewModel, openDialog: MutableState<Boolean>){
+fun Enquiry(viewModel: ChooseUserViewModel, openDialog: MutableState<Boolean>, context: Context){
 
     Column(
         modifier = Modifier
@@ -36,7 +35,6 @@ fun Enquiry(viewModel: ChooseUserViewModel, openDialog: MutableState<Boolean>){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        val context = LocalContext.current
 
         val name = remember {
             mutableStateOf("")
@@ -51,6 +49,7 @@ fun Enquiry(viewModel: ChooseUserViewModel, openDialog: MutableState<Boolean>){
             mutableStateOf(true)
         }
         val modifier = Modifier.padding(4.dp)
+
 
         if (openDialog.value) {
             // Display the alert dialog when openDialog is true
@@ -111,13 +110,13 @@ fun Enquiry(viewModel: ChooseUserViewModel, openDialog: MutableState<Boolean>){
                                     )
                                 ){
                                     if (it){
-                                        openDialog.value = false
                                         Toast.makeText(context,"Wait for a callback. We will call you soon!",Toast.LENGTH_LONG).show()
+
                                     }else{
                                         Toast.makeText(context,"Something went wrong",Toast.LENGTH_LONG).show()
                                     }
                                 }
-
+                                openDialog.value = false
                             }
                         }
                     ) {

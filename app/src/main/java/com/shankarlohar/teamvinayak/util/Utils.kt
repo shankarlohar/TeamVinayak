@@ -35,7 +35,14 @@ object Utils {
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
     }
 
-    val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+
+
+    fun convertMillisToDateString(millis: Long, pattern: String): String {
+        val dateFormat = SimpleDateFormat(pattern)
+        val date = Date(millis)
+        return dateFormat.format(date)
+    }
+
 
 }
 enum class Role{

@@ -37,7 +37,7 @@ data class PersonalDetails(
 )
 
 data class Disability(
-    val hasDisability: Boolean = true, // kept true to show the field, false disables the questions
+    val hasDisability: Boolean = false, // kept true to show the field, false disables the questions
     val about: String = "",
     val doctorName: String = "",
     val doctorContact: String = ""

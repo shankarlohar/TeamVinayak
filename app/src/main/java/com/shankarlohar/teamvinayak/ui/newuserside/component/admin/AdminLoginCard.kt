@@ -1,6 +1,5 @@
 package com.shankarlohar.teamvinayak.ui.newuserside.component.admin
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -35,10 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.shankarlohar.teamvinayak.R
-import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminLoginCard(
     navController: NavController,
@@ -129,15 +125,7 @@ fun AdminLoginCard(
 
         Button(
             onClick = {
-                authViewModel.loginAdmin(name.value,password.value)
-                { success, errorMessage ->
-                    if (success) {
-                        authViewModel.getAdmin()
-                        navController.navigate(Steps.OWNER.name)
-                    } else {
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                    }
-                }
+
             },
             colors = ButtonDefaults
                 .buttonColors(

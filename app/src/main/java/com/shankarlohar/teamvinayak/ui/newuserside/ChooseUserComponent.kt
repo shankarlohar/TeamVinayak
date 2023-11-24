@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -66,7 +67,7 @@ fun ChooseUserComponent(
     gymInfo: GymInfo
 ) {
     val pagerState = rememberPagerState()
-    val selectedCategory = remember { mutableStateOf(0) }
+    val selectedCategory = remember { mutableIntStateOf(0) }
     val rememberScope = rememberCoroutineScope()
 
 
@@ -238,7 +239,12 @@ fun ChoiceItem(
                         fontWeight = FontWeight.Light
                     )
                     when(page){
-                        0 -> JoinNowCard(navController = navController,gymInfo = gymInfo, viewModel = viewModel)
+                        0 -> JoinNowCard(
+                            navController = navController,
+                            gymInfo = gymInfo,
+                            viewModel = viewModel,
+                            context = context
+                        )
                         1 -> MemberLoginCard(navController = navController,authViewModel = authViewModel)
                         2 -> AdminLoginCard(navController = navController, authViewModel = authViewModel)
                     }

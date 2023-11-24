@@ -55,7 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.shankarlohar.teamvinayak.R
-import com.shankarlohar.teamvinayak.model.User
+import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.ui.navigation.MenuState
 import com.shankarlohar.teamvinayak.ui.navigation.OwnerMenuAction
 import com.shankarlohar.teamvinayak.ui.navigation.OwnerPanelNavigation
@@ -79,11 +79,9 @@ fun OwnerPanelComponent(
     val updateAnim = updateTransition(currentState, label = "MenuState")
     val context = LocalContext.current
 
-    LaunchedEffect(authViewModel.getUid()) {
-        userViewModel.fetchPersonalDetails(authViewModel.getUid())
-    }
 
-    val userDetails by userViewModel.personalDetails.observeAsState()
+
+    val userDetails = UserData()
 
 
     val scale = updateAnim.animateFloat(
@@ -353,7 +351,7 @@ fun OwnerPanelComponent(
 }
 
 @Composable
-fun MenuComponent(user: User?, modifier: Modifier, menuAction: (OwnerMenuAction) -> Unit) {
+fun MenuComponent(user: UserData?, modifier: Modifier, menuAction: (OwnerMenuAction) -> Unit) {
 
     Column(modifier = modifier.padding(18.dp), verticalArrangement = Arrangement.Center) {
 
@@ -365,7 +363,7 @@ fun MenuComponent(user: User?, modifier: Modifier, menuAction: (OwnerMenuAction)
             user?.let {details ->
 
                 Text(
-                    text = details.name,
+                    text = details.personalDetails.fullName,
                     fontStyle = MaterialTheme.typography.titleMedium.fontStyle,
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 24.sp,

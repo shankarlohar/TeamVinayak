@@ -1,5 +1,6 @@
 package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,8 @@ import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 fun JoinNowCard(
     viewModel: ChooseUserViewModel,
     navController: NavController,
-    gymInfo: GymInfo
+    gymInfo: GymInfo,
+    context: Context
 ){
     val openAboutDialog = remember { mutableStateOf(false) }
     val openEnquiryDialog = remember { mutableStateOf(false) }
@@ -73,5 +75,5 @@ fun JoinNowCard(
         }
     }
     About(gymInfo = gymInfo, openAboutDialog)
-    Enquiry(viewModel = viewModel, openDialog = openEnquiryDialog)
+    Enquiry(viewModel = viewModel, openDialog = openEnquiryDialog, context = context)
 }

@@ -19,12 +19,6 @@ class AuthenticationRepository {
     }
 
 
-    suspend fun createNewMember(userData: UserData): Boolean {
-        return withContext(Dispatchers.IO) {
-            return@withContext firestoreDatabase.createNewUser(userData)
-        }
-    }
-
     suspend fun loginMember(email: String, password: String,onResult: (Boolean, String?) -> Unit) {
         return withContext(Dispatchers.Main){
             return@withContext authentication.loginMember(email,password,onResult)
@@ -35,19 +29,5 @@ class AuthenticationRepository {
         authentication.logoutMember(onResult)
     }
 
-    fun getUid(): String {
-        return authentication.getUid()
-    }
 
-    suspend fun loginAdmin(name: String, password: String, onResult: (Boolean, String?) -> Unit) {
-        return withContext(Dispatchers.Main){
-            return@withContext firestoreDatabase.loginAdmin(name,password,onResult)
-        }
-    }
-
-    suspend fun getAdmin():String{
-        return withContext(Dispatchers.Main){
-            return@withContext firestoreDatabase.getAdmin()
-        }
-    }
 }
