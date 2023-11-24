@@ -53,6 +53,7 @@ import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.ui.common.CircularImageViewer
 import com.shankarlohar.teamvinayak.ui.common.DateInput
 import com.shankarlohar.teamvinayak.ui.common.InputChipWithAvatar
+import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.util.UiStatus
 import com.shankarlohar.teamvinayak.viewmodel.NewUserViewModel
 
@@ -171,6 +172,7 @@ fun NewUserForm(
                     confirmButton = {
                         Button(onClick = {
                             showFormSubmissionDialog.value = false
+                            navController.navigate(Steps.CHOICE.name)
                         }) {
                             Text(text = "Okay")
                         }
