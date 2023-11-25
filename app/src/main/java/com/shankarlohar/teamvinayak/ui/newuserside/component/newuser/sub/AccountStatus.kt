@@ -2,16 +2,21 @@ package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -28,9 +33,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Scale
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
@@ -133,7 +143,21 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
             }else{
                 val userData by userViewModel.userData.observeAsState()
 
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                val painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder // Image to display in case of an error
+                    (LocalContext.current).data(data = userData?.personalDetails?.picture).apply(block = fun ImageRequest.Builder.() {
+                    crossfade(true)
+                    placeholder(R.drawable.vinayak_multi_gym_no_background) // Placeholder image while loading
+                    error(R.drawable.maintanance) // Image to display in case of an error
+                    scale(Scale.FILL) // Scale type
+                }).build()
+                )
+
+                Column(
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
 
                     LaunchedEffect(scope){
                         scope.launch { bottomSheetState.expand() }.invokeOnCompletion {
@@ -144,7 +168,75 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                         }
                     }
 
-                    userData?.personalDetails?.let { Text(it.fullName) }
+                    userData?.personalDetails?.let {personalDetails ->
+                        Card(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(300.dp)
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painter,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(200.dp)
+                                    .clip(MaterialTheme.shapes.medium)
+                                    .padding(4.dp),
+                                contentScale = ContentScale.Fit
+                            )
+                            Text("Full Name" + personalDetails.fullName)
+                            Text("Username" + personalDetails.username)
+                        }
+                    }
+
+
+                    userData?.let {userData ->
+                        Card(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(150.dp)
+                                .padding(8.dp)
+                        ) {
+                            Text("Account Identification: " + userData.uid)
+                            Text("Account Role: " + userData.role.toString())
+                            Text("Account Referred by: " + userData.referral)
+                        }
+                    }
+
+                    userData?.membership?.let {membership ->
+                        Card(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(150.dp)
+                                .padding(8.dp)
+                        ) {
+                            Text("Membership Status: " + membership.status.toString())
+                            Text("Registration Form Status: " + membership.details)
+                            Text("Registration Form Submission: " + membership.formSubmission)
+                        }
+                    }
+
+
+
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        Button(
+                            onClick = {
+                                Log.d("bootomsheetlogin","trying log out")
+                                authViewModel.logoutMember {
+                                    if (it){
+                                        Toast.makeText(context,"Login as a member to access the account", Toast.LENGTH_LONG).show()
+                                        scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                                            if (!bottomSheetState.isVisible) {
+                                                openBottomSheet.value = false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ) {
+                            Text("Done")
+                        }
+                    }
 
                 }
             }
