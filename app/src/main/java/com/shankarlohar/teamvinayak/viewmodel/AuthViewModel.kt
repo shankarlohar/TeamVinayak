@@ -1,10 +1,10 @@
 package com.shankarlohar.teamvinayak.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.repository.AuthenticationRepository
-import com.shankarlohar.teamvinayak.repository.RegistrationRepository
 import com.shankarlohar.teamvinayak.util.UiStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,27 +18,14 @@ class AuthViewModel: ViewModel() {
     private val _dataStatus = MutableStateFlow(UiStatus.Loading)
     val dataStatus = _dataStatus.asStateFlow()
 
-    private val _userForm = MutableStateFlow(UiStatus.Loading)
-    val userForm = _userForm.asStateFlow()
-
-    private val _admin = MutableStateFlow("")
-    val admin = _admin.asStateFlow()
-
-
-
     private val authenticationRepository = AuthenticationRepository()
 
     private val _tncData = MutableStateFlow<List<TermsAndConditionsModel>>(emptyList())
     val termsAndConditionsData: StateFlow<List<TermsAndConditionsModel>> = _tncData
 
 
-
-
-   private val registrationRepository = RegistrationRepository()
-
-
-
     fun loginMember(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+        Log.d("bootomsheetlogin","in viewModel")
         viewModelScope.launch(Dispatchers.Main){
             return@launch authenticationRepository.loginMember(email,password, onResult)
             }

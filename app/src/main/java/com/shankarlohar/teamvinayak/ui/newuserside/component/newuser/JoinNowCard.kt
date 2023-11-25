@@ -21,9 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.GymInfo
+import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.About
+import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.AccountStatus
 import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.Enquiry
 import com.shankarlohar.teamvinayak.util.Steps
+import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 
 @Composable
@@ -31,11 +34,12 @@ fun JoinNowCard(
     viewModel: ChooseUserViewModel,
     navController: NavController,
     gymInfo: GymInfo,
-    context: Context
+    context: Context,
+    authViewModel: AuthViewModel
 ){
     val openAboutDialog = remember { mutableStateOf(false) }
     val openEnquiryDialog = remember { mutableStateOf(false) }
-    val openRegistrationStatusDialog = remember { mutableStateOf(false) }
+    val openAccountBottomSheet = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -69,11 +73,12 @@ fun JoinNowCard(
 
 
         Button(onClick = {
-
+            openAccountBottomSheet.value = true
         }) {
-            Text("View Registration Status")
+            Text("View Account Status")
         }
     }
     About(gymInfo = gymInfo, openAboutDialog)
     Enquiry(viewModel = viewModel, openDialog = openEnquiryDialog, context = context)
+    AccountStatus(openBottomSheet = openAccountBottomSheet, authViewModel = authViewModel)
 }

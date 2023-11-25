@@ -38,7 +38,6 @@ import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MemberLoginCard(
     navController: NavController,

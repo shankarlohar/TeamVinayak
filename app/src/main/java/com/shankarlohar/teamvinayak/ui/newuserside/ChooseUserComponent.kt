@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -243,6 +242,7 @@ fun ChoiceItem(
                             navController = navController,
                             gymInfo = gymInfo,
                             viewModel = viewModel,
+                            authViewModel = authViewModel,
                             context = context
                         )
                         1 -> MemberLoginCard(navController = navController,authViewModel = authViewModel)

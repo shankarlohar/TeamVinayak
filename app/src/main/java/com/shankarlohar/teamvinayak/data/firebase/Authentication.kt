@@ -1,5 +1,6 @@
 package com.shankarlohar.teamvinayak.data.firebase
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 
@@ -19,13 +20,18 @@ class Authentication {
     }
 
     fun loginMember(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+        Log.d("bootomsheetlogin","in auth")
        auth.signInWithEmailAndPassword(email, password)
            .addOnCompleteListener { task ->
+               Log.d("bootomsheetlogin","signed int with ->" + auth.uid)
                if (task.isSuccessful) {
-                   onResult(true, null) // Sign-in successful
+                   onResult(true, auth.uid) // Sign-in successful
                } else {
                    onResult(false, task.exception?.message ?: "Login failed")
                }
+           }
+           .addOnFailureListener {
+               Log.d("bootomsheetlogin",it.toString())
            }
     }
 

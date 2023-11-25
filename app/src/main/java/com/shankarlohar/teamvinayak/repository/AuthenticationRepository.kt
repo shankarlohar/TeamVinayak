@@ -1,5 +1,6 @@
 package com.shankarlohar.teamvinayak.repository
 
+import android.util.Log
 import com.shankarlohar.teamvinayak.data.firebase.Authentication
 import com.shankarlohar.teamvinayak.data.firebase.FirestoreDatabase
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
@@ -20,6 +21,7 @@ class AuthenticationRepository {
 
 
     suspend fun loginMember(email: String, password: String,onResult: (Boolean, String?) -> Unit) {
+        Log.d("bootomsheetlogin","in repository")
         return withContext(Dispatchers.Main){
             return@withContext authentication.loginMember(email,password,onResult)
         }
