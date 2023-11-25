@@ -5,8 +5,10 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.model.GymInfo
+import com.shankarlohar.teamvinayak.model.Membership
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.model.UserData
+import com.shankarlohar.teamvinayak.util.Utils.getCurrentDate
 import kotlinx.coroutines.tasks.await
 
 class FirestoreDatabase {
@@ -89,7 +91,7 @@ class FirestoreDatabase {
             authentication.registerUser(userData.personalDetails.email,userData.personalDetails.password).onSuccess { uid ->
                 Log.d("formSubmit", "registration complete ->$uid")
                 // use the uid to add the details
-                val updatedUserData = userData.copy(uid = uid)
+                val updatedUserData = userData.copy(uid = uid).copy(membership = userData.membership.copy(formSubmission = getCurrentDate()))
                 Log.d("formSubmit","added uid to updatedUserData -> ${updatedUserData.uid}")
                 Log.d("formSubmit","uploading userdata to firebase")
                 accounts.document(uid).set(updatedUserData).await()

@@ -1,6 +1,7 @@
 package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -101,6 +102,7 @@ fun Enquiry(viewModel: ChooseUserViewModel, openDialog: MutableState<Boolean>, c
                             if (name.value.isEmpty() || phone.value.isEmpty() || query.value.isEmpty()){
                                 Toast.makeText(context,"All the three fields are required",Toast.LENGTH_LONG).show()
                             }else{
+                                Log.d("enquiry","enquiry viewModel function called")
                                 viewModel.saveEnquiryQuestion(
                                     Enquiry(
                                         name.value,
@@ -109,14 +111,11 @@ fun Enquiry(viewModel: ChooseUserViewModel, openDialog: MutableState<Boolean>, c
                                         if(whatsapp.value) "Connect via What's App" else "Connect via call"
                                     )
                                 ){
-                                    if (it){
-                                        Toast.makeText(context,"Wait for a callback. We will call you soon!",Toast.LENGTH_LONG).show()
+                                    Log.d("enquiry","data uploaded")
 
-                                    }else{
-                                        Toast.makeText(context,"Something went wrong",Toast.LENGTH_LONG).show()
-                                    }
                                 }
                                 openDialog.value = false
+                                Log.d("enquiry","alert dialogue closed")
                             }
                         }
                     ) {
