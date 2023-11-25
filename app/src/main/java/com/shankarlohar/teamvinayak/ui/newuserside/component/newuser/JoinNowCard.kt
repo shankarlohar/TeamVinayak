@@ -28,6 +28,7 @@ import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.Enquiry
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
+import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 
 @Composable
 fun JoinNowCard(
@@ -35,7 +36,8 @@ fun JoinNowCard(
     navController: NavController,
     gymInfo: GymInfo,
     context: Context,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    userViewModel: UserViewModel
 ){
     val openAboutDialog = remember { mutableStateOf(false) }
     val openEnquiryDialog = remember { mutableStateOf(false) }
@@ -80,5 +82,5 @@ fun JoinNowCard(
     }
     About(gymInfo = gymInfo, openAboutDialog)
     Enquiry(viewModel = viewModel, openDialog = openEnquiryDialog, context = context)
-    AccountStatus(openBottomSheet = openAccountBottomSheet, authViewModel = authViewModel)
+    AccountStatus(openBottomSheet = openAccountBottomSheet, authViewModel = authViewModel,userViewModel = userViewModel)
 }

@@ -19,7 +19,9 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,12 +32,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
+import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthViewModel){
+fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthViewModel,userViewModel: UserViewModel){
 
     var skipPartiallyExpanded by remember { mutableStateOf(false) }
     var edgeToEdgeEnabled by remember { mutableStateOf(false) }
@@ -54,6 +59,7 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                 if (uid != null) {
                     account.value = uid
                     Log.d("bootomsheetlogin","yes logged in"+account.value)
+                    userViewModel.fetchUserData(account.value)
                 }else{
                     Log.d("bootomsheetlogin","no user data")
                     Toast.makeText(context,"No user data found", Toast.LENGTH_LONG).show()
@@ -117,7 +123,7 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                             // you must additionally handle intended state cleanup, if any.
                             onClick = {
                                 Log.d("bootomsheetlogin","trying logged in")
-                                loginAccount()
+                                    loginAccount()
                             }
                         ) {
                             Text("Get Account Info")
@@ -125,17 +131,20 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                     }
                 }
             }else{
-                Column() {
+                val userData by userViewModel.userData.observeAsState()
+
+                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
 
                     LaunchedEffect(scope){
                         scope.launch { bottomSheetState.expand() }.invokeOnCompletion {
+
                             if (!bottomSheetState.hasPartiallyExpandedState) {
                                 skipPartiallyExpanded = true
                             }
                         }
                     }
 
-                    Text(account.value)
+                    userData?.personalDetails?.let { Text(it.fullName) }
 
                 }
             }

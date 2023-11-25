@@ -54,6 +54,7 @@ import com.shankarlohar.teamvinayak.ui.newuserside.component.admin.AdminLoginCar
 import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.JoinNowCard
 import com.shankarlohar.teamvinayak.ui.newuserside.component.member.MemberLoginCard
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
+import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -63,7 +64,8 @@ fun ChooseUserComponent(
     viewModel: ChooseUserViewModel,
     navController: NavController,
     authViewModel: AuthViewModel,
-    gymInfo: GymInfo
+    gymInfo: GymInfo,
+    userViewModel: UserViewModel
 ) {
     val pagerState = rememberPagerState()
     val selectedCategory = remember { mutableIntStateOf(0) }
@@ -117,7 +119,8 @@ fun ChooseUserComponent(
                 viewModel = viewModel,
                 navController = navController,
                 authViewModel = authViewModel,
-                gymInfo = gymInfo
+                gymInfo = gymInfo,
+                userViewModel = userViewModel
             )
         }
     }
@@ -131,7 +134,7 @@ fun ChoiceItem(
     navController: NavController,
     authViewModel: AuthViewModel,
     gymInfo: GymInfo,
-
+    userViewModel: UserViewModel
     ) {
     val scale = Utils.lerp(
         start = 0.5f,
@@ -243,7 +246,8 @@ fun ChoiceItem(
                             gymInfo = gymInfo,
                             viewModel = viewModel,
                             authViewModel = authViewModel,
-                            context = context
+                            context = context,
+                            userViewModel = userViewModel
                         )
                         1 -> MemberLoginCard(navController = navController,authViewModel = authViewModel)
                         2 -> AdminLoginCard(navController = navController, authViewModel = authViewModel)

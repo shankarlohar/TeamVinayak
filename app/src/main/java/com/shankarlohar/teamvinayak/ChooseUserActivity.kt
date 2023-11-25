@@ -112,6 +112,7 @@ class ChooseUserActivity : ComponentActivity() {
                                     gymInfo = gymInfo,
                                     viewModel = chooseUserViewModel,
                                     authViewModel = authViewModel,
+                                    userViewModel = userViewModel,
                                     navController = navController
                                 )
                             }

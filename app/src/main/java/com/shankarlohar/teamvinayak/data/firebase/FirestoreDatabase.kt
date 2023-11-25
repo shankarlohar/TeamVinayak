@@ -5,7 +5,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.model.GymInfo
-import com.shankarlohar.teamvinayak.model.Membership
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.util.Utils.getCurrentDate
@@ -16,17 +15,11 @@ class FirestoreDatabase {
 
     private val tncList = db.collection("register").document("terms-and-conditions")
 
-    private val users = db.collection("user") // Replace with your collection name
-
-    private val admin = db.collection("admin")
-
     private val gym = db.collection("vmg")
 
     private val enquiries = db.collection("enquiry")
 
     private val accounts = db.collection("accounts")
-
-    private lateinit var adminId:String
 
     suspend fun updateGymInfo() {
         gym.document("info").update("totalMembers",FieldValue.increment(1)).await()
@@ -51,6 +44,28 @@ class FirestoreDatabase {
         }
 
         return gymInfoLiveData
+    }
+
+    suspend fun getUserData(uid: String): UserData{
+        val userUidRef = accounts.document(uid)
+        var userData = UserData()
+
+        val userRef = userUidRef.get().await()
+
+        if (userRef.data != null){
+            val userFetchedData = userRef.toObject(UserData::class.java)
+            if (userFetchedData != null){
+                userData = userFetchedData
+            }else {
+                // Handle the case where mapping to GymData failed
+                Log.d("userFetchedData","isempty")
+            }
+        }
+        else {
+            // Handle the case where the document does not exist
+            Log.d("userFetchedData","does not exist")
+        }
+        return userData
     }
 
 
