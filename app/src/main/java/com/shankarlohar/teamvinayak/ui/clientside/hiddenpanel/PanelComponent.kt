@@ -28,8 +28,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -67,6 +69,7 @@ import com.shankarlohar.teamvinayak.ui.clientside.component.settings.MoreCompone
 import com.shankarlohar.teamvinayak.ui.navigation.ClientMenuAction
 import com.shankarlohar.teamvinayak.ui.navigation.ClientPanelNavigation
 import com.shankarlohar.teamvinayak.ui.navigation.MenuState
+import com.shankarlohar.teamvinayak.util.Status
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
@@ -89,9 +92,8 @@ fun ClientPanelComponent(
     val updateAnim = updateTransition(currentState, label = "MenuState")
     val context = LocalContext.current
 
+    val userData by userViewModel.userData.observeAsState()
 
-
-    val userDetails = UserData()
 
 
     val scale = updateAnim.animateFloat(
@@ -217,7 +219,7 @@ fun ClientPanelComponent(
         //side menu
         MenuComponent(
             isForMen = isForMen,
-            user = userDetails,
+            user = userData,
             Modifier
                 .offset {
                     IntOffset(
@@ -370,10 +372,10 @@ fun MenuComponent(
         Row(verticalAlignment = Alignment.CenterVertically) {
 
 
-            user?.let {details ->
+            user?.let {userDetails ->
 
                 Text(
-                    text = details.personalDetails.fullName,
+                    text = userDetails.personalDetails.fullName,
                     fontStyle = MaterialTheme.typography.titleMedium.fontStyle,
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 24.sp,
@@ -383,8 +385,13 @@ fun MenuComponent(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Icon(
-                    Icons.Filled.CheckCircle,
-                    contentDescription = stringResource(R.string.membership_active),
+                    when (userDetails.membership.status){
+                        Status.ACTIVE -> Icons.Filled.CheckCircle
+                        Status.PENDING -> Icons.Filled.Warning
+                        Status.BLOCKED -> Icons.Filled.Close
+
+                    },
+                    contentDescription = stringResource(R.string.membership_staus),
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(24.dp)
                 )

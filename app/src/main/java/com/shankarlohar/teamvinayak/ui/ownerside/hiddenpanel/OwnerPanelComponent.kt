@@ -374,7 +374,7 @@ fun MenuComponent(user: UserData?, modifier: Modifier, menuAction: (OwnerMenuAct
 
                 Icon(
                     Icons.Filled.CheckCircle,
-                    contentDescription = stringResource(R.string.membership_active),
+                    contentDescription = stringResource(R.string.membership_staus),
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(24.dp)
                 )

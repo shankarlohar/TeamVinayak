@@ -3,6 +3,7 @@ package com.shankarlohar.teamvinayak.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseUser
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.repository.AuthenticationRepository
 import com.shankarlohar.teamvinayak.util.UiStatus
@@ -35,6 +36,10 @@ class AuthViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.Main){
             return@launch authenticationRepository.logoutMember(onResult)
         }
+    }
+
+    fun getAuth(): FirebaseUser? {
+        return authenticationRepository.getAuth()
     }
 
 

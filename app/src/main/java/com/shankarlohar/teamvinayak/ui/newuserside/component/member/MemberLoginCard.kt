@@ -16,13 +16,13 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,11 +37,13 @@ import androidx.navigation.NavController
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
+import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 
 @Composable
 fun MemberLoginCard(
     navController: NavController,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    userViewModel: UserViewModel
 ){
     val context = LocalContext.current
     Column(
@@ -50,6 +52,8 @@ fun MemberLoginCard(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+
         val modifier = Modifier
             .padding(8.dp)
 
@@ -128,12 +132,32 @@ fun MemberLoginCard(
 
         Button(
             onClick = {
-                authViewModel.loginMember(emailState.value,passState.value)
-                { success, errorMessage ->
-                    if (success) {
-                        navController.navigate(Steps.CLIENT.name)
-                    } else {
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                if (authViewModel.getAuth()!= null){
+                    userViewModel.fetchUserData(authViewModel.getAuth()!!.uid)
+                    navController.navigate(Steps.CLIENT.name)
+                    Toast.makeText(context, "Already logged in.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                else{
+                    if (emailState.value.isNotEmpty() and passState.value.isNotEmpty()){
+                        authViewModel.loginMember(emailState.value, passState.value)
+                        { success, user ->
+                            if (success) {
+                                if (user != null) {
+                                    userViewModel.fetchUserData(user)
+                                    navController.navigate(Steps.CLIENT.name)
+                                }
+                                else {
+                                    Toast.makeText(context, "User Data Not Found.", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            } else {
+                                Toast.makeText(context, user, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }else{
+                        Toast.makeText(context, "Username and Password is required.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             },

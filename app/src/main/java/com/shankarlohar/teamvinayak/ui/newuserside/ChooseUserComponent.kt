@@ -249,7 +249,11 @@ fun ChoiceItem(
                             context = context,
                             userViewModel = userViewModel
                         )
-                        1 -> MemberLoginCard(navController = navController,authViewModel = authViewModel)
+                        1 -> MemberLoginCard(
+                            navController = navController,
+                            authViewModel = authViewModel,
+                            userViewModel = userViewModel
+                        )
                         2 -> AdminLoginCard(navController = navController, authViewModel = authViewModel)
                     }
 

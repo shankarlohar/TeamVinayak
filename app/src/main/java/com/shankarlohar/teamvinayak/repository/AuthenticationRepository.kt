@@ -1,6 +1,7 @@
 package com.shankarlohar.teamvinayak.repository
 
 import android.util.Log
+import com.google.firebase.auth.FirebaseUser
 import com.shankarlohar.teamvinayak.data.firebase.Authentication
 import com.shankarlohar.teamvinayak.data.firebase.FirestoreDatabase
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
@@ -29,6 +30,10 @@ class AuthenticationRepository {
 
     fun logoutMember(onResult: (Boolean) -> Unit) {
         authentication.logoutMember(onResult)
+    }
+
+    fun getAuth(): FirebaseUser? {
+        return authentication.getAuth()
     }
 
 

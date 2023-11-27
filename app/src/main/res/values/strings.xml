@@ -62,7 +62,7 @@
     <string name="notifications">Notifications</string>
     <string name="person">Person</string>
     <string name="menu">Menu</string>
-    <string name="membership_active">Membership Active</string>
+    <string name="membership_staus">Membership Staus</string>
     <string name="payment">Payments</string>
     <string name="suggestion">Suggestion</string>
     <string name="status">Status</string>
