@@ -15,4 +15,12 @@ class UserDataRepository {
             return@withContext firestoreDatabase.getUserData(uid)
         }
     }
+
+    suspend fun getUserEmail(username: String): String{
+        return withContext(Dispatchers.Main){
+            return@withContext firestoreDatabase.getEmail(username)
+        }
+    }
+
+
 }

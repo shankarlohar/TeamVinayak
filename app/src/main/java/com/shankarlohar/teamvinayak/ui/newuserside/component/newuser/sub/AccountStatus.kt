@@ -43,6 +43,7 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.UserData
+import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
@@ -64,21 +65,31 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
     val account = remember{ mutableStateOf("") }
 
     val loginAccount = {
-        authViewModel.loginMember(email = username,password = password){ result, uid ->
-            if (result){
-                if (uid != null) {
-                    account.value = uid
-                    Log.d("bootomsheetlogin","yes logged in"+account.value)
-                    userViewModel.fetchUserData(account.value)
-                }else{
-                    Log.d("bootomsheetlogin","no user data")
-                    Toast.makeText(context,"No user data found", Toast.LENGTH_LONG).show()
+
+        if (username.isNotEmpty() and password.isNotEmpty()){
+            userViewModel.fetchUserEmail(username){email ->
+                Log.d("username",email)
+                authViewModel.loginMember(email = email,password = password){ result, uid ->
+                    if (result){
+                        if (uid != null) {
+                            account.value = uid
+                            Log.d("bootomsheetlogin","yes logged in"+account.value)
+                            userViewModel.fetchUserData(account.value)
+                        }else{
+                            Log.d("bootomsheetlogin","no user data")
+                            Toast.makeText(context,"No user data found", Toast.LENGTH_LONG).show()
+                        }
+                    }else{
+                        Log.d("bootomsheetlogin","not logged in")
+                        Toast.makeText(context,"Something went wrong", Toast.LENGTH_LONG).show()
+                    }
                 }
-            }else{
-                Log.d("bootomsheetlogin","not logged in")
-                Toast.makeText(context,"Something went wrong", Toast.LENGTH_LONG).show()
             }
+        }else{
+            Toast.makeText(context, "Username and Password is required.", Toast.LENGTH_SHORT)
+                .show()
         }
+
     }
 
     // Sheet content

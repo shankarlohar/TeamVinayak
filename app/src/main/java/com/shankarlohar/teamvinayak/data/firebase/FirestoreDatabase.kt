@@ -46,6 +46,22 @@ class FirestoreDatabase {
         return gymInfoLiveData
     }
 
+    suspend fun getEmail(username: String):String{
+        val doc = accounts.document("usernames").get().await()
+        var email = ""
+        if (doc.data != null){
+            val emailFetched = doc.get(username.trim())
+            if (emailFetched != null){
+                email = emailFetched.toString()
+            }else{
+                Log.d("userFetchedData","isempty")
+            }
+        }else{
+            Log.d("usernames","data folder does not exist")
+        }
+        return email
+    }
+
     suspend fun getUserData(uid: String): UserData{
         val userUidRef = accounts.document(uid)
         var userData = UserData()
@@ -67,6 +83,7 @@ class FirestoreDatabase {
         }
         return userData
     }
+
 
 
     suspend fun getTnC(): List<TermsAndConditionsModel>{

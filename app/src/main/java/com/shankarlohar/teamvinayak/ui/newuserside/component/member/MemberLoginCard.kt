@@ -1,5 +1,6 @@
 package com.shankarlohar.teamvinayak.ui.newuserside.component.member
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +58,7 @@ fun MemberLoginCard(
         val modifier = Modifier
             .padding(8.dp)
 
-        val emailState = remember{ mutableStateOf("") }
+        val username = remember{ mutableStateOf("") }
         val passState = remember{ mutableStateOf("") }
 
         Spacer(
@@ -66,8 +67,8 @@ fun MemberLoginCard(
 
 
         OutlinedTextField(
-            value = emailState.value,
-            onValueChange = {emailState.value = it},
+            value = username.value,
+            onValueChange = {username.value = it},
             label = {
                 Text(
                     text = stringResource(R.string.user_id)
@@ -139,20 +140,23 @@ fun MemberLoginCard(
                         .show()
                 }
                 else{
-                    if (emailState.value.isNotEmpty() and passState.value.isNotEmpty()){
-                        authViewModel.loginMember(emailState.value, passState.value)
-                        { success, user ->
-                            if (success) {
-                                if (user != null) {
-                                    userViewModel.fetchUserData(user)
-                                    navController.navigate(Steps.CLIENT.name)
+                    if (username.value.isNotEmpty() and passState.value.isNotEmpty()){
+                        userViewModel.fetchUserEmail(username.value){email ->
+                            Log.d("username",email)
+                            authViewModel.loginMember(email, passState.value)
+                            { success, user ->
+                                if (success) {
+                                    if (user != null) {
+                                        userViewModel.fetchUserData(user)
+                                        navController.navigate(Steps.CLIENT.name)
+                                    }
+                                    else {
+                                        Toast.makeText(context, "User Data Not Found.", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                } else {
+                                    Toast.makeText(context, user, Toast.LENGTH_SHORT).show()
                                 }
-                                else {
-                                    Toast.makeText(context, "User Data Not Found.", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                            } else {
-                                Toast.makeText(context, user, Toast.LENGTH_SHORT).show()
                             }
                         }
                     }else{

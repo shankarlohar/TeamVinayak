@@ -22,4 +22,11 @@ class UserViewModel: ViewModel() {
             _userData.value = userDataRepository.getUserData(uid)
         }
     }
+    fun fetchUserEmail(username: String, emailValue: (String) -> Unit) {
+        viewModelScope.launch(Dispatchers.Main) {
+            val email = userDataRepository.getUserEmail(username)
+            emailValue(email)
+        }
+    }
+
 }
