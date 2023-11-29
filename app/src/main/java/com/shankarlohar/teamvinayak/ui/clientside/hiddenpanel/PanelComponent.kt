@@ -334,7 +334,10 @@ fun ClientPanelComponent(
             )
             when (panelNavScreen) {
                 ClientPanelNavigation.Attendance -> {
-                    AttendanceComponent()
+                    AttendanceComponent(
+                        userViewModel = userViewModel,
+                        authViewModel = authViewModel
+                    )
                 }
                 ClientPanelNavigation.Profile -> {
                     ProfileComponent()

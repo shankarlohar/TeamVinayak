@@ -3,6 +3,8 @@ package com.shankarlohar.teamvinayak.data.firebase
 import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.shankarlohar.teamvinayak.model.Attendance
+import com.shankarlohar.teamvinayak.model.AttendanceModel
 import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
@@ -20,6 +22,10 @@ class FirestoreDatabase {
     private val enquiries = db.collection("enquiry")
 
     private val accounts = db.collection("accounts")
+
+    private val attendance = db.collection("metadata").document("attendance")
+
+
 
     suspend fun updateGymInfo() {
         gym.document("info").update("totalMembers",FieldValue.increment(1)).await()
@@ -150,5 +156,45 @@ class FirestoreDatabase {
         }
     }
 
+    suspend fun uploadAttendance(userAttendance: Attendance, uid: String, onDone: (Boolean) -> Unit ){
+        val doc = attendance.collection(getCurrentDate().substring(0,11)).document(uid)
+        try {
+            doc.set(AttendanceModel(
+                date = userAttendance.date.value,
+                start = userAttendance.start.value,
+                end = userAttendance.end.value,
+                type = userAttendance.type.toList(),
+                part = userAttendance.part.toList(),
+                trainer = userAttendance.trainer.value
+            )).await()
+            onDone(true)
+        }catch (e:Exception){
+            onDone(false)
+        }
+    }
 
+    suspend fun fetchTodaysAttendance(uid: String, onDone: (Boolean) -> Unit ): Attendance {
+        val doc = attendance.collection(getCurrentDate().substring(0,11))
+
+        val value = Attendance()
+        try {
+            val todayAttendance = doc.document(uid).get().await()
+
+            if(todayAttendance.data != null){
+                val fetched = todayAttendance.toObject(AttendanceModel::class.java)!!
+                value.date.value = doc.id
+                value.start.value = fetched.start
+                value.end.value = fetched.end
+                value.type = fetched.type as MutableList<String>
+                value.part = fetched.part as MutableList<String>
+                value.trainer.value = fetched.trainer
+                onDone(true)
+            }else{
+                onDone(false)
+            }
+        }catch (e:Exception){
+            onDone(false)
+        }
+        return value
+    }
 }
