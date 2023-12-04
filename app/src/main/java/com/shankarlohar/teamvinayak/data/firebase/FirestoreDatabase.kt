@@ -133,6 +133,7 @@ class FirestoreDatabase {
                 Log.d("formSubmit","added uid to updatedUserData -> ${updatedUserData.uid}")
                 Log.d("formSubmit","uploading userdata to firebase")
                 accounts.document(uid).set(updatedUserData).await()
+                accounts.document("usernames").set(updatedUserData.personalDetails.username to updatedUserData.personalDetails.email)
                 Log.d("formSubmit","firebase userdata upload complete")
 
             }
