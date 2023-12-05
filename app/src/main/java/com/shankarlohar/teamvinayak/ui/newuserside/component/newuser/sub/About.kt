@@ -173,7 +173,6 @@ fun About(gymInfo: GymInfo, openDialog: MutableState<Boolean>) {
                                 ElevatedCard(modifier = modifier) { Text(gymInfo.timing[1], fontSize = fontSize) }
                             }
                         }
-
                     }
                 })
 

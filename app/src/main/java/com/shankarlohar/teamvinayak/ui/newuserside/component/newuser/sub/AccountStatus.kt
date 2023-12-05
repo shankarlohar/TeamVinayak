@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -178,52 +179,60 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                             }
                         }
                     }
+                    
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            painter = painter,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(200.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .padding(4.dp),
+                            contentScale = ContentScale.Fit
+                        )
+                    }
 
                     userData?.personalDetails?.let {personalDetails ->
-                        Card(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(300.dp)
-                                .padding(8.dp)
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            Image(
-                                painter = painter,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(200.dp)
-                                    .clip(MaterialTheme.shapes.medium)
-                                    .padding(4.dp),
-                                contentScale = ContentScale.Fit
-                            )
-                            Text("Full Name" + personalDetails.fullName)
-                            Text("Username" + personalDetails.username)
+
+                           ElevatedCard(modifier = Modifier.padding(2.dp)) { Text(personalDetails.fullName) }
                         }
                     }
 
+                    Spacer(modifier = Modifier.padding(2.dp))
 
                     userData?.let {userData ->
-                        Card(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .padding(8.dp)
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            Text("Account Identification: " + userData.uid)
-                            Text("Account Role: " + userData.role.toString())
-                            Text("Account Referred by: " + userData.referral)
+                            ElevatedCard(modifier = Modifier.padding(2.dp)){ Text(userData.uid) }
                         }
                     }
 
                     userData?.membership?.let {membership ->
-                        Card(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .padding(8.dp)
-                        ) {
-                            Text("Membership Status: " + membership.status.toString())
-                            Text("Registration Form Status: " + membership.details)
-                            Text("Registration Form Submission: " + membership.formSubmission)
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ){
+                            Card(
+                            ) {
+                                Column(Modifier.padding(16.dp)){
+                                    Text("Membership Status: " + membership.status.toString())
+                                    Text("Registration Form Status: " + membership.details)
+                                    Text("Form Submission: " + membership.formSubmission)
+                                }
+                            }
                         }
                     }
 
