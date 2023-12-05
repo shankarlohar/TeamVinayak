@@ -24,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.util.Role
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
@@ -53,6 +56,8 @@ fun MemberLoginCard(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+        val userData by userViewModel.userData.observeAsState()
 
 
         val modifier = Modifier
@@ -135,9 +140,15 @@ fun MemberLoginCard(
             onClick = {
                 if (authViewModel.getAuth()!= null){
                     userViewModel.fetchUserData(authViewModel.getAuth()!!.uid)
-                    navController.navigate(Steps.CLIENT.name)
-                    Toast.makeText(context, "Already logged in.", Toast.LENGTH_SHORT)
-                        .show()
+                    if (userData?.role == Role.MEMBER) {
+                        navController.navigate(Steps.CLIENT.name)
+                        Toast.makeText(context, "Already logged in.", Toast.LENGTH_SHORT)
+                            .show()
+                    }else{
+                        authViewModel.logoutMember {  }
+                        Toast.makeText(context, "Only members can login here.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
                 else{
                     if (username.value.isNotEmpty() and passState.value.isNotEmpty()){
@@ -148,7 +159,13 @@ fun MemberLoginCard(
                                 if (success) {
                                     if (user != null) {
                                         userViewModel.fetchUserData(user)
-                                        navController.navigate(Steps.CLIENT.name)
+                                        if (userData?.role == Role.MEMBER) {
+                                            navController.navigate(Steps.CLIENT.name)
+                                        }else{
+                                            authViewModel.logoutMember {  }
+                                            Toast.makeText(context, "Only members can login here.", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
                                     }
                                     else {
                                         Toast.makeText(context, "User Data Not Found.", Toast.LENGTH_SHORT)

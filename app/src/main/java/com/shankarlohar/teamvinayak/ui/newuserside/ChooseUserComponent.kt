@@ -254,7 +254,11 @@ fun ChoiceItem(
                             authViewModel = authViewModel,
                             userViewModel = userViewModel
                         )
-                        2 -> AdminLoginCard(navController = navController, authViewModel = authViewModel)
+                        2 -> AdminLoginCard(
+                            navController = navController,
+                            authViewModel = authViewModel,
+                            userViewModel = userViewModel
+                        )
                     }
 
                 }
