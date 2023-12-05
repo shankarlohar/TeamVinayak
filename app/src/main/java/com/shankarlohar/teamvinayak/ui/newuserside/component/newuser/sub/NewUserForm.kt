@@ -87,8 +87,6 @@ fun NewUserForm(
 
 
     val uploadData = {
-        Toast.makeText(context,personalDetails.dateOfBirth,Toast.LENGTH_LONG).show()
-
         selectedImageUri.let { image ->
             image.value?.let {uri ->
                 viewModel.uploadProfilePicture(uri) {
@@ -320,7 +318,7 @@ fun PersonalDetailsComponent(personalDetails: PersonalDetails, onPersonalDetails
                 OutlinedTextField(
                     value = personalDetails.currentHeight.toString(),
                     onValueChange = { height ->
-                        onPersonalDetailsChange(personalDetails.copy(currentHeight = height.toInt()))
+                        onPersonalDetailsChange(personalDetails.copy(currentHeight = height))
                     },
                     label = { Text("Current Height") },
                     modifier = Modifier.weight(1f)
@@ -329,7 +327,7 @@ fun PersonalDetailsComponent(personalDetails: PersonalDetails, onPersonalDetails
                 OutlinedTextField(
                     value = personalDetails.currentWeight.toString(),
                     onValueChange = { weight ->
-                        onPersonalDetailsChange(personalDetails.copy(currentWeight = weight.toInt()))
+                        onPersonalDetailsChange(personalDetails.copy(currentWeight = weight))
                     },
                     label = { Text("Current Weight") },
                     modifier = Modifier.weight(1f)

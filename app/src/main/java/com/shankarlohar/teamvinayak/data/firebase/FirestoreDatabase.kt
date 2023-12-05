@@ -100,13 +100,17 @@ class FirestoreDatabase {
             val tncList = mutableListOf<TermsAndConditionsModel>()
 
             if (data != null) {
+
                 for (key in data.keys) {
+
                     if (data[key] is List<*>) {
                         val content = (data[key] as List<String>)
                         val termsAndConditionsModel = TermsAndConditionsModel(key, content)
                         tncList.add(termsAndConditionsModel)
                     }
+
                 }
+
             }
 
             return tncList
@@ -133,7 +137,13 @@ class FirestoreDatabase {
                 Log.d("formSubmit","added uid to updatedUserData -> ${updatedUserData.uid}")
                 Log.d("formSubmit","uploading userdata to firebase")
                 accounts.document(uid).set(updatedUserData).await()
-                accounts.document("usernames").set(updatedUserData.personalDetails.username to updatedUserData.personalDetails.email)
+                accounts.document("usernames").set(
+                    mapOf(
+                        updatedUserData.personalDetails.username
+                                to
+                        updatedUserData.personalDetails.email
+                    )
+                )
                 Log.d("formSubmit","firebase userdata upload complete")
 
             }

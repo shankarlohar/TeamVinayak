@@ -72,6 +72,15 @@
     <string name="maintanance">Maintanance</string>
     <string name="control">Control</string>
     <string name="upload_photo">Upload a decent Photo</string>
+    <string name="phone">"Phone: "</string>
+    <string name="close">Close</string>
+    <string name="gym_is_open_today">Gym is open today.</string>
+    <string name="gym_is_closed_today">Gym is closed today.</string>
+    <string name="late_fee">"Late Fee: "</string>
+    <string name="locker_rental">"Locker Rental: "</string>
+    <string name="monthly_fee">"Monthly Fee: "</string>
+    <string name="membership_holding_fee">"Membership holding fee: "</string>
+    <string name="email">"Email: "</string>
 
 
 </resources>
