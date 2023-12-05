@@ -60,6 +60,7 @@ import com.shankarlohar.teamvinayak.ui.navigation.MenuState
 import com.shankarlohar.teamvinayak.ui.navigation.OwnerMenuAction
 import com.shankarlohar.teamvinayak.ui.navigation.OwnerPanelNavigation
 import com.shankarlohar.teamvinayak.ui.ownerside.components.home.HomeComponent
+import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 import kotlin.math.roundToInt
@@ -81,7 +82,7 @@ fun OwnerPanelComponent(
 
 
 
-    val userDetails = UserData()
+    val userDetails by userViewModel.userData.observeAsState()
 
 
     val scale = updateAnim.animateFloat(
@@ -225,16 +226,13 @@ fun OwnerPanelComponent(
 
                 }
                 OwnerMenuAction.LOGOUT -> {
-//                    authViewModel.logoutMember{ success ->
-//                        if (success) {
-//                            navController.navigate(Steps.CHOICE.name)
-//                        } else {
+                    authViewModel.logoutMember{ success ->
+                        if (success) {
+                            navController.navigate(Steps.CHOICE.name)
+                        } else {
                             Toast.makeText(context, "Logout failed", Toast.LENGTH_SHORT).show()
-//                        }
+                        }
                     }
-//                }
-                else -> {
-                    currentState = MenuState.COLLAPSED
                 }
             }
             currentState = MenuState.COLLAPSED
