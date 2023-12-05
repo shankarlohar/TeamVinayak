@@ -6,9 +6,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
+import androidx.compose.material3.ElevatedAssistChip
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -38,13 +47,14 @@ fun JoinNowCard(
     context: Context,
     authViewModel: AuthViewModel,
     userViewModel: UserViewModel
-){
+) {
     val openAboutDialog = remember { mutableStateOf(false) }
     val openEnquiryDialog = remember { mutableStateOf(false) }
     val openAccountBottomSheet = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(6.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -52,35 +62,69 @@ fun JoinNowCard(
         Image(
             painter = painterResource(R.drawable.vinayak_multi_gym_no_background),
             contentDescription = stringResource(R.string.gym_name),
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.fillMaxWidth()
         )
-        Row() {
-            Button(onClick = {
-                openAboutDialog.value = true
-            }) {
-                Text("About")
+        ElevatedAssistChip(
+            onClick = { openAboutDialog.value = true },
+            label = { Text("About Gym") },
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.Info,
+                    contentDescription = "About",
+                    Modifier.size(AssistChipDefaults.IconSize)
+                )
             }
-            Spacer(Modifier.padding(4.dp))
-            Button(onClick = {
-                openEnquiryDialog.value = true
-            }) {
-                Text("Enquiry")
+        )
+
+        Spacer(Modifier.padding(4.dp))
+
+        ElevatedAssistChip(
+            onClick = { openEnquiryDialog.value = true },
+            label = { Text("Have a question? Ask here.") },
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.Create,
+                    contentDescription = "Enquiry",
+                    Modifier.size(AssistChipDefaults.IconSize)
+                )
             }
-        }
-        Button(onClick = {
-            navController.navigate(Steps.ONBOARD.name)
-        }) {
-            Text("Register Now!")
-        }
+        )
 
+        Spacer(Modifier.padding(4.dp))
+        Spacer(Modifier.padding(4.dp))
 
-        Button(onClick = {
-            openAccountBottomSheet.value = true
-        }) {
-            Text("View Account Status")
-        }
+        ElevatedAssistChip(
+            onClick = { navController.navigate(Steps.ONBOARD.name) },
+            label = { Text("Register Now!") },
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.AccountBox,
+                    contentDescription = "Register",
+                    Modifier.size(AssistChipDefaults.IconSize)
+                )
+            }
+        )
+
+        Spacer(Modifier.padding(4.dp))
+
+        ElevatedAssistChip(
+            onClick = { openAccountBottomSheet.value = true },
+            label = { Text("Account Status") },
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.AccountBox,
+                    contentDescription = "Account Status",
+                    Modifier.size(AssistChipDefaults.IconSize)
+                )
+            }
+        )
+
     }
     About(gymInfo = gymInfo, openAboutDialog)
     Enquiry(viewModel = viewModel, openDialog = openEnquiryDialog, context = context)
-    AccountStatus(openBottomSheet = openAccountBottomSheet, authViewModel = authViewModel,userViewModel = userViewModel)
+    AccountStatus(
+        openBottomSheet = openAccountBottomSheet,
+        authViewModel = authViewModel,
+        userViewModel = userViewModel
+    )
 }
