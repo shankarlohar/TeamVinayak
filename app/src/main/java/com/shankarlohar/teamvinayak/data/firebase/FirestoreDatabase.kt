@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shankarlohar.teamvinayak.model.Attendance
 import com.shankarlohar.teamvinayak.model.AttendanceModel
+import com.shankarlohar.teamvinayak.model.Complain
 import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.model.Notification
@@ -27,6 +28,8 @@ class FirestoreDatabase {
     private val attendance = db.collection("metadata").document("attendance")
 
     private val notifications = db.collection("metadata").document("notifications")
+
+    private val complains = db.collection("metadata").document("complains")
 
 
 
@@ -232,4 +235,32 @@ class FirestoreDatabase {
         }
         return value
     }
+
+    fun uploadComplain(complain: Complain?, isDone: (Boolean) -> Unit) {
+        try {
+            complain?.let { complains.collection(it.user).document(complain.date + complain.time) }?.set(complain)
+            isDone(true)
+        }catch (e: Exception){
+            isDone(false)
+        }
+    }
+
+    suspend fun fetchComplain(user: String, onDone: (Boolean) -> Unit): List<Complain>{
+        val doc = complains.collection(user)
+        val snapshot = doc.get().await()
+        val complainList = mutableListOf<Complain>()
+        if (snapshot.documents.isNotEmpty()){
+            for (documents in snapshot.documents){
+                val complain = documents.toObject(Complain::class.java)
+                if (complain != null) {
+                    complainList.add(
+                        complain
+                    )
+                }
+            }
+            return complainList
+        }
+        return emptyList()
+    }
+
 }

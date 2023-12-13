@@ -2,6 +2,7 @@ package com.shankarlohar.teamvinayak.repository
 
 import com.shankarlohar.teamvinayak.data.firebase.FirestoreDatabase
 import com.shankarlohar.teamvinayak.model.Attendance
+import com.shankarlohar.teamvinayak.model.Complain
 import com.shankarlohar.teamvinayak.model.Notification
 import com.shankarlohar.teamvinayak.model.UserData
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +40,18 @@ class UserDataRepository {
     suspend fun fetchTodaysAttendance(uid: String, onDone: (Boolean) -> Unit ): Attendance{
         return withContext(Dispatchers.Main){
             return@withContext firestoreDatabase.fetchTodaysAttendance(uid,onDone)
+        }
+    }
+
+    suspend fun uploadComplain(complain: Complain?, isDone: (Boolean) -> Unit) {
+        return withContext(Dispatchers.Main){
+            return@withContext firestoreDatabase.uploadComplain(complain,isDone)
+        }
+    }
+
+    suspend fun fetchComplains(uid: String?, onDone: (Boolean) -> Unit): List<Complain>? {
+        return withContext(Dispatchers.Main){
+            return@withContext uid?.let { firestoreDatabase.fetchComplain(it,onDone) }
         }
     }
 

@@ -36,10 +36,10 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpandableCard(
-    title: String,
-    date: String,
-    time: String,
-    from: String,
+    title: String = "",
+    date: String = "",
+    time: String = "",
+    from: String = "",
     titleFontSize: TextStyle = MaterialTheme.typography.titleLarge,
     titleFontWeight: FontWeight = FontWeight.Bold,
     description: String,

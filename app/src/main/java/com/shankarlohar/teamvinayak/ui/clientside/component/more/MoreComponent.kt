@@ -16,9 +16,14 @@ import com.shankarlohar.teamvinayak.ui.clientside.component.complain.ComplainCom
 import com.shankarlohar.teamvinayak.ui.clientside.component.diet.DietComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.leaderboard.LeaderboardComponent
 import com.shankarlohar.teamvinayak.ui.navigation.ClientBottomNavigation
+import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
+import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 
 @Composable
-fun MoreComponent() {
+fun MoreComponent(
+    authViewModel: AuthViewModel,
+    userViewModel: UserViewModel
+) {
     val bottomNavScreen = remember { mutableStateOf(ClientBottomNavigation.Complain) }
 
     Scaffold(
@@ -35,7 +40,10 @@ fun MoreComponent() {
         ) {
             when (bottomNavScreen.value) {
                 ClientBottomNavigation.Complain -> {
-                    ComplainComponent()
+                    ComplainComponent(
+                        authViewModel = authViewModel,
+                        userViewModel = userViewModel
+                    )
                 }
                 ClientBottomNavigation.Diet -> {
                     DietComponent()

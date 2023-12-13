@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shankarlohar.teamvinayak.model.Attendance
+import com.shankarlohar.teamvinayak.model.Complain
 import com.shankarlohar.teamvinayak.model.Notification
 import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.repository.UserDataRepository
@@ -30,6 +31,10 @@ class UserViewModel: ViewModel() {
     private val _notifications = MutableLiveData<List<Notification>>()
     val notifications: LiveData<List<Notification>>
         get() = _notifications
+
+    private val _complains = MutableLiveData<List<Complain>>()
+    val complains: LiveData<List<Complain>>
+        get() = _complains
 
 
     fun getNotifications(){
@@ -62,6 +67,18 @@ class UserViewModel: ViewModel() {
             _attendanceData.value = userDataRepository.fetchTodaysAttendance(uid){
                 _attendanceState.value = it
             }
+        }
+    }
+
+    fun addComplain(complain: Complain?, isDone: (Boolean) -> Unit) {
+        viewModelScope.launch (Dispatchers.Main){
+            userDataRepository.uploadComplain(complain,isDone)
+        }
+    }
+
+    fun fetchComplains(uid: String?,onDone: (Boolean) -> Unit){
+        viewModelScope.launch(Dispatchers.Main) {
+            _complains.value = userDataRepository.fetchComplains(uid,onDone)
         }
     }
 

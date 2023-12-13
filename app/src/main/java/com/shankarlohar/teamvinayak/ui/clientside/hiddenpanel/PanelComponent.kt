@@ -357,7 +357,10 @@ fun ClientPanelComponent(
                     )
                 }
                 ClientPanelNavigation.More -> {
-                    MoreComponent()
+                    MoreComponent(
+                        authViewModel = authViewModel,
+                        userViewModel = userViewModel
+                    )
                 }
             }
 
