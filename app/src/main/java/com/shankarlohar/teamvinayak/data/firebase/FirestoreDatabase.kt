@@ -7,6 +7,7 @@ import com.shankarlohar.teamvinayak.model.Attendance
 import com.shankarlohar.teamvinayak.model.AttendanceModel
 import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.model.GymInfo
+import com.shankarlohar.teamvinayak.model.Notification
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
 import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.util.Utils.getCurrentDate
@@ -24,6 +25,8 @@ class FirestoreDatabase {
     private val accounts = db.collection("accounts")
 
     private val attendance = db.collection("metadata").document("attendance")
+
+    private val notifications = db.collection("metadata").document("notifications")
 
 
 
@@ -116,6 +119,27 @@ class FirestoreDatabase {
             return tncList
         }
 
+        return emptyList()
+    }
+
+    suspend fun getNotifications(): List<Notification>{
+        val snapshot = notifications.get().await()
+        val notificationList = mutableListOf<Notification>()
+        if (snapshot.exists()){
+            for (key in snapshot.data?.keys!!){
+                val notification = (snapshot[key] as Map<*, *>)
+                notificationList.add(
+                    Notification(
+                        title = notification["title"] as String,
+                        description = notification["description"] as String,
+                        time = notification["time"] as String,
+                        date = notification["date"] as String,
+                        from = notification["from"] as String
+                    )
+                )
+            }
+            return notificationList
+        }
         return emptyList()
     }
 

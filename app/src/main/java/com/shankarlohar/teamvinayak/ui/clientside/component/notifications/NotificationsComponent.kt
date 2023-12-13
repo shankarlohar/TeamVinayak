@@ -1,28 +1,44 @@
 package com.shankarlohar.teamvinayak.ui.clientside.component.notifications
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.ui.common.ExpandableCard
+import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 
 @Composable
-fun NotificationsComponent() {
-    Column(
+fun NotificationsComponent(userViewModel: UserViewModel) {
+
+
+    val notifications by userViewModel.notifications.observeAsState()
+
+    LazyColumn(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        //add some content here
-        Icon(
-            Icons.Filled.Notifications,
-            contentDescription = stringResource(R.string.notifications)
-        )
-    }
+        verticalArrangement = Arrangement.Top
+    ){
+            if (notifications != null){
+                Log.d("notifications", notifications.toString())
+                items(notifications!!){
+                    ExpandableCard(
+                        title = it.title,
+                        description = it.description,
+                        from = it.from,
+                        time = it.time,
+                        date = it.date
+                    )
+                }
+            }
+
+        }
+
 }

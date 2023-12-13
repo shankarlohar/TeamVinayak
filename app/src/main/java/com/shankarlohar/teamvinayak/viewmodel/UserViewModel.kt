@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shankarlohar.teamvinayak.model.Attendance
+import com.shankarlohar.teamvinayak.model.Notification
 import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.repository.UserDataRepository
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,18 @@ class UserViewModel: ViewModel() {
 
     val attendanceData: LiveData<Attendance>
         get() = _attendanceData
+
+
+    private val _notifications = MutableLiveData<List<Notification>>()
+    val notifications: LiveData<List<Notification>>
+        get() = _notifications
+
+
+    fun getNotifications(){
+        viewModelScope.launch(Dispatchers.Main){
+            _notifications.value = userDataRepository.getNotifications()
+        }
+    }
 
 
     fun fetchUserData(uid: String) {

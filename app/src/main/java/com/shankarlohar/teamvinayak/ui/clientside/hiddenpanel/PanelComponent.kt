@@ -65,7 +65,7 @@ import com.shankarlohar.teamvinayak.ui.clientside.component.message.MessageCompo
 import com.shankarlohar.teamvinayak.ui.clientside.component.notifications.NotificationsComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.payment.PaymentComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.profile.ProfileComponent
-import com.shankarlohar.teamvinayak.ui.clientside.component.settings.MoreComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.more.MoreComponent
 import com.shankarlohar.teamvinayak.ui.navigation.ClientMenuAction
 import com.shankarlohar.teamvinayak.ui.navigation.ClientPanelNavigation
 import com.shankarlohar.teamvinayak.ui.navigation.MenuState
@@ -94,7 +94,9 @@ fun ClientPanelComponent(
 
     val userData by userViewModel.userData.observeAsState()
 
-
+    LaunchedEffect(currentState){
+        userViewModel.getNotifications()
+    }
 
     val scale = updateAnim.animateFloat(
         transitionSpec = {
@@ -332,6 +334,7 @@ fun ClientPanelComponent(
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.onPrimaryContainer)
             )
+
             when (panelNavScreen) {
                 ClientPanelNavigation.Attendance -> {
                     AttendanceComponent(
@@ -349,7 +352,9 @@ fun ClientPanelComponent(
                     MessageComponent()
                 }
                 ClientPanelNavigation.Notification -> {
-                    NotificationsComponent()
+                    NotificationsComponent(
+                        userViewModel = userViewModel
+                    )
                 }
                 ClientPanelNavigation.More -> {
                     MoreComponent()
