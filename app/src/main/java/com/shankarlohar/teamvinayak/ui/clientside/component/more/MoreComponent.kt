@@ -12,13 +12,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.shankarlohar.teamvinayak.ui.clientside.component.bottomnav.ClientBottomToolbar
+import com.shankarlohar.teamvinayak.ui.clientside.component.complain.ComplainComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.diet.DietComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.leaderboard.LeaderboardComponent
 import com.shankarlohar.teamvinayak.ui.navigation.ClientBottomNavigation
 
 @Composable
 fun MoreComponent() {
-    val bottomNavScreen = remember { mutableStateOf(ClientBottomNavigation.Status) }
+    val bottomNavScreen = remember { mutableStateOf(ClientBottomNavigation.Complain) }
 
     Scaffold(
         bottomBar = {
@@ -33,17 +34,11 @@ fun MoreComponent() {
             verticalArrangement = Arrangement.SpaceAround
         ) {
             when (bottomNavScreen.value) {
-                ClientBottomNavigation.Status -> {
-                    Text(text = "Status")
-                }
                 ClientBottomNavigation.Complain -> {
-                    Text(text = "Complain")
+                    ComplainComponent()
                 }
                 ClientBottomNavigation.Diet -> {
                     DietComponent()
-                }
-                ClientBottomNavigation.Suggestion -> {
-                    Text(text = "Suggestion")
                 }
                 ClientBottomNavigation.Leaderboard -> {
                     LeaderboardComponent()

@@ -13,10 +13,8 @@ enum class ClientPanelNavigation(val icon: Int, val title: String) {
 }
 
 enum class ClientBottomNavigation(val icon: Int, val title: String){
-    Status(R.drawable.status, "Status"),
     Complain(R.drawable.issue, "Complain"),
     Diet(R.drawable.diet, "Diet"),
-    Suggestion(R.drawable.idea, "Suggestion"),
     Leaderboard(R.drawable.leaderboard, "Leaderboard")
 }
 
