@@ -27,7 +27,6 @@ fun NotificationsComponent(userViewModel: UserViewModel) {
         verticalArrangement = Arrangement.Top
     ){
             if (notifications != null){
-                Log.d("notifications", notifications.toString())
                 items(notifications!!){
                     ExpandableCard(
                         title = it.title,
