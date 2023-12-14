@@ -64,8 +64,8 @@ import com.shankarlohar.teamvinayak.ui.clientside.component.attendance.Attendanc
 import com.shankarlohar.teamvinayak.ui.clientside.component.message.MessageComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.notifications.NotificationsComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.payment.PaymentComponent
-import com.shankarlohar.teamvinayak.ui.clientside.component.profile.ProfileComponent
 import com.shankarlohar.teamvinayak.ui.clientside.component.more.MoreComponent
+import com.shankarlohar.teamvinayak.ui.clientside.component.profile.ProfileComponent
 import com.shankarlohar.teamvinayak.ui.navigation.ClientMenuAction
 import com.shankarlohar.teamvinayak.ui.navigation.ClientPanelNavigation
 import com.shankarlohar.teamvinayak.ui.navigation.MenuState
@@ -343,7 +343,9 @@ fun ClientPanelComponent(
                     )
                 }
                 ClientPanelNavigation.Profile -> {
-                    ProfileComponent()
+                    ProfileComponent(
+                        userViewModel = userViewModel
+                    )
                 }
                 ClientPanelNavigation.Payment -> {
                     PaymentComponent()

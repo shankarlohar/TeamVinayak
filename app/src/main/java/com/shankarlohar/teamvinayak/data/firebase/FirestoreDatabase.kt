@@ -84,6 +84,7 @@ class FirestoreDatabase {
             val userFetchedData = userRef.toObject(UserData::class.java)
             if (userFetchedData != null){
                 userData = userFetchedData
+                Log.d("userdatahere",userData.toString())
             }else {
                 // Handle the case where mapping to GymData failed
                 Log.d("userFetchedData","isempty")
