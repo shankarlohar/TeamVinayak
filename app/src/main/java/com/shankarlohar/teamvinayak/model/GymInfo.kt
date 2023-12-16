@@ -13,7 +13,8 @@ data class GymInfo(
     val openToday: Boolean = false,
     val phone: List<String> = emptyList(),
     val timing: List<String> = emptyList(),
-    val totalMembers: Int = 0
+    val totalMembers: Int = 0,
+    val admissionFee: Int = 1400
 )
 
 
