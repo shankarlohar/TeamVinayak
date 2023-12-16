@@ -82,6 +82,7 @@
     <string name="membership_holding_fee">"Membership holding fee: "</string>
     <string name="email">"Email: "</string>
     <string name="coming_soon">Coming Soon!</string>
+    <string name="your_image">Your Image</string>
 
 
 </resources>
