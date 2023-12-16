@@ -1,6 +1,5 @@
 package com.shankarlohar.teamvinayak.ui.common
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,16 +23,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shankarlohar.teamvinayak.R
+import com.shankarlohar.teamvinayak.model.Notification
 
 @Preview
 @Composable
-fun ItemDogCard() {
+fun NotificationCard(
+    notification: Notification = Notification(
+        title = "Sample",
+        description = "This is a sample notification This is a sample notification This is a sample notification This is a sample notification This is a sample notification This is a sample notification This is a sample notification",
+        from = "Ankit Shaw",
+        time = "14:30",
+        date = "16/12/2020"
+    )
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,39 +56,25 @@ fun ItemDogCard() {
                 .padding(16.dp)
         ) {
 
-            val image: Painter = painterResource(id = R.drawable.vinayak_multi_gym_no_background)
-            Image(
-                modifier = Modifier
-                    .size(80.dp, 80.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                painter = image,
-                alignment = Alignment.CenterStart,
-                contentDescription = "",
-                contentScale = ContentScale.Crop
-            )
 
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 Text(
-                    text = "dog.name",
+                    text = notification.title,
                     modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
                     fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = buildString {
-                        append("dog.age")
-                        append("yrs | ")
-                        append("dog.gender")
-                    },
-                    modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
+                    text = notification.description,
+                    modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp).fillMaxWidth(.65f),
                 )
 
                 Row(verticalAlignment = Alignment.Bottom) {
 
-                    val location: Painter = painterResource(id = R.drawable.ic_location)
+                    val location: Painter = painterResource(id = R.drawable.baseline_calendar_today_24)
 
                     Icon(
                         painter = location,
@@ -91,7 +84,11 @@ fun ItemDogCard() {
                     )
 
                     Text(
-                        text = "dog.location",
+                        text = buildString {
+                            append(notification.date)
+                            append(" - ")
+                            append(notification.time)
+                        },
                         modifier = Modifier.padding(8.dp, 12.dp, 12.dp, 0.dp),
                     )
                 }
@@ -100,20 +97,20 @@ fun ItemDogCard() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                GenderTag("dog.gender")
+                FromTag(notification.from)
             }
         }
     }
 }
 
 @Composable
-fun GenderTag(name: String) {
+fun FromTag(name: String) {
     val color = if (name == "Male") Color.Blue else Color.Red
-    ChipView(gender = name, colorResource = color)
+    ChipView(from = name, colorResource = color)
 }
 
 @Composable
-fun ChipView(gender: String, colorResource: Color) {
+fun ChipView(from: String, colorResource: Color) {
     Box(
         modifier = Modifier
             .wrapContentWidth()
@@ -121,7 +118,7 @@ fun ChipView(gender: String, colorResource: Color) {
             .background(colorResource.copy(.08f))
     ) {
         Text(
-            text = gender, modifier = Modifier.padding(12.dp, 6.dp, 12.dp, 6.dp),
+            text = from, modifier = Modifier.padding(12.dp, 6.dp, 12.dp, 6.dp),
             color = colorResource
         )
     }

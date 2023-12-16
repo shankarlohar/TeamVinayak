@@ -29,8 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.shankarlohar.teamvinayak.model.Complain
+import com.shankarlohar.teamvinayak.model.Notification
 import com.shankarlohar.teamvinayak.ui.common.ExpandableCard
 import com.shankarlohar.teamvinayak.ui.common.FancyIndicator
+import com.shankarlohar.teamvinayak.ui.common.NotificationCard
 import com.shankarlohar.teamvinayak.util.Utils.getCurrentDate
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
@@ -152,12 +154,14 @@ fun ComplainComponent(
                 ){
                     if (complains != null){
                         items(complains!!){
-                            ExpandableCard(
-                                title = it.subject,
-                                description = it.description,
-                                time = it.time,
-                                date = it.date,
-                                from = if (it.response.isEmpty()) "Pending" else it.response
+                            NotificationCard(
+                                Notification(
+                                    title = it.subject,
+                                    description = it.description,
+                                    time = it.time,
+                                    date = it.date,
+                                    from = if (it.response.isEmpty()) "Pending" else it.response
+                                )
                             )
                         }
                     }

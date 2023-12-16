@@ -13,6 +13,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.shankarlohar.teamvinayak.ui.common.ExpandableCard
+import com.shankarlohar.teamvinayak.ui.common.NotificationCard
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 
 @Composable
@@ -28,13 +29,7 @@ fun NotificationsComponent(userViewModel: UserViewModel) {
     ){
             if (notifications != null){
                 items(notifications!!){
-                    ExpandableCard(
-                        title = it.title,
-                        description = it.description,
-                        from = it.from,
-                        time = it.time,
-                        date = it.date
-                    )
+                    NotificationCard(it)
                 }
             }
 
