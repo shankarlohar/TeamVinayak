@@ -3,10 +3,12 @@ package com.shankarlohar.teamvinayak.data.firebase
 import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.shankarlohar.teamvinayak.model.Attendance
 import com.shankarlohar.teamvinayak.model.AttendanceModel
 import com.shankarlohar.teamvinayak.model.Complain
 import com.shankarlohar.teamvinayak.model.Enquiry
+import com.shankarlohar.teamvinayak.model.FaqItem
 import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.model.Notification
 import com.shankarlohar.teamvinayak.model.TermsAndConditionsModel
@@ -22,6 +24,8 @@ class FirestoreDatabase {
     private val gym = db.collection("vmg")
 
     private val enquiries = db.collection("enquiry")
+
+    private val faq = db.collection("faq")
 
     private val accounts = db.collection("accounts")
 
@@ -143,6 +147,21 @@ class FirestoreDatabase {
                 )
             }
             return notificationList
+        }
+        return emptyList()
+    }
+
+    suspend fun fetchFaq(): List<FaqItem>{
+        val snapshot = faq.get().await()
+        val faqList = mutableListOf<FaqItem>()
+        if (snapshot.documents.size > 0){
+            for (document in snapshot.documents){
+                document.toObject<FaqItem>()?.let {
+                    faqList.add(it)
+                }
+            }
+            Log.d("faqDocument",faqList.toString())
+            return faqList
         }
         return emptyList()
     }

@@ -91,7 +91,10 @@ fun ChooseUserComponent(
     Scaffold(
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { openChat.value = !openChat.value },
+                onClick = {
+                    openChat.value = true
+                    viewModel.fetchFaq()
+                },
                 expanded = true,
                 icon = { Icon(painter = painterResource(id = R.drawable.chat), "FAQ") },
                 text = { Text(text = "Chat") },

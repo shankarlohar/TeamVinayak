@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shankarlohar.teamvinayak.model.ChooseUserModel
 import com.shankarlohar.teamvinayak.model.Enquiry
+import com.shankarlohar.teamvinayak.model.FaqItem
 import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.repository.RegistrationRepository
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,9 @@ class ChooseUserViewModel() : ViewModel() {
 
     private val _gymInfo = MutableStateFlow(GymInfo())
     val gymInfo = _gymInfo.asStateFlow()
+
+    private val _faqs = MutableStateFlow<List<FaqItem>>(emptyList())
+    val faqs = _faqs.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.Main) {
@@ -49,6 +53,12 @@ class ChooseUserViewModel() : ViewModel() {
     fun saveEnquiryQuestion(enquiry: Enquiry, onDone: (Boolean) -> Unit) {
         viewModelScope.launch(Dispatchers.IO){
             registrationRepository.saveEnquiryQuestion(enquiry,onDone)
+        }
+    }
+
+    fun fetchFaq(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _faqs.value = registrationRepository.fetchFaq()
         }
     }
 

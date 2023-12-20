@@ -5,6 +5,7 @@ import android.util.Log
 import com.shankarlohar.teamvinayak.data.firebase.FirestoreDatabase
 import com.shankarlohar.teamvinayak.data.firebase.Storage
 import com.shankarlohar.teamvinayak.model.Enquiry
+import com.shankarlohar.teamvinayak.model.FaqItem
 import com.shankarlohar.teamvinayak.model.GymInfo
 import com.shankarlohar.teamvinayak.model.UserData
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +21,9 @@ class RegistrationRepository {
         }
     }
 
-    suspend fun updateGymInfo() {
+    suspend fun fetchFaq(): List<FaqItem> {
         return withContext(Dispatchers.IO) {
-            return@withContext firestoreDatabase.updateGymInfo()
+            return@withContext firestoreDatabase.fetchFaq()
         }
     }
 

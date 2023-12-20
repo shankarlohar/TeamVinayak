@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
@@ -31,6 +33,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -54,6 +57,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.Enquiry
+import com.shankarlohar.teamvinayak.model.FaqItem
 import com.shankarlohar.teamvinayak.ui.common.FancyIndicator
 import com.shankarlohar.teamvinayak.util.Utils.getCurrentDate
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
@@ -67,6 +71,39 @@ fun Enquiry(
     context: Context = LocalContext.current
 ) {
 
+    val faqItems by viewModel.faqs.collectAsState()
+
+    var state by remember { mutableIntStateOf(0) }
+    val titles = listOf("FAQ", "Ask!")
+
+    val name = remember {
+        mutableStateOf("")
+    }
+    val phone = remember {
+        mutableStateOf("")
+    }
+    val query = remember {
+        mutableStateOf("")
+    }
+    val whatsapp = remember {
+        mutableStateOf(true)
+    }
+    val modifier = Modifier.padding(4.dp)
+
+    var skipPartiallyExpanded by remember { mutableStateOf(false) }
+    var edgeToEdgeEnabled by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = skipPartiallyExpanded
+    )
+    val compositionQuestion by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.question))
+    val compositionDone by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.done))
+    val compositionQuestions by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.chatsupport))
+
+    val asked = remember {
+        mutableStateOf(false)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,35 +112,6 @@ fun Enquiry(
         verticalArrangement = Arrangement.Center
     ) {
 
-        var state by remember { mutableIntStateOf(0) }
-        val titles = listOf("FAQ", "Ask!")
-
-        val name = remember {
-            mutableStateOf("")
-        }
-        val phone = remember {
-            mutableStateOf("")
-        }
-        val query = remember {
-            mutableStateOf("")
-        }
-        val whatsapp = remember {
-            mutableStateOf(true)
-        }
-        val modifier = Modifier.padding(4.dp)
-
-        var skipPartiallyExpanded by remember { mutableStateOf(false) }
-        var edgeToEdgeEnabled by remember { mutableStateOf(false) }
-        val scope = rememberCoroutineScope()
-        val bottomSheetState = rememberModalBottomSheetState(
-            skipPartiallyExpanded = skipPartiallyExpanded
-        )
-        val compositionQuestion by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.question))
-        val compositionDone by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.done))
-
-        val asked = remember {
-            mutableStateOf(false)
-        }
 
         if (openDialog.value) {
             val windowInsets = if (edgeToEdgeEnabled)
@@ -154,8 +162,22 @@ fun Enquiry(
                                 }
                             }
 
+                            LottieAnimation(
+                                modifier = Modifier.size(150.dp),
+                                composition = compositionQuestions,
+                                iterations = LottieConstants.IterateForever,
+                            )
+
                             // faq here
                             Text(text = "Frequently Asked Questions.")
+                            Spacer(modifier = modifier)
+                            Spacer(modifier = modifier)
+
+                            LazyColumn {
+                                items(faqItems) { item ->
+                                    FaqItemRow(item,modifier)
+                                }
+                            }
                         }
 
                     }
@@ -214,31 +236,38 @@ fun Enquiry(
                                     })
                                 }
                                 Button(onClick = {
-                                    if (name.value.isEmpty() || phone.value.isEmpty() || query.value.isEmpty()){
-                                        Toast.makeText(context,"All the three fields are required",Toast.LENGTH_LONG).show()
-                                    }else{
-                                        Log.d("enquiry","enquiry viewModel function called")
+                                    if (name.value.isEmpty() || phone.value.isEmpty() || query.value.isEmpty()) {
+                                        Toast.makeText(
+                                            context,
+                                            "All the three fields are required",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    } else {
+                                        Log.d("enquiry", "enquiry viewModel function called")
                                         viewModel.saveEnquiryQuestion(
                                             Enquiry(
                                                 name.value,
                                                 phone.value,
                                                 query.value,
-                                                if(whatsapp.value) "Connect via What's App" else "Connect via call",
+                                                if (whatsapp.value) "Connect via What's App" else "Connect via call",
                                                 getCurrentDate(),
                                                 "Not Seen"
                                             )
-                                        ){
-                                            if (it){
+                                        ) {
+                                            if (it) {
                                                 asked.value = true
-                                                Log.d("enquiry","data uploaded")
-                                            }
-                                            else{
-                                                Toast.makeText(context,"Something went wrong",Toast.LENGTH_LONG).show()
+                                                Log.d("enquiry", "data uploaded")
+                                            } else {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Something went wrong",
+                                                    Toast.LENGTH_LONG
+                                                ).show()
                                             }
 
                                         }
                                         openDialog.value = false
-                                        Log.d("enquiry","alert dialogue closed")
+                                        Log.d("enquiry", "alert dialogue closed")
                                     }
 
                                 }) {
@@ -288,5 +317,14 @@ fun Enquiry(
                 }
             )
         }
+    }
+}
+
+@Composable
+fun FaqItemRow(item: FaqItem, modifier: Modifier) {
+    Column {
+        Text(text = item.question, style = MaterialTheme.typography.headlineSmall)
+        Text(text = item.answer, style = MaterialTheme.typography.bodySmall)
+        Spacer(modifier = modifier)
     }
 }
