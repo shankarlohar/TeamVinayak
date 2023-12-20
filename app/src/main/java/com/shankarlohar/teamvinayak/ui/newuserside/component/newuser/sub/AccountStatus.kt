@@ -56,7 +56,11 @@ import java.lang.Exception
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthViewModel,userViewModel: UserViewModel){
+fun AccountStatus(
+    openBottomSheet: MutableState<Boolean>,
+    authViewModel: AuthViewModel,
+    userViewModel: UserViewModel
+) {
 
     val compositionForm by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.form))
 
@@ -68,33 +72,33 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
         skipPartiallyExpanded = skipPartiallyExpanded
     )
     val context = LocalContext.current
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    val account = remember{ mutableStateOf("") }
+    var username = remember { mutableStateOf("") }
+    var password = remember { mutableStateOf("") }
+    val account = remember { mutableStateOf("") }
 
 
     val loginAccount = {
 
-        if (username.isNotEmpty() and password.isNotEmpty()){
-            userViewModel.fetchUserEmail(username){email ->
-                Log.d("username",email)
-                authViewModel.loginMember(email = email,password = password){ result, uid ->
-                    if (result){
+        if (username.value.isNotEmpty() and password.value.isNotEmpty()) {
+            userViewModel.fetchUserEmail(username.value) { email ->
+                Log.d("username", email)
+                authViewModel.loginMember(email = email, password = password.value) { result, uid ->
+                    if (result) {
                         if (uid != null) {
                             account.value = uid
-                            Log.d("bootomsheetlogin","yes logged in"+account.value)
+                            Log.d("bootomsheetlogin", "yes logged in" + account.value)
                             userViewModel.fetchUserData(account.value)
-                        }else{
-                            Log.d("bootomsheetlogin","no user data")
-                            Toast.makeText(context,"No user data found", Toast.LENGTH_LONG).show()
+                        } else {
+                            Log.d("bootomsheetlogin", "no user data")
+                            Toast.makeText(context, "No user data found", Toast.LENGTH_LONG).show()
                         }
-                    }else{
-                        Log.d("bootomsheetlogin","not logged in")
-                        Toast.makeText(context,"Something went wrong", Toast.LENGTH_LONG).show()
+                    } else {
+                        Log.d("bootomsheetlogin", "not logged in")
+                        Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
                     }
                 }
             }
-        }else{
+        } else {
             Toast.makeText(context, "Username and Password is required.", Toast.LENGTH_SHORT)
                 .show()
         }
@@ -107,12 +111,26 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
             WindowInsets(0) else BottomSheetDefaults.windowInsets
 
         ModalBottomSheet(
-            onDismissRequest = { openBottomSheet.value = false },
+            onDismissRequest = {
+                openBottomSheet.value = false
+                Log.d("bottomsheetvalue",openBottomSheet.value.toString())
+                if (account.value.isNotEmpty()){
+                    Log.d("bootomsheetlogin","trying log out")
+                    authViewModel.logoutMember {
+                        if (it){
+                            Toast.makeText(context,"Login as a member to access the account", Toast.LENGTH_LONG).show()
+                            account.value = ""
+                            username.value = ""
+                            password.value = ""
+                        }
+                    }
+                }
+            },
             sheetState = bottomSheetState,
             windowInsets = windowInsets
         ) {
 
-            if (account.value == ""){
+            if (account.value == "") {
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -134,8 +152,8 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                     Spacer(modifier = Modifier.padding(8.dp))
 
                     OutlinedTextField(
-                        value = username,
-                        onValueChange = { username = it },
+                        value = username.value,
+                        onValueChange = { username.value = it },
                         label = {
                             Text(
                                 text = stringResource(R.string.user_id)
@@ -144,8 +162,8 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
+                        value = password.value,
+                        onValueChange = { password.value = it },
                         label = {
                             Text(
                                 text = stringResource(R.string.passcode)
@@ -158,28 +176,27 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                             // Note: If you provide logic outside of onDismissRequest to remove the sheet,
                             // you must additionally handle intended state cleanup, if any.
                             onClick = {
-                                Log.d("bootomsheetlogin","trying logged in")
-                                    loginAccount()
+                                Log.d("bootomsheetlogin", "trying logged in")
+                                loginAccount()
                             }
                         ) {
                             Text("Get Account Info")
                         }
                     }
                 }
-            }else{
+            } else {
                 val userData by userViewModel.userData.observeAsState()
 
                 val painter = rememberAsyncImagePainter(
                     ImageRequest.Builder // Image to display in case of an error
-                    (LocalContext.current).data(data = userData?.personalDetails?.picture).apply(block = fun ImageRequest.Builder.() {
-                    crossfade(true)
-                    placeholder(R.drawable.vinayak_multi_gym_no_background) // Placeholder image while loading
-                    error(R.drawable.maintanance) // Image to display in case of an error
-                    scale(Scale.FILL) // Scale type
-                }).build()
+                        (LocalContext.current).data(data = userData?.personalDetails?.picture)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                            placeholder(R.drawable.vinayak_multi_gym_no_background) // Placeholder image while loading
+                            error(R.drawable.maintanance) // Image to display in case of an error
+                            scale(Scale.FILL) // Scale type
+                        }).build()
                 )
-
-
 
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
@@ -187,16 +204,13 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                     modifier = Modifier.fillMaxWidth()
                 ) {
 
-                    LaunchedEffect(scope){
+                    LaunchedEffect(scope) {
                         scope.launch { bottomSheetState.expand() }.invokeOnCompletion {
                             if (!bottomSheetState.hasPartiallyExpandedState) {
                                 skipPartiallyExpanded = true
                             }
                         }
                     }
-
-
-                    
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -213,61 +227,44 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                         )
                     }
 
-                    userData?.personalDetails?.let {personalDetails ->
+                    userData?.personalDetails?.let { personalDetails ->
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
 
-                           ElevatedCard(modifier = Modifier.padding(2.dp)) { Text(personalDetails.fullName) }
+                            ElevatedCard(modifier = Modifier.padding(2.dp)) { Text(personalDetails.fullName) }
                         }
                     }
 
                     Spacer(modifier = Modifier.padding(2.dp))
 
-                    userData?.let {userData ->
+                    userData?.let { userData ->
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            ElevatedCard(modifier = Modifier.padding(2.dp)){ Text(userData.uid) }
+                            ElevatedCard(modifier = Modifier.padding(2.dp)) { Text(userData.uid) }
                         }
                     }
 
-                    userData?.membership?.let {membership ->
+                    userData?.membership?.let { membership ->
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
-                        ){
+                        ) {
                             Card(
                             ) {
-                                Column(Modifier.padding(16.dp)){
+                                Column(Modifier.padding(16.dp)) {
                                     Text("Membership Status: " + membership.status.toString())
                                     Text("Registration Form Status: " + membership.details)
                                     Text("Form Submission: " + membership.formSubmission)
                                 }
                             }
                         }
-                    }
-                }
-            }
-
-
-
-        }
-    }
-    else{
-        Log.d("bottomsheetvalue",openBottomSheet.value.toString())
-        if (account.value.isNotEmpty()){
-            Log.d("bootomsheetlogin","trying log out")
-            authViewModel.logoutMember {
-                if (it){
-                    Toast.makeText(context,"Login as a member to access the account", Toast.LENGTH_LONG).show()
-                    scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
-                        openBottomSheet.value = false
                     }
                 }
             }
