@@ -18,12 +18,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -44,6 +51,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
+import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 import com.shankarlohar.teamvinayak.data.local.choiceCategories
 import com.shankarlohar.teamvinayak.data.local.choiceScreens
@@ -53,6 +61,7 @@ import com.shankarlohar.teamvinayak.util.Utils
 import com.shankarlohar.teamvinayak.ui.newuserside.component.admin.AdminLoginCard
 import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.JoinNowCard
 import com.shankarlohar.teamvinayak.ui.newuserside.component.member.MemberLoginCard
+import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.Enquiry
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
@@ -71,59 +80,80 @@ fun ChooseUserComponent(
     val selectedCategory = remember { mutableIntStateOf(0) }
     val rememberScope = rememberCoroutineScope()
 
+    val openChat = remember{ mutableStateOf(false) }
+
 
 
     LaunchedEffect(pagerState.currentPage){
         selectedCategory.value = pagerState.currentPage
     }
 
-
-    Row(modifier = Modifier.fillMaxWidth()) {
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            choiceCategories.forEachIndexed { index, item ->
-                Text(
-                    text = item,
-                    modifier = Modifier
-                        .height(90.dp)
-                        .graphicsLayer {
-                            rotationZ = -90f
-                            translationX = 100f
-                        }
-                        .clickable {
-                            selectedCategory.value = index
-                            rememberScope.launch {
-                                pagerState.animateScrollToPage(index)
+    Scaffold(
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { openChat.value = !openChat.value },
+                expanded = true,
+                icon = { Icon(painter = painterResource(id = R.drawable.chat), "FAQ") },
+                text = { Text(text = "Chat") },
+            )
+        },
+        floatingActionButtonPosition = FabPosition.End,
+    ) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(it)) {
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                choiceCategories.forEachIndexed { index, item ->
+                    Text(
+                        text = item,
+                        modifier = Modifier
+                            .height(90.dp)
+                            .graphicsLayer {
+                                rotationZ = -90f
+                                translationX = 100f
                             }
-                        },
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = if (selectedCategory.value == index) FontWeight.Bold else FontWeight.Thin,
-                    color = if (selectedCategory.value == index) Color.White else Color.LightGray,
-                    maxLines = 1,
+                            .clickable {
+                                selectedCategory.value = index
+                                rememberScope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
+                            },
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = if (selectedCategory.value == index) FontWeight.Bold else FontWeight.Thin,
+                        color = if (selectedCategory.value == index) Color.White else Color.LightGray,
+                        maxLines = 1,
+                    )
+                }
+            }
+            HorizontalPager(
+                count = choiceScreens.size,
+                contentPadding = PaddingValues(end = 70.dp, top = 70.dp),
+                state = pagerState,
+            ) { page ->
+                val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
+                ChoiceItem(
+                    item = choiceScreens[page],
+                    page = page,
+                    pageOffset = pageOffset,
+                    viewModel = viewModel,
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    gymInfo = gymInfo,
+                    userViewModel = userViewModel
                 )
             }
         }
-        HorizontalPager(
-            count = choiceScreens.size,
-            contentPadding = PaddingValues(end = 70.dp, top = 70.dp),
-            state = pagerState,
-        ) { page ->
-            val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
-            ChoiceItem(
-                item = choiceScreens[page],
-                page = page,
-                pageOffset = pageOffset,
-                viewModel = viewModel,
-                navController = navController,
-                authViewModel = authViewModel,
-                gymInfo = gymInfo,
-                userViewModel = userViewModel
-            )
-        }
     }
+
+    Enquiry(
+        viewModel = viewModel,
+        openDialog = openChat
+    )
+
 }
 
 @Composable

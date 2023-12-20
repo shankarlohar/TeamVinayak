@@ -77,20 +77,6 @@ fun JoinNowCard(
         )
 
         Spacer(Modifier.padding(4.dp))
-
-        ElevatedAssistChip(
-            onClick = { openEnquiryDialog.value = true },
-            label = { Text("Have a question? Ask here.") },
-            leadingIcon = {
-                Icon(
-                    Icons.Filled.Create,
-                    contentDescription = "Enquiry",
-                    Modifier.size(AssistChipDefaults.IconSize)
-                )
-            }
-        )
-
-        Spacer(Modifier.padding(4.dp))
         Spacer(Modifier.padding(4.dp))
 
         ElevatedAssistChip(

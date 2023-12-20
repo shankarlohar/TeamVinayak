@@ -179,7 +179,9 @@ fun NewUserForm(
                 )
             }
             when (index.value) {
-                0 -> ProfilePictureComponent(selectedImageUri = selectedImageUri)
+                0 -> ProfilePictureComponent(
+                    selectedImageUri = selectedImageUri
+                )
                 1 -> PersonalDetailsComponent(
                     personalDetails = personalDetails,
                     onPersonalDetailsChange = { updatedDetails ->
