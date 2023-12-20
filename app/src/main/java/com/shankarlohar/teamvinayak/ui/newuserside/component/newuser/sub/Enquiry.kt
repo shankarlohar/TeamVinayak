@@ -55,6 +55,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.ui.common.FancyIndicator
+import com.shankarlohar.teamvinayak.util.Utils.getCurrentDate
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
 import kotlinx.coroutines.launch
 
@@ -222,7 +223,9 @@ fun Enquiry(
                                                 name.value,
                                                 phone.value,
                                                 query.value,
-                                                if(whatsapp.value) "Connect via What's App" else "Connect via call"
+                                                if(whatsapp.value) "Connect via What's App" else "Connect via call",
+                                                getCurrentDate(),
+                                                "Not Seen"
                                             )
                                         ){
                                             if (it){

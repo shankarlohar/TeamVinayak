@@ -185,7 +185,7 @@ class FirestoreDatabase {
 
 
     suspend fun saveEnquiryQuestion(enquiry: Enquiry, onDone: (Boolean) -> Unit) {
-        val doc = enquiries.document(enquiry.phone)
+        val doc = enquiries.document(enquiry.time)
         try {
             doc.set(enquiry).await()
         }catch (e:Exception){

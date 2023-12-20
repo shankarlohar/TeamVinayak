@@ -4,5 +4,7 @@ data class Enquiry(
     val name: String = "",
     val phone: String = "",
     val query: String = "",
-    val replyMode: String = ""
+    val replyMode: String = "",
+    val time: String = "",
+    val reply: String = ""
 )
