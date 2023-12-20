@@ -42,6 +42,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.UserData
 import com.shankarlohar.teamvinayak.util.Steps
@@ -54,6 +58,9 @@ import java.lang.Exception
 @Composable
 fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthViewModel,userViewModel: UserViewModel){
 
+    val compositionForm by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.form))
+
+
     var skipPartiallyExpanded by remember { mutableStateOf(false) }
     var edgeToEdgeEnabled by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -64,6 +71,7 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val account = remember{ mutableStateOf("") }
+
 
     val loginAccount = {
 
@@ -112,6 +120,12 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
+
+                    LottieAnimation(
+                        modifier = Modifier.size(150.dp),
+                        composition = compositionForm,
+                        iterations = LottieConstants.IterateForever,
+                    )
 
                     Spacer(modifier = Modifier.padding(8.dp))
 
@@ -165,6 +179,8 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                 }).build()
                 )
 
+
+
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -173,12 +189,13 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
 
                     LaunchedEffect(scope){
                         scope.launch { bottomSheetState.expand() }.invokeOnCompletion {
-
                             if (!bottomSheetState.hasPartiallyExpandedState) {
                                 skipPartiallyExpanded = true
                             }
                         }
                     }
+
+
                     
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -235,34 +252,25 @@ fun AccountStatus(openBottomSheet: MutableState<Boolean>, authViewModel: AuthVie
                             }
                         }
                     }
-
-
-
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                        Button(
-                            onClick = {
-                                Log.d("bootomsheetlogin","trying log out")
-                                authViewModel.logoutMember {
-                                    if (it){
-                                        Toast.makeText(context,"Login as a member to access the account", Toast.LENGTH_LONG).show()
-                                        scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
-                                            if (!bottomSheetState.isVisible) {
-                                                openBottomSheet.value = false
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        ) {
-                            Text("Done")
-                        }
-                    }
-
                 }
             }
 
 
 
+        }
+    }
+    else{
+        Log.d("bottomsheetvalue",openBottomSheet.value.toString())
+        if (account.value.isNotEmpty()){
+            Log.d("bootomsheetlogin","trying log out")
+            authViewModel.logoutMember {
+                if (it){
+                    Toast.makeText(context,"Login as a member to access the account", Toast.LENGTH_LONG).show()
+                    scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                        openBottomSheet.value = false
+                    }
+                }
+            }
         }
     }
 }
