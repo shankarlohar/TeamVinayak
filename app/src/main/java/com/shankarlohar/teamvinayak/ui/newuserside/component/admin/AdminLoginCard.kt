@@ -4,13 +4,19 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -36,6 +42,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.util.Role
 import com.shankarlohar.teamvinayak.util.Steps
@@ -49,6 +59,9 @@ fun AdminLoginCard(
     userViewModel: UserViewModel,
 ){
     val context = LocalContext.current
+
+    val compositionCoach by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.coach))
+
 
     Column(
         modifier = Modifier
@@ -133,65 +146,83 @@ fun AdminLoginCard(
             }
         }
 
-
-        Button(
-            onClick = {
-                if (authViewModel.getAuth()!= null){
-                    userViewModel.fetchUserData(authViewModel.getAuth()!!.uid)
-                    if (userData?.role == Role.ADMIN) {
-                        navController.navigate(Steps.OWNER.name)
-                        Toast.makeText(context, "Already logged in.", Toast.LENGTH_SHORT)
-                            .show()
-                    }else{
-                        authViewModel.logoutMember {  }
-                        Toast.makeText(context, "Only admin can login here.", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-                else{
-                    if (name.value.isNotEmpty() and password.value.isNotEmpty()){
-                        userViewModel.fetchUserEmail(name.value){email ->
-                            Log.d("username",email)
-                            authViewModel.loginMember(email, password.value)
-                            { success, user ->
-                                if (success) {
-                                    if (user != null) {
-                                        userViewModel.fetchUserData(user)
-                                        if (userData?.role == Role.ADMIN) {
-                                            navController.navigate(Steps.OWNER.name)
-                                        }else{
-                                            authViewModel.logoutMember {  }
-                                            Toast.makeText(context, "Only admin can login here.", Toast.LENGTH_SHORT)
-                                                .show()
-                                        }
-                                    }
-                                    else {
-                                        Toast.makeText(context, "User Data Not Found.", Toast.LENGTH_SHORT)
-                                            .show()
-                                    }
-                                } else {
-                                    Toast.makeText(context, user, Toast.LENGTH_SHORT).show()
-                                }
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                contentAlignment = Alignment.TopCenter
+            ){
+                LottieAnimation(
+                    modifier = Modifier.fillMaxWidth(),
+                    composition = compositionCoach,
+                    iterations = LottieConstants.IterateForever,
+                )
+                // rest here
+                Button(
+                    onClick = {
+                        if (authViewModel.getAuth()!= null){
+                            userViewModel.fetchUserData(authViewModel.getAuth()!!.uid)
+                            if (userData?.role == Role.ADMIN) {
+                                navController.navigate(Steps.OWNER.name)
+                                Toast.makeText(context, "Already logged in.", Toast.LENGTH_SHORT)
+                                    .show()
+                            }else{
+                                authViewModel.logoutMember {  }
+                                Toast.makeText(context, "Only admin can login here.", Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
-                    }else{
-                        Toast.makeText(context, "Username and Password is required.", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                        else{
+                            if (name.value.isNotEmpty() and password.value.isNotEmpty()){
+                                userViewModel.fetchUserEmail(name.value){email ->
+                                    Log.d("username",email)
+                                    authViewModel.loginMember(email, password.value)
+                                    { success, user ->
+                                        if (success) {
+                                            if (user != null) {
+                                                userViewModel.fetchUserData(user)
+                                                if (userData?.role == Role.ADMIN) {
+                                                    navController.navigate(Steps.OWNER.name)
+                                                }else{
+                                                    authViewModel.logoutMember {  }
+                                                    Toast.makeText(context, "Only admin can login here.", Toast.LENGTH_SHORT)
+                                                        .show()
+                                                }
+                                            }
+                                            else {
+                                                Toast.makeText(context, "User Data Not Found.", Toast.LENGTH_SHORT)
+                                                    .show()
+                                            }
+                                        } else {
+                                            Toast.makeText(context, user, Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }
+                            }else{
+                                Toast.makeText(context, "Username and Password is required.", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
+                    },
+                    colors = ButtonDefaults
+                        .buttonColors(
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        ),
+                    contentPadding = PaddingValues(2.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = modifier
+                        .width(90.dp)
+                        .height(30.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.get_in),
+                    )
                 }
-            },
-            colors = ButtonDefaults
-                .buttonColors(
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-            contentPadding = PaddingValues(16.dp),
-            shape = CircleShape,
-            modifier = modifier
-                .size(90.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.get_in),
-            )
+            }
         }
+
+
+
     }
 }
