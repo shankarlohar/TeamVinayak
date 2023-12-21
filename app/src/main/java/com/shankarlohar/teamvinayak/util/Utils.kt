@@ -1,5 +1,9 @@
 package com.shankarlohar.teamvinayak.util
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.Easing
 import java.text.SimpleDateFormat
@@ -43,8 +47,19 @@ object Utils {
         return dateFormat.format(date)
     }
 
+    fun openWebsite(context: Context, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        try {
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            // Handle potential errors (e.g., no browser installed)
+            Log.e("OpenWebsite", "Error opening website: $e")
+        }
+    }
 
 }
+
+
 enum class Role{
     ADMIN,
     MEMBER
