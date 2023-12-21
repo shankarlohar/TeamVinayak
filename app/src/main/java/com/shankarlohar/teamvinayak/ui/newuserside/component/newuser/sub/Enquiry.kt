@@ -15,12 +15,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -60,7 +65,9 @@ import com.shankarlohar.teamvinayak.model.Enquiry
 import com.shankarlohar.teamvinayak.model.FaqItem
 import com.shankarlohar.teamvinayak.ui.common.FancyIndicator
 import com.shankarlohar.teamvinayak.util.Utils.getCurrentDate
+import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.ChooseUserViewModel
+import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,6 +75,8 @@ import kotlinx.coroutines.launch
 fun Enquiry(
     viewModel: ChooseUserViewModel,
     openDialog: MutableState<Boolean>,
+    authViewModel: AuthViewModel,
+    userViewModel: UserViewModel,
     context: Context = LocalContext.current
 ) {
 
@@ -103,6 +112,7 @@ fun Enquiry(
     val asked = remember {
         mutableStateOf(false)
     }
+    val openAccountBottomSheet = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -190,7 +200,17 @@ fun Enquiry(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                         ) {
-
+                            ElevatedAssistChip(
+                                onClick = { openAccountBottomSheet.value = true },
+                                label = { Text("Account Status") },
+                                leadingIcon = {
+                                    Icon(
+                                        Icons.Filled.AccountBox,
+                                        contentDescription = "Account Status",
+                                        Modifier.size(AssistChipDefaults.IconSize)
+                                    )
+                                }
+                            )
                             LottieAnimation(
                                 modifier = Modifier.size(150.dp),
                                 composition = compositionQuestion,
@@ -280,6 +300,12 @@ fun Enquiry(
                 }
             }
         }
+
+        AccountStatus(
+            openBottomSheet = openAccountBottomSheet,
+            authViewModel = authViewModel,
+            userViewModel = userViewModel
+        )
 
         if (asked.value) {
             // Display the alert dialog when openDialog is true
