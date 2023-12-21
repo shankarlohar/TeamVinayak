@@ -3,6 +3,7 @@ package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -29,6 +31,10 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.GymInfo
@@ -49,6 +55,8 @@ fun JoinNowCard(
         "https://firebasestorage.googleapis.com/v0/b/team-vinayak.appspot.com/o/vinayak_main_1.jpg?alt=media&token=e5af93d1-0cc4-4618-be2d-9418ec4b80c1",
         "https://firebasestorage.googleapis.com/v0/b/team-vinayak.appspot.com/o/vinayak_main_2.jpg?alt=media&token=77f32971-cf8e-4f8e-a9ff-de40950607d3"
     )
+    val compositionRegister by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.register))
+
 
     val painter = rememberAsyncImagePainter(
         ImageRequest.Builder // Image to display in case of an error
@@ -63,8 +71,7 @@ fun JoinNowCard(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(6.dp),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -74,8 +81,7 @@ fun JoinNowCard(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.padding(4.dp))
-        Spacer(Modifier.padding(4.dp))
+        Spacer(Modifier.padding(1.dp))
 
         Column(
             modifier = Modifier
@@ -85,7 +91,7 @@ fun JoinNowCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             Card(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(2.dp),
                 shape = RoundedCornerShape(16.dp),
             ) {
                 AutoSlidingCarousel(
@@ -104,20 +110,24 @@ fun JoinNowCard(
             }
         }
 
-
-
-        ElevatedAssistChip(
-            onClick = { navController.navigate(Steps.ONBOARD.name) },
-            label = { Text("Register Now!") },
-            leadingIcon = {
-                Icon(
-                    Icons.Filled.AccountBox,
-                    contentDescription = "Register",
-                    Modifier.size(AssistChipDefaults.IconSize)
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                contentAlignment = Alignment.Center
+            ){
+                LottieAnimation(
+                    modifier = Modifier.fillMaxWidth(),
+                    composition = compositionRegister,
+                    iterations = LottieConstants.IterateForever,
+                )
+                ElevatedAssistChip(
+                    onClick = { navController.navigate(Steps.ONBOARD.name) },
+                    label = { Text("Register Now!") },
                 )
             }
-        )
-
+        }
         Spacer(Modifier.padding(4.dp))
     }
 
