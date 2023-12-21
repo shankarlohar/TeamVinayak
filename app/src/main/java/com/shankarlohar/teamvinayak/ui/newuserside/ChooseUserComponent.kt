@@ -17,9 +17,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
@@ -62,6 +66,7 @@ import com.shankarlohar.teamvinayak.ui.newuserside.component.admin.AdminLoginCar
 import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.JoinNowCard
 import com.shankarlohar.teamvinayak.ui.newuserside.component.member.MemberLoginCard
 import com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub.Enquiry
+import com.shankarlohar.teamvinayak.util.Utils.openWebsite
 import com.shankarlohar.teamvinayak.viewmodel.AuthViewModel
 import com.shankarlohar.teamvinayak.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
@@ -154,7 +159,9 @@ fun ChooseUserComponent(
 
     Enquiry(
         viewModel = viewModel,
-        openDialog = openChat
+        openDialog = openChat,
+        authViewModel = authViewModel,
+        userViewModel = userViewModel
     )
 
 }
@@ -255,12 +262,35 @@ fun ChoiceItem(
                     .alpha(visibility)
             ) {
                 Column {
-                    Text(
-                        text = stringResource(item.title),
-                        fontSize = 16.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Medium
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = stringResource(item.title),
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Medium
+                        )
+                        if (page == 0){
+                            ElevatedAssistChip(
+                                onClick = {
+                                    openWebsite(context,"https://www.google.co.in")
+                                },
+                                label = { Text("About Gym") },
+                                trailingIcon = {
+                                    Icon(
+                                        Icons.Filled.Info,
+                                        contentDescription = "About",
+                                        Modifier.size(AssistChipDefaults.IconSize)
+                                    )
+                                }
+                            )
+                        }
+
+                    }
+
                     Text(
                         text = stringResource(item.heading),
                         color = Color.White,
@@ -278,9 +308,7 @@ fun ChoiceItem(
                             navController = navController,
                             gymInfo = gymInfo,
                             viewModel = viewModel,
-                            authViewModel = authViewModel,
                             context = context,
-                            userViewModel = userViewModel
                         )
                         1 -> MemberLoginCard(
                             navController = navController,

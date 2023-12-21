@@ -61,10 +61,10 @@ fun AutoSlidingCarousel(
             color = Color.Black.copy(alpha = 0.5f)
         ) {
             DotsIndicator(
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+                modifier = Modifier.padding(horizontal = 2.dp, vertical = 1.dp),
                 totalDots = itemsCount,
                 selectedIndex = if (isDragged) pagerState.currentPage else pagerState.targetPage,
-                dotSize = 8.dp
+                dotSize = 2.dp
             )
         }
     }
