@@ -21,6 +21,7 @@ data class EmergencyContact(
     val name: String = "",
     val number: String = "+91 ",
     val profession: String = "",
+    val relation: String = ""
 )
 
 data class PersonalDetails(

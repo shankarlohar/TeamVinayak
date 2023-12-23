@@ -488,25 +488,40 @@ fun EmergencyContactComponent(
     onEmergencyContactChange: (EmergencyContact) -> Unit
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp)
+            .fillMaxWidth()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Text(text = "We need an Emergency Contact.")
+        OutlinedTextField(
+            value = emergencyContact.relation,
+            onValueChange = { relation ->
+                onEmergencyContactChange(emergencyContact.copy(relation = relation))
+            },
+            label = { Text("Relation") }
+        )
         OutlinedTextField(
             value = emergencyContact.name,
             onValueChange = { name ->
                 onEmergencyContactChange(emergencyContact.copy(name = name))
             },
-            label = { Text("Emergency Contact Name") }
+            label = { Text("Name") }
         )
         OutlinedTextField(
             value = emergencyContact.number,
             onValueChange = { phone ->
                 onEmergencyContactChange(emergencyContact.copy(number = phone))
             },
-            label = { Text("Emergency Contact Number") }
+            label = { Text("Phone Number") }
+        )
+        OutlinedTextField(
+            value = emergencyContact.profession,
+            onValueChange = { profession ->
+                onEmergencyContactChange(emergencyContact.copy(profession = profession))
+            },
+            label = { Text("Profession") }
         )
     }
 }
