@@ -2,6 +2,7 @@ package com.shankarlohar.teamvinayak.ui.newuserside.component.newuser.sub
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -135,8 +136,35 @@ fun NewUserForm(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
-                    if ((index.value == 1) && (componentPersonalDetails.value != 9)) {
-                        componentPersonalDetails.value += 1
+                    if ((index.value == 0) && (selectedImageUri.value == null)){
+                        Toast.makeText(context,"Profile picture is required", Toast.LENGTH_LONG).show()
+                    }else if ((index.value == 1) && (componentPersonalDetails.value < 10)) {
+                        if ((componentPersonalDetails.value == 0) && (personalDetails.aadhaarNumber.isEmpty())){
+                            Toast.makeText(context,"Aadhaar is required", Toast.LENGTH_LONG).show()
+                        }else if ((componentPersonalDetails.value == 1) && (personalDetails.email.isEmpty())){
+                            Toast.makeText(context,"Email is required", Toast.LENGTH_LONG).show()
+
+                        }else if ((componentPersonalDetails.value == 2) && (personalDetails.mobile.isEmpty())){
+                            Toast.makeText(context,"Mobile is required", Toast.LENGTH_LONG).show()
+
+                        }else if ((componentPersonalDetails.value == 3) && (personalDetails.fullName.isEmpty())){
+                            Toast.makeText(context,"Name is required", Toast.LENGTH_LONG).show()
+
+                        }else if ((componentPersonalDetails.value == 5) && (personalDetails.fullAddress.isEmpty())){
+                            Toast.makeText(context,"Address is required", Toast.LENGTH_LONG).show()
+
+                        }else if ((componentPersonalDetails.value == 6) && (personalDetails.dateOfBirth.isEmpty())){
+                            Toast.makeText(context,"Date of Birth is required", Toast.LENGTH_LONG).show()
+
+                        }else if ((componentPersonalDetails.value == 9) && (personalDetails.username.isEmpty())){
+                            Toast.makeText(context,"Creating username is essential", Toast.LENGTH_LONG).show()
+
+                        }else if ((componentPersonalDetails.value == 9) && (personalDetails.password.isEmpty())){
+                            Toast.makeText(context,"Password cannot be empty", Toast.LENGTH_LONG).show()
+
+                        }else{
+                            componentPersonalDetails.value += 1
+                        }
                     } else if ((index.value == 4) && (componentPARQ.value != 9)){
                         componentPARQ.value += 1
 
