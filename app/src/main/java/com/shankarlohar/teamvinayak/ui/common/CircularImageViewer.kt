@@ -6,13 +6,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,30 +45,38 @@ fun CircularImageViewer(
     }
 
     Box(
-            modifier = Modifier
-                .size(300.dp)
-                .background(MaterialTheme.colorScheme.primary, CircleShape)
-                .clickable {
-                    launcher.launch("profilePictures/*")
-                },
-            contentAlignment = Alignment.Center,
-        ) {
-            if (selectedImageUri != null) {
-                Image(
-                    painter = rememberImagePainter(selectedImageUri),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(300.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
+        modifier = Modifier
+            .size(300.dp)
+            .background(MaterialTheme.colorScheme.primary, CircleShape)
+            .clickable {
+                launcher.launch("image/*")
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        if (selectedImageUri != null) {
+            Image(
+                painter = rememberImagePainter(selectedImageUri),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(300.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ){
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(100.dp)
                 )
+                Text(text = "Tap to upload an Image")
             }
         }
+    }
 
 }

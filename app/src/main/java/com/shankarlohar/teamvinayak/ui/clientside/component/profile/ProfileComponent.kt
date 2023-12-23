@@ -175,11 +175,11 @@ fun EmergencyContactView(contact: EmergencyContact) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = contact.contactName,
+                text = contact.name,
                 style = MaterialTheme.typography.bodySmall,
             )
             Text(
-                text = contact.contactNumber,
+                text = contact.name,
                 style = MaterialTheme.typography.bodySmall,
             )
         }

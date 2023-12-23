@@ -6,6 +6,7 @@ import com.shankarlohar.teamvinayak.util.Status
 
 data class UserData(
     val uid: String = "",
+    val noOfPeopleReferred: Int = 0,
     val role: Role = Role.MEMBER, // Admin, Member
     val personalDetails: PersonalDetails = PersonalDetails(),
     val emergencyContact: EmergencyContact = EmergencyContact(),
@@ -17,8 +18,9 @@ data class UserData(
 )
 
 data class EmergencyContact(
-    val contactName: String = "",
-    val contactNumber: String = ""
+    val name: String = "",
+    val number: String = "+91 ",
+    val profession: String = "",
 )
 
 data class PersonalDetails(
@@ -34,6 +36,7 @@ data class PersonalDetails(
     val email: String = "",
     val password: String = "",
     val username: String = "",
+    val profession: String = "",
 )
 
 data class Disability(

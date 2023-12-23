@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -44,7 +45,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.shankarlohar.teamvinayak.R
 import com.shankarlohar.teamvinayak.model.Disability
 import com.shankarlohar.teamvinayak.model.EmergencyContact
 import com.shankarlohar.teamvinayak.model.PARQ
@@ -84,6 +90,8 @@ fun NewUserForm(
     }
 
     val context = LocalContext.current
+
+    val compositionRegistration by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.registration))
 
 
     val uploadData = {
@@ -141,6 +149,13 @@ fun NewUserForm(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = "Registration Form", style = MaterialTheme.typography.headlineLarge)
+
+            LottieAnimation(
+                modifier = Modifier.size(150.dp),
+                composition = compositionRegistration,
+                iterations = LottieConstants.IterateForever,
+            )
+
             if (showFormSubmissionDialog.value) {
                 AlertDialog(
                     onDismissRequest = {
@@ -408,16 +423,16 @@ fun EmergencyContactComponent(emergencyContact: EmergencyContact,onEmergencyCont
         ) {
             Text(text = "We need an Emergency Contact.")
             OutlinedTextField(
-                value = emergencyContact.contactName,
+                value = emergencyContact.name,
                 onValueChange = { name ->
-                    onEmergencyContactChange(emergencyContact.copy(contactName = name))
+                    onEmergencyContactChange(emergencyContact.copy(name = name))
                 },
                 label = { Text("Emergency Contact Name") }
             )
             OutlinedTextField(
-                value = emergencyContact.contactNumber,
+                value = emergencyContact.number,
                 onValueChange = { phone ->
-                    onEmergencyContactChange(emergencyContact.copy(contactNumber = phone))
+                    onEmergencyContactChange(emergencyContact.copy(number = phone))
                 },
                 label = { Text("Emergency Contact Number") }
             )
