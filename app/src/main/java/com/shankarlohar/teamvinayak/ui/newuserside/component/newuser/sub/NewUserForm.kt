@@ -612,7 +612,7 @@ fun PARQComponent(parq: PARQ, onParqChange: (PARQ) -> Unit, componentPARQ: Mutab
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Physical Activity Readiness Query", style = MaterialTheme.typography.headlineSmall)
+        Text(text = "Physical Activity Readiness Query", style = MaterialTheme.typography.bodyLarge)
         Text(text = "Answer all the questions with honesty", style = MaterialTheme.typography.bodySmall)
         Spacer(modifier = Modifier.padding(8.dp))
 
