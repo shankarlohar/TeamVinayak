@@ -955,18 +955,35 @@ fun ReferralComponent(referral: String, onReferralChange: (String) -> Unit) {
     ) {
         Text(text = "Tell us how you know about us!")
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(text = "Were you referred by a member?")
-            Switch(
-                checked = isReferred.value,
-                onCheckedChange = {
-                    isReferred.value = !isReferred.value
-                }
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Yes",
+                    color = if (isReferred.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.width(16.dp))
+                Switch(
+                    modifier = Modifier.semantics { contentDescription = "disability switch" },
+                    checked = isReferred.value,
+                    onCheckedChange = {
+                        isReferred.value = !isReferred.value
+                    }
+                )
+                Spacer(Modifier.width(16.dp))
+                Text(
+                    text = "No",
+                    color = if (!isReferred.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
 
         if (isReferred.value) {
