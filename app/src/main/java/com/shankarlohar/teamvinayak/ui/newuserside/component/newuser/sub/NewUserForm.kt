@@ -250,7 +250,7 @@ fun ProfilePictureComponent(
             .fillMaxSize()
             .padding(24.dp)
     ) {
-        Text(text = "Upload a Photo")
+        Text(text = "Upload a Professional Photo")
         Spacer(modifier = Modifier.padding(48.dp))
         CircularImageViewer(
             imageUrl = selectedImageUri.toString(),
