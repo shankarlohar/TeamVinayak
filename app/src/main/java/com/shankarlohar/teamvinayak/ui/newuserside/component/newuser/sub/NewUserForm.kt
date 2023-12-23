@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -534,22 +535,39 @@ fun DisabilityComponent(disability: Disability, onDisabilityChange: (Disability)
             .fillMaxSize()
             .padding(24.dp)
     ) {
-        Text(text = "Disability Information")
+        Text(text = "Disability Information", style = MaterialTheme.typography.headlineMedium)
+        Text(text = "It's important for us to know! ", style = MaterialTheme.typography.headlineSmall)
 
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(text = "Do you have any disability?")
-            Switch(
-                modifier = Modifier.semantics { contentDescription = "disability switch" },
-                checked = disability.hasDisability,
-                onCheckedChange = {
-                    onDisabilityChange(disability.copy(hasDisability = !disability.hasDisability))
-                }
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Yes",
+                    color = if (disability.hasDisability) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.width(16.dp))
+                Switch(
+                    modifier = Modifier.semantics { contentDescription = "disability switch" },
+                    checked = disability.hasDisability,
+                    onCheckedChange = {
+                        onDisabilityChange(disability.copy(hasDisability = !disability.hasDisability))
+                    }
+                )
+                Spacer(Modifier.width(16.dp))
+                Text(
+                    text = "No",
+                    color = if (!disability.hasDisability) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
         if (disability.hasDisability) {
             OutlinedTextField(
