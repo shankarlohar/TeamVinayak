@@ -42,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -95,6 +94,9 @@ fun NewUserForm(
     val componentPersonalDetails = remember {
         mutableStateOf(0)
     }
+    val componentPARQ = remember {
+        mutableStateOf(0)
+    }
 
     val context = LocalContext.current
 
@@ -133,6 +135,9 @@ fun NewUserForm(
                 onClick = {
                     if ((index.value == 1) && (componentPersonalDetails.value != 9)) {
                         componentPersonalDetails.value += 1
+                    } else if ((index.value == 4) && (componentPARQ.value != 9)){
+                        componentPARQ.value += 1
+
                     } else if (index.value == 5) {
                         formSubmitStatus.value = UiStatus.Loading
                         showFormSubmissionDialog.value = true
@@ -241,7 +246,8 @@ fun NewUserForm(
                     parq = parq,
                     onParqChange = { updatedDetails ->
                         parq = updatedDetails
-                    }
+                    },
+                    componentPARQ = componentPARQ
                 )
 
                 5 -> ReferralComponent(
@@ -597,160 +603,340 @@ fun DisabilityComponent(disability: Disability, onDisabilityChange: (Disability)
 }
 
 @Composable
-fun PARQComponent(parq: PARQ, onParqChange: (PARQ) -> Unit) {
+fun PARQComponent(parq: PARQ, onParqChange: (PARQ) -> Unit, componentPARQ: MutableState<Int>) {
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Disability Information")
+        Text(text = "Physical Activity Readiness Query", style = MaterialTheme.typography.headlineSmall)
+        Text(text = "Answer all the questions with honesty", style = MaterialTheme.typography.bodySmall)
         Spacer(modifier = Modifier.padding(8.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) { Text(text = parq.question1) }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer1,
-                    onCheckedChange = { onParqChange(parq.copy(answer1 = !parq.answer1)) }
-                )
-            }
-        }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) { Text(text = parq.question2) }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer2,
-                    onCheckedChange = { onParqChange(parq.copy(answer2 = !parq.answer2)) }
-                )
+        when(componentPARQ.value){
+            0 -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question1, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer1) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer1,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer1 = !parq.answer1))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer1) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) { Text(text = parq.question3) }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer3,
-                    onCheckedChange = { onParqChange(parq.copy(answer3 = !parq.answer3)) }
-                )
+            1 -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question2, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer2,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer2 = !parq.answer2))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) { Text(text = parq.question4) }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer4,
-                    onCheckedChange = { onParqChange(parq.copy(answer4 = !parq.answer4)) }
-                )
+            2 -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question3, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer3) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer3,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer3 = !parq.answer3))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer3) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) { Text(text = parq.question5) }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer5,
-                    onCheckedChange = { onParqChange(parq.copy(answer5 = !parq.answer5)) }
-                )
+            3 -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question4, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer4) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer4,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer4 = !parq.answer4))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer4) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) { Text(text = parq.question6) }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer6,
-                    onCheckedChange = { onParqChange(parq.copy(answer6 = !parq.answer6)) }
-                )
+            4 -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question5, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer5) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer5,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer5 = !parq.answer5))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer5) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) { Text(text = parq.question7) }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer7,
-                    onCheckedChange = { onParqChange(parq.copy(answer7 = !parq.answer7)) }
-                )
+            5 -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question6, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer6) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer6,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer6 = !parq.answer6))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer6) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) { Text(text = parq.question8) }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer8,
-                    onCheckedChange = { onParqChange(parq.copy(answer8 = !parq.answer8)) }
-                )
+            6 -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question7, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer7) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer7,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer7 = !parq.answer7))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer7) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) { Text(text = parq.question9) }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer9,
-                    onCheckedChange = { onParqChange(parq.copy(answer9 = !parq.answer9)) }
-                )
+            7 -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question8, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer8) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer8,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer8 = !parq.answer8))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer8) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(Modifier.weight(.9f)) {
-                Text(text = parq.question10)
-
+            8 -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question9, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer9) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer9,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer9 = !parq.answer9))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer9) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-            Row(Modifier.weight(.1f)) {
-                Switch(
-                    checked = parq.answer10,
-                    onCheckedChange = { onParqChange(parq.copy(answer10 = !parq.answer10)) },
-                    modifier = Modifier
-                )
+            else -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = parq.question10, textAlign = TextAlign.Center)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Yes",
+                            color = if (parq.answer10) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Switch(
+                            modifier = Modifier.semantics { contentDescription = "disability switch" },
+                            checked = parq.answer10,
+                            onCheckedChange = {
+                                onParqChange(parq.copy(answer10 = !parq.answer10))
+                            }
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = "No",
+                            color = if (!parq.answer10) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
             }
-
         }
     }
 }
