@@ -1005,20 +1005,3 @@ fun ReferralComponent(referral: String, onReferralChange: (String) -> Unit) {
         }
     }
 }
-
-
-@OptIn(ExperimentalPagerApi::class)
-@Preview
-@Composable
-fun NewUserFormPreview() {
-    // Create a mock ViewModel and NavController for preview
-    val viewModel = NewUserViewModel() // Implement mockViewModel() to create a mock instance
-    val navController = rememberNavController()
-
-    // Call your composable with the preview parameters
-    NewUserForm(
-        viewModel = viewModel,
-        navController = navController
-    )
-}
-
