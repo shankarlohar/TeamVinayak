@@ -101,6 +101,8 @@ fun NewUserForm(
     val context = LocalContext.current
 
     val compositionRegistration by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.registration))
+    val compositionRegistrationDone by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.registration_done))
+
 
 
     val uploadData = {
@@ -186,7 +188,7 @@ fun NewUserForm(
                             when (formSubmitStatus.value) {
                                 UiStatus.Loading -> "Loading..."
                                 UiStatus.Failed -> "Failed"
-                                else -> "Final Step"
+                                else -> "Success!"
                             }
 
                         )
@@ -195,9 +197,11 @@ fun NewUserForm(
                         when (formSubmitStatus.value) {
                             UiStatus.Loading -> Text("Wait for a few seconds.")
                             UiStatus.Failed -> Text("Submission was not succeeded.")
-                            else -> Column() {
-                                Text("Your form is under review.")
-                                Text("Please submit a copy of Aadhaar at the gym and ask for approval.")
+                            else -> {
+                                LottieAnimation(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    composition = compositionRegistrationDone
+                                )
                             }
                         }
 
