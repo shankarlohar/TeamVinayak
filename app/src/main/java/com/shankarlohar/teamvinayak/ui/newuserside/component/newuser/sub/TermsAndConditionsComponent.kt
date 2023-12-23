@@ -46,6 +46,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -66,6 +71,9 @@ fun TermsAndConditionsComponent(
     val scope = rememberCoroutineScope()
     val pageState = rememberPagerState()
     val context = LocalContext.current
+
+    val compositionTnc by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.tnc))
+
 
     Column(
         modifier = Modifier
@@ -98,7 +106,8 @@ fun TermsAndConditionsComponent(
                 .fillMaxWidth()
         ) { page ->
             TncItem(
-                tnc = items[page]
+                tnc = items[page],
+                compositionTnc = compositionTnc
             )
         }
 
@@ -183,7 +192,6 @@ fun BottomSection(
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
-                        .heightIn(min = 48.dp)
                         .padding(horizontal = 16.dp),
                     textAlign = TextAlign.Center,
                 )
@@ -235,7 +243,7 @@ fun Indicator(isSelected: Boolean) {
 }
 
 @Composable
-fun TncItem(tnc: TermsAndConditionsModel) {
+fun TncItem(tnc: TermsAndConditionsModel, compositionTnc: LottieComposition?) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
@@ -250,6 +258,11 @@ fun TncItem(tnc: TermsAndConditionsModel) {
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             letterSpacing = 1.sp,
+        )
+        LottieAnimation(
+            modifier = Modifier.fillMaxWidth().height(200.dp),
+            composition = compositionTnc,
+            iterations = LottieConstants.IterateForever,
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
