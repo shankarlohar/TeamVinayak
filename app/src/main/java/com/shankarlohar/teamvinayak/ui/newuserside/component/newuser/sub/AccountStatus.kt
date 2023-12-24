@@ -184,7 +184,7 @@ fun AccountStatus(
                             crossfade(true)
                             placeholder(R.drawable.vinayak_multi_gym_no_background) // Placeholder image while loading
                             error(R.drawable.maintanance) // Image to display in case of an error
-                            scale(Scale.FILL) // Scale type
+                            scale(Scale.FIT) // Scale type
                         }).build()
                 )
 

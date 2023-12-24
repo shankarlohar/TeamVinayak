@@ -1,11 +1,16 @@
 package com.shankarlohar.teamvinayak.ui.common
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -63,17 +69,17 @@ fun UserCard(
                     modifier = Modifier.wrapContentSize(),
                     color = Color(0xFF000000)
                 ) {
-                    if (membershipStatus != Status.PENDING){
+                    if (membershipStatus != Status.PENDING) {
                         Text(
                             text = if (membershipStatus == Status.BLOCKED) "Blocked Account" else "Active Account",
-                            fontSize =  12.sp,
+                            fontSize = 12.sp,
                             style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
                         )
-                    }else{
+                    } else {
                         Text(
                             text = "New User Request",
-                            fontSize =  12.sp,
+                            fontSize = 12.sp,
                             style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
                         )
@@ -85,7 +91,7 @@ fun UserCard(
                 if (fullName != null) {
                     Text(
                         text = fullName,
-                        fontSize =  24.sp,
+                        fontSize = 24.sp,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -93,7 +99,10 @@ fun UserCard(
 
                 Spacer(modifier = Modifier.height(2.dp))
 
-                Text(text = if (registrationStatus == Details.UNDER_REVIEW) "User details are under review." else "User details are verified.", fontSize = 8.sp)
+                Text(
+                    text = if (registrationStatus == Details.UNDER_REVIEW) "User details are under review." else "User details are verified.",
+                    fontSize = 8.sp
+                )
 
                 Spacer(modifier = Modifier.height(2.dp))
 
@@ -107,7 +116,7 @@ fun UserCard(
                     if (uid != null) {
                         Text(
                             text = uid,
-                            fontSize =  8.sp,
+                            fontSize = 8.sp,
                             fontWeight = FontWeight.SemiBold,
                             style = MaterialTheme.typography.titleLarge
                         )
@@ -126,8 +135,8 @@ fun UserCard(
                 ) {
                     if (formSubmissionTime != null) {
                         Text(
-                            text = formSubmissionTime.substring(0,11),
-                            fontSize =  11.sp,
+                            text = formSubmissionTime.substring(0, 11),
+                            fontSize = 11.sp,
                             fontWeight = FontWeight.SemiBold,
                             style = MaterialTheme.typography.bodyMedium
                         )
@@ -135,14 +144,16 @@ fun UserCard(
                 }
             }
 
+
             Surface(
                 shape = CircleShape,
                 modifier = Modifier.size(125.dp)
             ) {
                 Image(
                     painter = painter,
+                    contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    contentDescription = null
+                    modifier = Modifier.fillMaxSize().clip(CircleShape)
                 )
             }
         }
