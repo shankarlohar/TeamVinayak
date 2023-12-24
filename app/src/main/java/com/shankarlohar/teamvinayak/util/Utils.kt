@@ -56,6 +56,45 @@ object Utils {
             Log.e("OpenWebsite", "Error opening website: $e")
         }
     }
+    private fun verifyVerhoeffCheckDigit(number: String): Boolean {
+        val d = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+        val p = intArrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        val inv = intArrayOf(0, 4, 3, 2, 1, 5, 6, 7, 8, 9)
+
+        var c = 0
+        for (i in number.length - 1 downTo 0) {
+            c = d[c] + p[(number[i].toString().toInt())]
+            c = c % 10
+        }
+        return c == 0
+    }
+    fun checkAadhaar(aadhaarNumber: String): Boolean{
+        if (aadhaarNumber.isNotEmpty()){
+            return aadhaarNumber.matches(Regex("^[2-9]{1}[0-9]{11}$")) &&
+                    verifyVerhoeffCheckDigit(aadhaarNumber)
+        }
+        return false
+    }
+
+    private val EMAIL_REGEX = Regex(
+        "^" +  // Start of string
+                "[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*" +  // Username
+                "@" +  // "@" symbol
+                "[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*" +  // Domain name
+                "\$"  // End of string
+    )
+
+    fun checkEmail(email:String):Boolean{
+        return EMAIL_REGEX.matches(email)
+    }
+
+    private val INDIA_MOBILE_REGEX = Regex(
+        "^(\\+91)?" +  // Optional +91
+                " ?[6789][0-9]{9}$"  // Start with 6, 7, 8 or 9 and follow with 9 digits
+    )
+    fun checkMobile(number: String): Boolean{
+        return INDIA_MOBILE_REGEX.matches(number)
+    }
 
 }
 

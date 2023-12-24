@@ -64,6 +64,9 @@ import com.shankarlohar.teamvinayak.ui.common.DateInput
 import com.shankarlohar.teamvinayak.ui.common.InputChipWithAvatar
 import com.shankarlohar.teamvinayak.util.Steps
 import com.shankarlohar.teamvinayak.util.UiStatus
+import com.shankarlohar.teamvinayak.util.Utils.checkAadhaar
+import com.shankarlohar.teamvinayak.util.Utils.checkEmail
+import com.shankarlohar.teamvinayak.util.Utils.checkMobile
 import com.shankarlohar.teamvinayak.viewmodel.NewUserViewModel
 
 @ExperimentalPagerApi
@@ -139,12 +142,14 @@ fun NewUserForm(
                     if ((index.value == 0) && (selectedImageUri.value == null)){
                         Toast.makeText(context,"Profile picture is required", Toast.LENGTH_LONG).show()
                     }else if ((index.value == 1) && (componentPersonalDetails.value < 10)) {
-                        if ((componentPersonalDetails.value == 0) && (personalDetails.aadhaarNumber.isEmpty())){
-                            Toast.makeText(context,"Aadhaar is required", Toast.LENGTH_LONG).show()
-                        }else if ((componentPersonalDetails.value == 1) && (personalDetails.email.isEmpty())){
-                            Toast.makeText(context,"Email is required", Toast.LENGTH_LONG).show()
 
-                        }else if ((componentPersonalDetails.value == 2) && (personalDetails.mobile.isEmpty())){
+                        if ((componentPersonalDetails.value == 0) && !checkAadhaar(personalDetails.aadhaarNumber)){
+                            Toast.makeText(context,"Check Aadhaar Number", Toast.LENGTH_LONG).show()
+                        }
+                        else if ((componentPersonalDetails.value == 1) && !checkEmail(personalDetails.email)){
+                            Toast.makeText(context,"Valid Email is required", Toast.LENGTH_LONG).show()
+
+                        }else if ((componentPersonalDetails.value == 2) && !checkMobile(personalDetails.mobile)){
                             Toast.makeText(context,"Mobile is required", Toast.LENGTH_LONG).show()
 
                         }else if ((componentPersonalDetails.value == 3) && (personalDetails.fullName.isEmpty())){
