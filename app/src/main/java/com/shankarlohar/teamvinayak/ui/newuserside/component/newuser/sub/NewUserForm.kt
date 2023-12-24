@@ -231,10 +231,17 @@ fun NewUserForm(
                             UiStatus.Loading -> Text("Wait for a few seconds.")
                             UiStatus.Failed -> Text("Submission was not succeeded.")
                             else -> {
-                                LottieAnimation(
+                                Column(
                                     modifier = Modifier.fillMaxWidth(),
-                                    composition = compositionRegistrationDone
-                                )
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    LottieAnimation(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        composition = compositionRegistrationDone
+                                    )
+                                    Text("Submit a copy of Aadhaar at the gym and request details verification. To activate the membership.")
+                                }
                             }
                         }
 
